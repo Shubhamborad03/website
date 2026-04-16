@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-montserrat: 'Montserrat', sans-serif;
+  --font-inter: 'Inter', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: #0b2119;
+  background: #ffffff;
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 bg-white hover:bg-brand-50 text-brand-800 font-semibold px-6 py-3 rounded-lg border border-brand-200 transition-all duration-200 hover:-translate-y-0.5;
+  }
+  .btn-outline-white {
+    @apply inline-flex items-center gap-2 bg-transparent hover:bg-white/10 text-white font-semibold px-6 py-3 rounded-lg border-2 border-white/60 hover:border-white transition-all duration-200;
+  }
+  .section-label {
+    @apply text-brand-600 text-sm font-semibold uppercase tracking-widest;
+  }
+  .section-heading {
+    @apply font-heading text-3xl md:text-4xl font-bold text-brand-950 leading-tight;
+  }
+  .section-heading-light {
+    @apply font-heading text-3xl md:text-4xl font-bold text-white leading-tight;
+  }
+  .card {
+    @apply bg-white rounded-2xl shadow-sm border border-brand-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300;
+  }
+}
+
+/* Shield pattern overlay */
+.shield-bg {
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0);
+  background-size: 40px 40px;
+}
+
+/* Scroll fade-in animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Chat widget */
+.chat-bubble {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(39, 109, 80, 0.4); }
+  50%       { box-shadow: 0 0 0 12px rgba(39, 109, 80, 0); }
+}
+
+/* Stats counter */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Testimonial slider */
+.testimonial-track {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Star rating */
+.stars {
+  color: #D4A017;
+}
+
+/* Underline decoration */
+.heading-underline {
+  position: relative;
+  display: inline-block;
+}
+.heading-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: #276d50;
+  border-radius: 2px;
+}
+
+/* Service card icon ring */
+.icon-ring {
+  @apply flex items-center justify-center w-14 h-14 rounded-2xl bg-brand-50 text-brand-600 mb-4;
+}
+
+/* Mobile menu */
+.mobile-menu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+.mobile-menu.open {
+  max-height: 400px;
+}
