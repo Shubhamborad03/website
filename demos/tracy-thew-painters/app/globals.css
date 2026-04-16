@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy-950: #0B1829;
+  --color-navy-900: #0F2240;
+  --color-navy-800: #1B2B4B;
+  --color-navy-700: #1E3A5F;
+  --color-navy-600: #234875;
+  --color-navy-100: #E8EDF5;
+  --color-navy-50: #F4F6FA;
+
+  --color-gold-600: #A87228;
+  --color-gold-500: #C8963C;
+  --color-gold-400: #D4A853;
+  --color-gold-300: #E0C07A;
+  --color-gold-100: #F5EDD8;
+  --color-gold-50: #FAF5EC;
+
+  --color-cream-50: #FDFCF8;
+  --color-cream-100: #F8F5EE;
+  --color-cream-200: #EFE9DA;
+
+  --font-heading: var(--font-playfair);
+  --font-body: var(--font-inter);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body), system-ui, sans-serif;
+  background-color: #ffffff;
+  color: #1a1a1a;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-heading {
+  font-family: var(--font-heading), Georgia, serif;
+}
+
+/* Paint brush stroke underline effect */
+.brush-underline {
+  position: relative;
+  display: inline-block;
+}
+.brush-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: var(--color-gold-400);
+  border-radius: 3px;
+  transform: rotate(-0.5deg) scaleX(0.95);
+}
+
+/* Scroll animation */
+@keyframes scroll-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-scroll-left {
+  animation: scroll-left 35s linear infinite;
+}
+.animate-scroll-left:hover {
+  animation-play-state: paused;
+}
+
+/* Fade edges for scrolling sections */
+.fade-edges {
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+}

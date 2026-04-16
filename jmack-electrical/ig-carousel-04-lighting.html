@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>IG Carousel - Lighting & Downlights</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --BRAND_PRIMARY:#1f7050;
+        --BRAND_LIGHT:#4daa83;
+        --BRAND_DARK:#0a2219;
+        --LIGHT_BG:#f0f9f4;
+        --LIGHT_BORDER:#daf0e6;
+        --DARK_BG:#0a2219;
+        --SLIDE_W:420px;
+        --SLIDE_H:525px;
+        --FONT_HEAD:"Montserrat", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        --FONT_BODY:"Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      }
+      *{ box-sizing:border-box; }
+      body{
+        margin:0;
+        padding:28px 18px 60px;
+        background:linear-gradient(180deg,#f7faf8, #eef3f0);
+        font-family:var(--FONT_BODY);
+        color:#0a2219;
+      }
+      .page{ width:420px; margin:0 auto; }
+      .ig-frame{
+        width:420px;
+        border-radius:28px;
+        overflow:hidden;
+        background:#fff;
+        border:1px solid rgba(0,0,0,0.08);
+        box-shadow:0 22px 70px rgba(0,0,0,0.18);
+      }
+      .ig-header{
+        display:flex; align-items:center; gap:10px;
+        padding:14px 14px 12px;
+        border-bottom:1px solid rgba(0,0,0,0.06);
+      }
+      .ig-avatar{
+        width:36px;height:36px;border-radius:50%;
+        background:var(--BRAND_PRIMARY);
+        display:flex; align-items:center; justify-content:center;
+        flex-shrink:0;
+      }
+      .ig-hdr-meta{ min-width:0; }
+      .ig-hdr-name{
+        font-weight:800; font-size:13px; letter-spacing:-0.1px;
+        white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      }
+      .ig-hdr-sub{ margin-top:2px; font-size:11px; color:rgba(0,0,0,0.5); font-weight:600; }
+      .carousel-wrap{ width:420px; }
+      .carousel-viewport{ width:420px; height:525px; position:relative; overflow:hidden; background:var(--LIGHT_BG); user-select:none; touch-action:pan-y; }
+      .carousel-track{ height:525px; display:flex; width:calc(var(--SLIDE_W) * 6); transform:translateX(0px); transition:transform 330ms cubic-bezier(.2,.8,.2,1); }
+      .slide{ width:420px; height:525px; flex:0 0 auto; position:relative; overflow:hidden; }
+      .slide-bg{ position:absolute; inset:0; }
+      .bg-light{
+        background:
+          radial-gradient(circle at 20% 10%, rgba(31,112,80,0.14), transparent 55%),
+          radial-gradient(circle at 80% 35%, rgba(212,160,23,0.12), transparent 52%),
+          linear-gradient(180deg, rgba(240,249,244,1) 0%, rgba(218,240,230,0.85) 100%);
+      }
+      .bg-dark{
+        background:
+          radial-gradient(circle at 25% 0%, rgba(31,112,80,0.26), transparent 55%),
+          radial-gradient(circle at 80% 40%, rgba(212,160,23,0.14), transparent 48%),
+          linear-gradient(180deg, rgba(10,34,25,1) 0%, rgba(23,72,52,1) 100%);
+      }
+      .bg-gradient{
+        background:
+          radial-gradient(circle at 20% 20%, rgba(255,255,255,0.18), transparent 55%),
+          linear-gradient(165deg, var(--BRAND_DARK) 0%, var(--BRAND_PRIMARY) 50%, var(--BRAND_LIGHT) 100%);
+      }
+      .media{ position:absolute; inset:0; background-size:cover; background-position:center; opacity:1; }
+      .media-overlay{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.22) 35%, rgba(0,0,0,0.55) 100%); }
+      .slide-inner{ position:absolute; inset:0; padding:0 36px 58px; display:flex; flex-direction:column; gap:10px; }
+      .hero{ justify-content:center; text-align:center; align-items:center; }
+      .content-bottom{ justify-content:flex-end; }
+      .tag{ font-size:10px; font-weight:700; letter-spacing:2.3px; text-transform:uppercase; margin-bottom:6px; }
+      .serif, .heading{ font-family:var(--FONT_HEAD); }
+      .heading{ font-size:32px; line-height:1.08; font-weight:800; letter-spacing:-0.4px; margin:0; }
+      .body{ font-size:14px; line-height:1.5; font-weight:500; }
+      .body-light{ color:rgba(10,34,25,0.72); }
+      .body-dark{ color:rgba(255,255,255,0.66); }
+      .bullets{ margin:8px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:8px; }
+      .bullet{ display:flex; gap:10px; align-items:flex-start; }
+      .bullet i{ width:18px; height:18px; border-radius:6px; display:inline-flex; align-items:center; justify-content:center; margin-top:1px; flex-shrink:0; }
+      .bullet i.dark{ background:rgba(255,255,255,0.10); color:#fff; }
+      .lockup{ display:flex; align-items:center; gap:12px; }
+      .lockup-word{ display:flex; flex-direction:column; line-height:1; }
+      .lockup-word .w{ font-family:var(--FONT_HEAD); font-weight:800; font-size:22px; letter-spacing:-0.35px; margin-top:2px; }
+      .lockup-word .s{ font-family:var(--FONT_HEAD); font-weight:600; font-size:10px; letter-spacing:2.5px; text-transform:uppercase; margin-top:6px; opacity:0.95; }
+      .quote{ border:1px solid rgba(255,255,255,0.14); background:rgba(0,0,0,0.18); border-radius:16px; padding:12px 14px; margin-top:6px; }
+      .quote .q-label{ font-size:12px; font-weight:800; color:rgba(255,255,255,0.72); }
+      .quote .q-text{ margin-top:6px; font-family:var(--FONT_HEAD); font-style:italic; font-size:16px; line-height:1.35; color:#fff; font-weight:600; }
+      .progress{ position:absolute; left:0; right:0; bottom:0; padding:16px 28px 20px; z-index:10; display:flex; align-items:center; gap:10px; }
+      .progress .bar{ flex:1; height:3px; background:var(--track); border-radius:2px; overflow:hidden; }
+      .progress .fill{ height:100%; width:var(--fill); background:var(--fillColor); border-radius:2px; }
+      .progress .cnt{ font-size:11px; color:var(--cntColor); font-weight:600; letter-spacing:-0.1px; }
+      .arrow{ position:absolute; right:0; top:0; bottom:0; width:48px; z-index:9; display:flex; align-items:center; justify-content:center; background:linear-gradient(to right, transparent, var(--arrowBg)); pointer-events:none; }
+      .cta-btn{ display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:14px 22px; border-radius:28px; background:rgba(240,249,244,0.95); color:var(--BRAND_DARK); font-weight:900; font-size:14px; text-decoration:none; box-shadow:0 12px 26px rgba(0,0,0,0.18); border:1px solid rgba(0,0,0,0.06); margin-top:10px; }
+      .list-compact{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:10px; }
+      .list-compact li{ display:flex; align-items:flex-start; gap:12px; font-size:13px; font-weight:650; }
+      .list-compact li .dot{ width:8px; height:8px; border-radius:50%; background:var(--BRAND_PRIMARY); margin-top:6px; flex-shrink:0; }
+      .dots{ display:flex; gap:7px; justify-content:center; padding:10px 0 12px; }
+      .dot{ width:7px; height:7px; border-radius:50%; background:rgba(0,0,0,0.18); }
+      .dot.active{ background:var(--BRAND_PRIMARY); width:20px; border-radius:8px; }
+      .ig-actions{ display:flex; gap:12px; padding:12px 14px 0; align-items:center; }
+      .action svg{ width:18px; height:18px; opacity:0.7; }
+      .ig-caption{ padding:10px 14px 14px; border-top:1px solid rgba(0,0,0,0.06); font-size:12px; color:rgba(0,0,0,0.65); line-height:1.35; }
+      .ig-caption b{ color:#0a2219; }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="ig-frame" aria-label="Instagram carousel preview">
+        <div class="ig-header">
+          <div class="ig-avatar" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="0" y="0" width="40" height="40" rx="10" fill="#1f7050"></rect>
+              <path d="M22 6L13 22H19L16 34L27 17H21L24 6H22Z" fill="#fff" stroke="#fff" stroke-width="0.5" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <div class="ig-hdr-meta">
+            <div class="ig-hdr-name">@jmackelectricalservices</div>
+            <div class="ig-hdr-sub">LED downlights + lighting upgrades</div>
+          </div>
+        </div>
+
+        <div class="carousel-wrap">
+          <div class="carousel-viewport" id="viewport-04" role="region" aria-roledescription="carousel" aria-label="Lighting and downlights carousel">
+            <div class="carousel-track" id="track-04">
+              <!-- Slide 1 (Light) -->
+              <section class="slide" aria-label="Slide 1 of 6">
+                <div class="slide-bg bg-light"></div>
+                <div class="media" style="background:radial-gradient(circle at 20% 10%, rgba(31,112,80,0.25), transparent 55%), radial-gradient(circle at 82% 28%, rgba(212,160,23,0.18), transparent 50%), linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.22)); opacity:0.70;"></div>
+                <div class="media-overlay" style="background:linear-gradient(180deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.14) 55%, rgba(0,0,0,0.25) 100%);"></div>
+                <div class="slide-inner hero">
+                  <div class="lockup">
+                    <svg width="56" height="56" viewBox="0 0 40 40" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+                      <rect width="40" height="40" rx="10" fill="var(--BRAND_PRIMARY)"></rect>
+                      <path d="M22 6L13 22H19L16 34L27 17H21L24 6H22Z" fill="#ffffff" stroke="#ffffff" stroke-width="0.5" stroke-linejoin="round"></path>
+                    </svg>
+                    <div class="lockup-word">
+                      <div class="w" style="color:#0a2219;">J MACK</div>
+                      <div class="s" style="color:#1f7050;">Electrical Services</div>
+                    </div>
+                  </div>
+                  <div style="height:12px"></div>
+                  <div class="tag" style="color:var(--BRAND_PRIMARY)">💡 LIGHTING</div>
+                  <h2 class="heading" style="color:#0a2219; max-width:330px;">💡 Light your space beautifully</h2>
+                  <div class="body body-light" style="max-width:330px;">
+                    LED downlights and feature lighting installed by a licensed local team.
+                  </div>
+                </div>
+                <div class="progress" style="--track:rgba(0,0,0,0.08); --fill:16.6667%; --fillColor:var(--BRAND_PRIMARY); --cntColor:rgba(0,0,0,0.3);">
+                  <div class="bar"><div class="fill"></div></div>
+                  <span class="cnt">1/6</span>
+                </div>
+                <div class="arrow" style="--arrowBg:rgba(0,0,0,0.06);">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M9 6l6 6-6 6" stroke="rgba(0,0,0,0.25)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                </div>
+              </section>
+
+              <!-- Slide 2 (Dark) -->
+              <section class="slide" aria-label="Slide 2 of 6">
+                <div class="slide-bg bg-dark"></div>
+                <div class="media media--dark" style="background:radial-gradient(circle at 20% 0%, rgba(31,112,80,0.40), transparent 50%), radial-gradient(circle at 85% 35%, rgba(212,160,23,0.20), transparent 52%), linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.35)); opacity:0.35;"></div>
+                <div class="media-overlay"></div>
+                <div class="slide-inner content-bottom">
+                  <div class="tag" style="color:var(--BRAND_LIGHT)">⚠️ THE PROBLEM</div>
+                  <h2 class="heading" style="color:#fff; font-size:30px; max-width:340px;">⚠️ Boring lights and high power bills</h2>
+                  <ul class="bullets" style="margin-top:10px;">
+                    <li class="bullet"><i class="dark">✓</i><span style="color:rgba(255,255,255,0.72);">Outdated fittings waste energy</span></li>
+                    <li class="bullet"><i class="dark">✓</i><span style="color:rgba(255,255,255,0.72);">Poor light can affect comfort and safety</span></li>
+                    <li class="bullet"><i class="dark">✓</i><span style="color:rgba(255,255,255,0.72);">No dimming? Hard to set the mood</span></li>
+                  </ul>
+                  <div class="quote">
+                    <div class="q-label">Change the vibe</div>
+                    <div class="q-text">Switch to LED and get brighter, cleaner light.</div>
+                  </div>
+                </div>
+                <div class="progress" style="--track:rgba(255,255,255,0.12); --fill:33.3333%; --fillColor:#fff; --cntColor:rgba(255,255,255,0.4);">
+                  <div class="bar"><div class="fill"></div></div>
+                  <span class="cnt">2/6</span>
+                </div>
+                <div class="arrow" style="--arrowBg:rgba(255,255,255,0.08);">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M9 6l6 6-6 6" stroke="rgba(255,255,255,0.35)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                </div>
+              </section>
+
+              <!-- Slide 3 (Gradient) -->
+              <section class="slide" aria-label="Slide 3 of 6">
+                <div class="slide-bg bg-gradient"></div>
+                <div class="media" style="background:radial-gradient(circle at 25% 10%, rgba(31,112,80,0.35), transparent 55%), radial-gradient(circle at 80% 30%, rgba(212,160,23,0.16), transparent 52%), linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.40)); opacity:0.28;"></div>
+                <div class="media-overlay" style="background:linear-gradient(180deg, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.18) 55%, rgba(0,0,0,0.40) 100%);"></div>
+                <div class="slide-inner content-bottom" style="padding-bottom:64px;">
+                  <div class="tag" style="color:rgba(255,255,255,0.72);">✨ UPGRADE THE LIGHT</div>
+                  <h2 class="heading" style="color:#fff; font-size:30px; max-width:340px;">✨ Energy-efficient upgrades</h2>
+                  <div class="body" style="color:rgba(255,255,255,0.70); margin-top:8px;">
+                    Get the right brightness and fittings, installed neatly and tested properly.
+                  </div>
+                  <div class="quote">
+                    <div class="q-label">Customer-friendly</div>
+                    <div class="q-text">Switch today, enjoy brighter rooms tonight.</div>
+                  </div>
+                </div>
+                <div class="progress" style="--track:rgba(255,255,255,0.12); --fill:50%; --fillColor:#fff; --cntColor:rgba(255,255,255,0.4);">
+                  <div class="bar"><div class="fill"></div></div>
+                  <span class="cnt">3/6</span>
+                </div>
+                <div class="arrow" style="--arrowBg:rgba(255,255,255,0.08);">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M9 6l6 6-6 6" stroke="rgba(255,255,255,0.35)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                </div>
+              </section>
+
+              <!-- Slide 4 (Light) -->
+              <section class="slide" aria-label="Slide 4 of 6">
+                <div class="slide-bg bg-light"></div>
+                <div class="media" style="background:radial-gradient(circle at 30% 0%, rgba(31,112,80,0.22), transparent 55%), radial-gradient(circle at 80% 40%, rgba(212,160,23,0.12), transparent 52%), linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.16)); opacity:0.16;"></div>
+                <div class="media-overlay" style="background:linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.10) 60%, rgba(0,0,0,0.14) 100%);"></div>
+                <div class="slide-inner content-bottom">
+                  <div class="tag" style="color:var(--BRAND_PRIMARY)">🔧 SERVICES</div>
+                  <h2 class="heading" style="color:#0a2219; font-size:30px; max-width:320px;">🔧 We install & upgrade</h2>
+                  <ul class="list-compact" style="margin-top:10px;">
+                    <li><span class="dot" aria-hidden="true"></span>LED downlight installation</li>
+                    <li><span class="dot" aria-hidden="true"></span>Pendant & feature lighting</li>
+                    <li><span class="dot" aria-hidden="true"></span>Under-cabinet and outdoor lighting</li>
+                    <li><span class="dot" aria-hidden="true"></span>Sensor lights and dimmer switches</li>
+                  </ul>
+                </div>
+                <div class="progress" style="--track:rgba(0,0,0,0.08); --fill:66.6667%; --fillColor:var(--BRAND_PRIMARY); --cntColor:rgba(0,0,0,0.3);">
+                  <div class="bar"><div class="fill"></div></div>
+                  <span class="cnt">4/6</span>
+                </div>
+                <div class="arrow" style="--arrowBg:rgba(0,0,0,0.06);">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M9 6l6 6-6 6" stroke="rgba(0,0,0,0.25)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                </div>
+              </section>
+
+              <!-- Slide 5 (Dark) -->
+              <section class="slide" aria-label="Slide 5 of 6">
+                <div class="slide-bg bg-dark"></div>
+                <div class="media" style="background:radial-gradient(circle at 20% 0%, rgba(31,112,80,0.34), transparent 50%), radial-gradient(circle at 85% 45%, rgba(212,160,23,0.18), transparent 52%), linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.35)); opacity:0.30;"></div>
+                <div class="media-overlay"></div>
+                <div class="slide-inner content-bottom">
+                  <div class="tag" style="color:var(--BRAND_LIGHT)">📝 BEFORE WE START</div>
+                  <h2 class="heading" style="color:#fff; font-size:30px; max-width:340px;">📝 3 quick lighting decisions</h2>
+                  <div style="margin-top:12px; display:flex; flex-direction:column; gap:12px;">
+                    <div style="display:flex; gap:16px; align-items:flex-start; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.12);">
+                      <div style="font-family:var(--FONT_HEAD); font-size:26px; font-weight:300; color:var(--BRAND_PRIMARY); min-width:44px;">01</div>
+                      <div style="flex:1;">
+                        <div style="font-family:var(--FONT_BODY); font-size:13px; font-weight:800; color:#fff;">Brightness and warmth</div>
+                        <div style="font-size:12px; font-weight:600; color:rgba(255,255,255,0.65); margin-top:3px;">Tell us the look you want.</div>
+                      </div>
+                    </div>
+                    <div style="display:flex; gap:16px; align-items:flex-start; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.12);">
+                      <div style="font-family:var(--FONT_HEAD); font-size:26px; font-weight:300; color:var(--BRAND_PRIMARY); min-width:44px;">02</div>
+                      <div style="flex:1;">
+                        <div style="font-family:var(--FONT_BODY); font-size:13px; font-weight:800; color:#fff;">Where you need light most</div>
+                        <div style="font-size:12px; font-weight:600; color:rgba(255,255,255,0.65); margin-top:3px;">We plan wiring routes neatly.</div>
+                      </div>
+                    </div>
+                    <div style="display:flex; gap:16px; align-items:flex-start; padding:12px 0 0;">
+                      <div style="font-family:var(--FONT_HEAD); font-size:26px; font-weight:300; color:var(--BRAND_PRIMARY); min-width:44px;">03</div>
+                      <div style="flex:1;">
+                        <div style="font-family:var(--FONT_BODY); font-size:13px; font-weight:800; color:#fff;">Dimmers and sensors</div>
+                        <div style="font-size:12px; font-weight:600; color:rgba(255,255,255,0.65); margin-top:3px;">For better control and convenience.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="progress" style="--track:rgba(255,255,255,0.12); --fill:83.3333%; --fillColor:#fff; --cntColor:rgba(255,255,255,0.4);">
+                  <div class="bar"><div class="fill"></div></div>
+                  <span class="cnt">5/6</span>
+                </div>
+                <div class="arrow" style="--arrowBg:rgba(255,255,255,0.08);">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M9 6l6 6-6 6" stroke="rgba(255,255,255,0.35)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                </div>
+              </section>
+
+              <!-- Slide 6 (Gradient CTA) -->
+              <section class="slide" aria-label="Slide 6 of 6">
+                <div class="slide-bg bg-gradient"></div>
+                <div class="media" style="background:radial-gradient(circle at 25% 10%, rgba(31,112,80,0.32), transparent 55%), radial-gradient(circle at 80% 35%, rgba(212,160,23,0.16), transparent 52%), linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.45)); opacity:0.25;"></div>
+                <div class="media-overlay" style="background:linear-gradient(180deg, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.18) 50%, rgba(0,0,0,0.38) 100%);"></div>
+                <div class="slide-inner hero" style="padding-bottom:64px;">
+                  <div class="lockup">
+                    <svg width="56" height="56" viewBox="0 0 40 40" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+                      <rect width="40" height="40" rx="10" fill="rgba(255,255,255,0.18)"></rect>
+                      <path d="M22 6L13 22H19L16 34L27 17H21L24 6H22Z" fill="#ffffff" stroke="#ffffff" stroke-width="0.5" stroke-linejoin="round"></path>
+                    </svg>
+                    <div class="lockup-word">
+                      <div class="w" style="color:#fff; letter-spacing:-0.35px;">J MACK</div>
+                      <div class="s" style="color:rgba(255,255,255,0.75);">Electrical Services</div>
+                    </div>
+                  </div>
+                  <div style="height:10px"></div>
+                  <div class="tag" style="color:rgba(255,255,255,0.82);">📞 BOOK A QUOTE</div>
+                  <h2 class="heading" style="color:#fff; font-size:30px; max-width:320px;">📞 Lighting upgrade, free quote</h2>
+                  <div class="body" style="color:rgba(255,255,255,0.72); font-weight:650; margin-top:10px;">
+                    <span style="display:inline-block; font-size:20px; font-weight:900; letter-spacing:-0.3px;">0432 057 619</span>
+                  </div>
+                  <a class="cta-btn" href="tel:+61432057619" aria-label="Call now 0432 057 619">
+                    Call Now
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke="rgba(10,34,25,0.9)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                  </a>
+                  <div class="subtle" style="color:rgba(255,255,255,0.65); margin-top:6px; font-size:12px; font-weight:800;">
+                    @jmackelectricalservices
+                  </div>
+                </div>
+                <div class="progress" style="--track:rgba(255,255,255,0.12); --fill:100%; --fillColor:#fff; --cntColor:rgba(255,255,255,0.4);">
+                  <div class="bar"><div class="fill"></div></div>
+                  <span class="cnt">6/6</span>
+                </div>
+              </section>
+            </div>
+          </div>
+
+          <div class="dots" aria-hidden="true">
+            <span class="dot active" data-dot="0"></span>
+            <span class="dot" data-dot="1"></span>
+            <span class="dot" data-dot="2"></span>
+            <span class="dot" data-dot="3"></span>
+            <span class="dot" data-dot="4"></span>
+            <span class="dot" data-dot="5"></span>
+          </div>
+
+          <div class="ig-actions" aria-hidden="true">
+            <div class="action" style="display:flex;align-items:center;gap:8px;">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="rgba(0,0,0,0.6)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </div>
+            <div class="action">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M21 15a4 4 0 01-4 4H8l-5 3V7a4 4 0 014-4h10a4 4 0 014 4v8z" stroke="rgba(0,0,0,0.6)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </div>
+            <div class="action">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M16 5l-8 7 8 7" stroke="rgba(0,0,0,0.6)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </div>
+            <div style="flex:1"></div>
+            <div class="action">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2v16z" stroke="rgba(0,0,0,0.6)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </div>
+          </div>
+
+          <div class="ig-caption">
+            <b>@jmackelectricalservices</b> LED downlights and lighting upgrades in Gympie.
+            <br />
+            <span style="opacity:0.6;font-weight:700;">2 hours ago</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function(){
+        const SLIDE_W = 420;
+        const TOTAL = 6;
+        const viewport = document.getElementById('viewport-04');
+        const track = document.getElementById('track-04');
+        const dots = Array.from(document.querySelectorAll('[data-dot]'));
+
+        let index = 0;
+        let dragging = false;
+        let startX = 0;
+        let startOffset = 0;
+
+        function render(){
+          track.style.transition = dragging ? 'none' : 'transform 330ms cubic-bezier(.2,.8,.2,1)';
+          track.style.transform = 'translateX(' + (-index * SLIDE_W) + 'px)';
+          dots.forEach(d => d.classList.toggle('active', Number(d.dataset.dot) === index));
+        }
+
+        function go(next){
+          index = Math.max(0, Math.min(TOTAL - 1, next));
+          render();
+        }
+
+        function snapFromDelta(deltaX){
+          const threshold = 70;
+          if (deltaX <= -threshold) return go(index + 1);
+          if (deltaX >= threshold) return go(index - 1);
+          return render();
+        }
+
+        track.addEventListener('pointerdown', (e) => {
+          if (e.pointerType === 'mouse' && e.button !== 0) return;
+          dragging = true;
+          startX = e.clientX;
+          startOffset = -index * SLIDE_W;
+          viewport.setPointerCapture(e.pointerId);
+        });
+
+        track.addEventListener('pointermove', (e) => {
+          if (!dragging) return;
+          const dx = e.clientX - startX;
+          track.style.transition = 'none';
+          track.style.transform = 'translateX(' + (startOffset + dx) + 'px)';
+        });
+
+        track.addEventListener('pointerup', (e) => {
+          if (!dragging) return;
+          dragging = false;
+          const dx = e.clientX - startX;
+          snapFromDelta(dx);
+        });
+
+        window.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowRight') go(index + 1);
+          if (e.key === 'ArrowLeft') go(index - 1);
+        });
+
+        render();
+      })();
+    </script>
+  </body>
+</html>
+

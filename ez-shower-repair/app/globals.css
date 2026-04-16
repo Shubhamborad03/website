@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white text-navy-900 antialiased;
+  }
+
+  ::selection {
+    @apply bg-ocean-100 text-navy-900;
+  }
+}
+
+@layer components {
+  .container-tight {
+    @apply mx-auto max-w-7xl;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-ocean-500 px-6 py-3.5 font-semibold text-white shadow-lg shadow-ocean-500/25 transition-all duration-200 hover:bg-ocean-600 hover:shadow-xl hover:shadow-ocean-500/30 active:scale-[0.98];
+  }
+
+  .btn-outline-light {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border-2 border-white/20 px-6 py-3.5 font-semibold text-white transition-all duration-200 hover:border-white/40 hover:bg-white/5;
+  }
+
+  .btn-outline-dark {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border-2 border-navy-900/20 px-6 py-3.5 font-semibold text-navy-900 transition-all duration-200 hover:border-navy-900/40 hover:bg-navy-900/5;
+  }
+
+  .btn-white {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-white px-6 py-3.5 font-semibold text-navy-900 shadow-lg transition-all duration-200 hover:bg-navy-50 hover:shadow-xl active:scale-[0.98];
+  }
+
+  .section-padding {
+    @apply px-4 py-12 sm:px-6 lg:py-16;
+  }
+
+  .section-heading {
+    @apply font-heading text-3xl font-bold tracking-tight text-navy-900 sm:text-4xl lg:text-5xl;
+  }
+
+  .section-subheading {
+    @apply mt-4 max-w-2xl text-lg leading-relaxed text-slate-600;
+  }
+}
