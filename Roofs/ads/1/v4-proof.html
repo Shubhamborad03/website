@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080">
+<title>Set 1 · V4 Social Proof · 1080×1350</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;1,700&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#0a0a0a; font-family:'Barlow',sans-serif; }
+
+
+.ad { width:1080px; height:1350px; position:relative; overflow:hidden;
+  background:#0a0a0a; display:flex; flex-direction:column; }
+
+.photo-top { width:100%; height:720px; position:relative; overflow:hidden; flex-shrink:0; }
+.photo-top img { width:100%; height:100%; object-fit:cover; object-position:center top;
+  filter:saturate(1.15) brightness(0.8) contrast(1.05); }
+.photo-top::after { content:''; position:absolute; bottom:0; left:0; right:0; height:55%;
+  background:linear-gradient(0deg,#0a0a0a 0%,transparent 100%); }
+
+.photo-tag { position:absolute; top:32px; left:32px;
+  background:rgba(0,0,0,0.75); color:#fff;
+  font-family:'Barlow Condensed',sans-serif; font-size:22px;
+  font-weight:700; letter-spacing:1px; text-transform:uppercase;
+  padding:8px 16px; border-left:4px solid #D94F00; z-index:5; }
+
+.before-mini { position:absolute; top:32px; right:32px; z-index:5; width:180px; }
+.before-mini img { width:180px; height:120px; object-fit:cover;
+  filter:grayscale(50%) brightness(0.5); border:3px solid #ff3232; display:block; }
+.before-mini-tag { background:#ff3232; color:#fff;
+  font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:2px;
+  padding:4px 10px; text-align:center; }
+
+.content { flex:1; padding:24px 52px 0; display:flex; flex-direction:column;
+  justify-content:space-between; }
+
+.stars { display:flex; align-items:center; gap:6px; margin-bottom:12px; }
+.star { color:#D94F00; font-size:34px; }
+.review-ct { font-family:'Barlow Condensed',sans-serif; font-size:22px;
+  color:#555; margin-left:8px; letter-spacing:1px; }
+
+.quote-mark { font-family:Georgia,serif; font-size:100px; color:#D94F00;
+  line-height:0.5; margin-bottom:8px; opacity:0.8; }
+.quote-text { font-family:'Barlow',sans-serif; font-size:34px;
+  font-style:italic; color:#fff; line-height:1.4; margin-bottom:20px; max-width:880px; }
+.attr { display:flex; align-items:center; gap:16px; margin-bottom:20px; }
+.avatar { width:56px; height:56px; border-radius:50%; background:#D94F00;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Bebas Neue',sans-serif; font-size:22px; color:#fff; flex-shrink:0; }
+.attr-name { font-family:'Barlow Condensed',sans-serif; font-size:26px;
+  font-weight:700; color:#fff; }
+.attr-sub { font-family:'Barlow',sans-serif; font-size:18px; color:#555; }
+
+.cta-bar { background:#D94F00; margin:0 -52px;
+  padding:24px 52px; display:flex; justify-content:space-between; align-items:center; }
+.cta-left .cta-main { font-family:'Bebas Neue',sans-serif; font-size:44px;
+  color:#fff; letter-spacing:2px; line-height:1; }
+.cta-left .cta-sub { font-family:'Barlow',sans-serif; font-size:18px;
+  color:rgba(255,255,255,0.65); }
+.cta-right { text-align:right; }
+.cta-price-old { font-family:'Barlow',sans-serif; font-size:18px;
+  color:rgba(255,255,255,0.45); text-decoration:line-through; }
+.cta-price-new { font-family:'Bebas Neue',sans-serif; font-size:58px;
+  color:#fff; letter-spacing:1px; line-height:1; }
+
+</style>
+</head>
+<body>
+<div class="ad">
+  <div class="photo-top">
+    <img src="../After/image-1.png" alt="After">
+    <div class="photo-tag">📍 Noosaville, QLD</div>
+    <div class="before-mini">
+      <img src="../Before/image-1.png" alt="Before">
+      <div class="before-mini-tag">BEFORE</div>
+    </div>
+  </div>
+  <div class="content">
+    <div>
+      <div class="stars">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        <span class="star">★</span><span class="star">★</span>
+        <span class="review-ct">127 Google Reviews</span>
+      </div>
+      <div class="quote-mark">"</div>
+      <div class="quote-text">Couldn't believe the difference. Sam fixed things I didn't even know were problems.</div>
+      <div class="attr">
+        <div class="avatar">KM</div>
+        <div>
+          <div class="attr-name">Karen M.</div>
+          <div class="attr-sub">Noosaville QLD · Verified customer</div>
+        </div>
+      </div>
+    </div>
+    <div class="cta-bar">
+      <div class="cta-left">
+        <div class="cta-sub">Free quote · Zero deposit</div>
+        <div class="cta-main">Call Sam → 0412 345 678</div>
+      </div>
+      <div class="cta-right">
+        <div class="cta-price-old">Standard $7,400</div>
+        <div class="cta-price-new">$5,920</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

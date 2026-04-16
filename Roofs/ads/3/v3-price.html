@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080">
+<title>Set 3 · V3 Price · 1080×1080</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;1,700&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#0a0a0a; font-family:'Barlow',sans-serif; }
+
+
+.ad { width:1080px; height:1080px; position:relative; overflow:hidden;
+  background:#0a0a0a; display:flex; }
+
+.photo-col { width:420px; height:100%; position:relative; overflow:hidden; flex-shrink:0; }
+.photo-col img { width:100%; height:100%; object-fit:cover; object-position:center;
+  filter:brightness(0.82) saturate(1.15) contrast(1.05); }
+.photo-col::after { content:''; position:absolute; top:0; right:0; bottom:0; width:120px;
+  background:linear-gradient(90deg,transparent 0%,#0a0a0a 100%); }
+.after-tag { position:absolute; bottom:32px; left:24px;
+  background:#D94F00; color:#fff; font-family:'Bebas Neue',sans-serif;
+  font-size:28px; letter-spacing:3px; padding:8px 20px; z-index:5; }
+
+.content { flex:1; display:flex; flex-direction:column; justify-content:space-between;
+  padding:52px 48px 36px 20px; }
+
+.top-eyebrow { font-family:'Barlow Condensed',sans-serif; font-size:20px; font-weight:700;
+  color:#D94F00; text-transform:uppercase; letter-spacing:5px; margin-bottom:10px; }
+.headline { font-family:'Bebas Neue',sans-serif; font-size:82px;
+  color:#fff; line-height:0.86; letter-spacing:1px; }
+
+.price-block { display:flex; flex-direction:column; gap:0; }
+
+.p-row { padding:18px 20px; border-left:4px solid #222; position:relative; }
+.p-row.cross { border-left-color:#ff3232; }
+.p-row.win { border-left-color:#D94F00; background:rgba(217,79,0,0.07); }
+.p-lbl { font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:700;
+  color:#555; text-transform:uppercase; letter-spacing:2px; margin-bottom:2px; }
+.p-row.win .p-lbl { color:#D94F00; }
+.p-val { font-family:'Bebas Neue',sans-serif; font-size:72px; line-height:0.95; color:#444; }
+.p-row.cross .p-val { text-decoration:line-through; text-decoration-color:#ff3232;
+  text-decoration-thickness:5px; }
+.p-row.win .p-val { color:#D94F00; font-size:84px; }
+
+.divider-row { display:flex; align-items:center; gap:14px; padding:12px 0; }
+.div-line { flex:1; height:1px; background:#1e1e1e; }
+.div-badge { background:#141414; border:1px solid #D94F00; color:#D94F00;
+  font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:700;
+  letter-spacing:2px; text-transform:uppercase; padding:5px 14px; white-space:nowrap; }
+
+.save-note { font-family:'Barlow',sans-serif; font-size:18px; color:#666;
+  padding:0 20px; margin-top:4px; }
+.save-note strong { color:#fff; }
+
+.cta { background:#D94F00; padding:22px 28px; display:flex;
+  justify-content:space-between; align-items:center; margin-top:4px; }
+.cta-main { font-family:'Bebas Neue',sans-serif; font-size:38px;
+  color:#fff; letter-spacing:2px; line-height:1; }
+.cta-sub { font-family:'Barlow',sans-serif; font-size:16px;
+  color:rgba(255,255,255,0.65); }
+.cta-phone { font-family:'Bebas Neue',sans-serif; font-size:30px;
+  color:#fff; letter-spacing:1px; text-align:right; }
+
+</style>
+</head>
+<body>
+<div class="ad">
+  <div class="photo-col">
+    <img src="../After/image-3.png" alt="After">
+    <div class="after-tag">✓ Restored</div>
+  </div>
+  <div class="content">
+    <div>
+      <div class="top-eyebrow">Why restore?</div>
+      <div class="headline">Same<br>roof.<br>$18,000+<br>cheaper.</div>
+    </div>
+    <div class="price-block">
+      <div class="p-row cross">
+        <div class="p-lbl">Full re-roof</div>
+        <div class="p-val">$28,000</div>
+      </div>
+      <div class="divider-row">
+        <div class="div-line"></div>
+        <div class="div-badge">You save ~$18,000+</div>
+        <div class="div-line"></div>
+      </div>
+      <div class="p-row win">
+        <div class="p-lbl">Sam's area rate</div>
+        <div class="p-val">$5,920</div>
+      </div>
+      <div class="save-note">10-year Dulux warranty. <strong>Fixed price. Zero deposit.</strong></div>
+    </div>
+    <div class="cta">
+      <div>
+        <div class="cta-main">Get free quote</div>
+        <div class="cta-sub">No deposit · Fixed price · 2-day job</div>
+      </div>
+      <div class="cta-phone">0412 345 678</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

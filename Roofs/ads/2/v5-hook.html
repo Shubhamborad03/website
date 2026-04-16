@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080">
+<title>Set 2 · V5 Hook · 1080×1080</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;1,700&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#0a0a0a; font-family:'Barlow',sans-serif; }
+
+
+.ad { width:1080px; height:1080px; position:relative; overflow:hidden; background:#0a0a0a; }
+
+.bg { position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; object-position:center;
+  filter:grayscale(30%) brightness(0.55) contrast(1.2) saturate(0.6); }
+
+.grad-top { position:absolute; top:0; left:0; right:0; height:40%;
+  background:linear-gradient(180deg,rgba(0,0,0,0.88) 0%,transparent 100%); z-index:2; }
+.grad-bot { position:absolute; bottom:0; left:0; right:0; height:52%;
+  background:linear-gradient(0deg,rgba(0,0,0,0.98) 0%,rgba(0,0,0,0.5) 60%,transparent 100%); z-index:2; }
+
+/* Red annotation circle */
+.annotation { position:absolute; top:28%; left:42%; z-index:8; }
+.ann-circle { width:180px; height:180px; border-radius:50%;
+  border:6px solid #ff3232;
+  box-shadow:0 0 0 4px rgba(255,50,50,0.25), 0 0 40px rgba(255,50,50,0.3); }
+.ann-line { position:absolute; bottom:-60px; left:50%; width:3px; height:60px;
+  background:#ff3232; transform:translateX(-50%); }
+.ann-label { position:absolute; bottom:-90px; left:50%; transform:translateX(-50%);
+  background:#ff3232; color:#fff; font-family:'Barlow Condensed',sans-serif;
+  font-size:18px; font-weight:700; letter-spacing:1px; padding:5px 14px;
+  white-space:nowrap; text-transform:uppercase; }
+
+/* Top hook text */
+.hook-top { position:absolute; top:40px; left:44px; right:44px; z-index:10; }
+.eyebrow { font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:700;
+  color:#D94F00; text-transform:uppercase; letter-spacing:5px; margin-bottom:12px;
+  display:flex; align-items:center; gap:14px; }
+.eyebrow::before { content:''; display:block; width:32px; height:3px; background:#D94F00; }
+.hook-head { font-family:'Bebas Neue',sans-serif; font-size:96px;
+  color:#fff; line-height:0.88; letter-spacing:2px; max-width:860px; }
+.hook-head .acc { color:#D94F00; }
+
+/* After inset - bottom right */
+.after-inset { position:absolute; bottom:240px; right:44px; z-index:10; }
+.after-inset img { width:220px; height:160px; object-fit:cover;
+  border:4px solid #D94F00; display:block;
+  filter:brightness(1.0) saturate(1.2); }
+.after-inset-tag { background:#D94F00; color:#fff;
+  font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:2px;
+  padding:5px 12px; text-align:center; }
+
+/* Bottom CTA */
+.bottom { position:absolute; bottom:0; left:0; right:0; padding:0 44px 44px; z-index:10; }
+.cta-hook { font-family:'Barlow Condensed',sans-serif; font-size:28px;
+  color:rgba(255,255,255,0.55); font-style:italic; margin-bottom:10px; }
+.cta-main-row { display:flex; justify-content:space-between; align-items:flex-end; }
+.cta-text { font-family:'Bebas Neue',sans-serif; font-size:64px;
+  color:#D94F00; letter-spacing:2px; line-height:0.9; }
+.cta-detail { text-align:right; }
+.cta-phone { font-family:'Bebas Neue',sans-serif; font-size:40px;
+  color:#fff; letter-spacing:1px; }
+.cta-sub { font-family:'Barlow',sans-serif; font-size:18px; color:#555; }
+.badges { display:flex; gap:12px; margin-top:16px; flex-wrap:wrap; }
+.badge { font-size:16px; color:#444; border:1px solid #252525;
+  padding:4px 12px; font-family:'Barlow',sans-serif; }
+
+</style>
+</head>
+<body>
+<div class="ad">
+  <img class="bg" src="../Before/image-2.png" alt="Before">
+  <div class="grad-top"></div>
+  <div class="grad-bot"></div>
+
+  <div class="annotation">
+    <div class="ann-circle"></div>
+    <div class="ann-line"></div>
+    <div class="ann-label">⚠ Water entry point</div>
+  </div>
+
+  <div class="hook-top">
+    <div class="eyebrow">Tewantin</div>
+    <div class="hook-head">This is your<br>roof from <span class="acc">above.</span></div>
+  </div>
+
+  <div class="after-inset">
+    <img src="../After/image-2.png" alt="After">
+    <div class="after-inset-tag">✓ After Sam</div>
+  </div>
+
+  <div class="bottom">
+    <div class="cta-hook">Streaks, fade, water stains — this is what neglect looks like from above.</div>
+    <div class="cta-main-row">
+      <div class="cta-text">Free<br>inspection.</div>
+      <div class="cta-detail">
+        <div class="cta-phone">0412 345 678</div>
+        <div class="cta-sub">Area rate $5,920 · Fixed price</div>
+      </div>
+    </div>
+    <div class="badges">
+      <span class="badge">QBCC 15207890</span>
+      <span class="badge">30 Years Exp.</span>
+      <span class="badge">Zero Deposit</span>
+      <span class="badge">Dulux 10yr Warranty</span>
+      <span class="badge">★★★★★ 127 Reviews</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>

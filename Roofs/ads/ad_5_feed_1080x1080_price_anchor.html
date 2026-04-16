@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080">
+<title>Ad 5 — Price Anchor Feed 1:1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0a0a0a;
+    font-family: 'Barlow', sans-serif;
+  }
+
+  .ad {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    display: flex;
+    overflow: hidden;
+  }
+
+  /* ── LEFT — PHOTO ── */
+  .left-photo {
+    width: 480px;
+    height: 100%;
+    position: relative;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  .left-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(1.25) brightness(0.8) contrast(1.05);
+  }
+
+  .left-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(155deg, #7a3a10 0%, #c26820 25%, #8b4513 50%, #d2691e 75%, #a0522d 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    color: rgba(255,255,255,0.35);
+    font-family: 'Barlow', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 20px;
+  }
+  .left-placeholder span { font-size: 52px; opacity: 0.5; }
+
+  /* Gradient on right edge of photo */
+  .left-photo::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 120px;
+    background: linear-gradient(90deg, transparent 0%, #0a0a0a 100%);
+  }
+
+  /* After label on photo */
+  .after-label {
+    position: absolute;
+    bottom: 32px;
+    left: 32px;
+    background: rgba(217,79,0,0.9);
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+    padding: 8px 20px;
+    z-index: 10;
+  }
+
+  /* ── RIGHT — CONTENT ── */
+  .right-content {
+    flex: 1;
+    background: #0a0a0a;
+    padding: 52px 52px 52px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* Top section */
+  .top-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #D94F00;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 12px;
+  }
+
+  .headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    color: #fff;
+    line-height: 0.90;
+    letter-spacing: 1px;
+    margin-bottom: 28px;
+  }
+
+  /* Price comparison */
+  .price-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .price-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 20px 24px;
+    border-left: 4px solid #333;
+  }
+
+  .price-item.crossed {
+    background: rgba(255,255,255,0.02);
+    border-left-color: #ff3b3b;
+    opacity: 0.75;
+  }
+
+  .price-item.highlighted {
+    background: rgba(217,79,0,0.08);
+    border-left-color: #D94F00;
+  }
+
+  .price-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .price-item.highlighted .price-label {
+    color: #D94F00;
+  }
+
+  .price-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    line-height: 1;
+    letter-spacing: 1px;
+  }
+
+  .price-item.crossed .price-value {
+    color: #555;
+    text-decoration: line-through;
+    text-decoration-color: #ff3b3b;
+    text-decoration-thickness: 5px;
+  }
+
+  .price-item.highlighted .price-value {
+    color: #D94F00;
+    font-size: 96px;
+  }
+
+  .price-note {
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    color: #555;
+  }
+
+  .price-item.highlighted .price-note {
+    color: #888;
+  }
+
+  /* Divider with SAVE label */
+  .save-bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .save-line {
+    flex: 1;
+    height: 1px;
+    background: #333;
+  }
+
+  .save-badge {
+    background: #1a1a1a;
+    border: 1px solid #D94F00;
+    color: #D94F00;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    white-space: nowrap;
+  }
+
+  /* Warranty row */
+  .warranty-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    margin: 4px 0;
+  }
+
+  .warranty-icon { font-size: 26px; }
+
+  .warranty-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: #ccc;
+    letter-spacing: 0.5px;
+  }
+
+  /* Bottom CTA */
+  .cta-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .cta-button {
+    background: #D94F00;
+    padding: 22px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+
+  .cta-button-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cta-main {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 38px;
+    color: #fff;
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+
+  .cta-sub {
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    color: rgba(255,255,255,0.7);
+  }
+
+  .cta-phone {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: #fff;
+    letter-spacing: 2px;
+  }
+
+  .footer-badges {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .f-badge {
+    font-family: 'Barlow', sans-serif;
+    font-size: 13px;
+    color: #444;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+<div class="ad">
+
+  <!-- LEFT — AFTER PHOTO -->
+  <div class="left-photo">
+    <!-- REPLACE: <img src="../after_photo.jpg" alt="Restored roof"> -->
+    <div class="left-placeholder">
+      <span>✨</span>
+      After Photo<br>after_roof.jpg
+    </div>
+    <div class="after-label">Restored</div>
+  </div>
+
+  <!-- RIGHT — PRICE ANCHOR CONTENT -->
+  <div class="right-content">
+
+    <div>
+      <div class="top-tag">Why restore?</div>
+      <div class="headline">Same roof.<br>$15K<br>cheaper.</div>
+    </div>
+
+    <div class="price-section">
+
+      <!-- Re-roof price (crossed out) -->
+      <div class="price-item crossed">
+        <span class="price-label">Full re-roof cost</span>
+        <span class="price-value">$28,000</span>
+        <span class="price-note">Average QLD quote · disrupts your home</span>
+      </div>
+
+      <div class="save-bar">
+        <div class="save-line"></div>
+        <div class="save-badge">You save ~$18,000</div>
+        <div class="save-line"></div>
+      </div>
+
+      <!-- Restoration price -->
+      <div class="price-item highlighted">
+        <span class="price-label">Sam's area rate</span>
+        <span class="price-value">from $4,200</span>
+        <span class="price-note">Fixed price · No deposit · GST incl.</span>
+      </div>
+
+      <!-- Warranty row -->
+      <div class="warranty-row">
+        <span class="warranty-icon">🏆</span>
+        <span class="warranty-text">Dulux 10-Year Waterproofing Warranty included</span>
+      </div>
+
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-section">
+      <div class="cta-button">
+        <div class="cta-button-text">
+          <span class="cta-main">Get free quote</span>
+          <span class="cta-sub">No deposit · Fixed price · 3-day job</span>
+        </div>
+        <span class="cta-phone">0412 345 678</span>
+      </div>
+      <div class="footer-badges">
+        <span class="f-badge">QBCC 15207890</span>
+        <span class="f-badge">★★★★★ 127 reviews</span>
+        <span class="f-badge">30 yrs experience</span>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@layer components {
+  .container-tight {
+    @apply mx-auto max-w-6xl;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-amber-500 px-6 py-3 font-semibold text-asphalt-950 shadow-lg shadow-amber-500/20 transition-all hover:bg-amber-400 hover:shadow-amber-400/30 active:scale-[0.98];
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border-2 border-white/20 px-6 py-3 font-semibold text-white transition-all hover:border-amber-400 hover:text-amber-400;
+  }
+
+  .btn-dark {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-asphalt-900 px-6 py-3 font-semibold text-white transition-all hover:bg-asphalt-800;
+  }
+
+  .section-dark {
+    @apply bg-asphalt-950 text-white;
+  }
+
+  .section-light {
+    @apply bg-asphalt-50 text-asphalt-900;
+  }
+
+  .section-mid {
+    @apply bg-asphalt-900 text-white;
+  }
+}

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080">
+<title>Ad 3 — Social Proof Feed 4:5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1350px;
+    overflow: hidden;
+    background: #0a0a0a;
+    font-family: 'Barlow', sans-serif;
+  }
+
+  .ad {
+    width: 1080px;
+    height: 1350px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── PHOTO BLOCK (top 58%) ── */
+  .photo-block {
+    width: 100%;
+    height: 783px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .photo-block img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(1.2) brightness(0.85);
+  }
+
+  .photo-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(155deg, #7a3a10 0%, #cd853f 30%, #8b4513 55%, #d2691e 80%, #a0522d 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    color: rgba(255,255,255,0.4);
+    font-family: 'Barlow', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .photo-placeholder span { font-size: 60px; opacity: 0.5; }
+
+  /* Dark gradient bottom of photo */
+  .photo-block::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(0deg, #0a0a0a 0%, rgba(10,10,10,0.6) 60%, transparent 100%);
+  }
+
+  /* Suburb tag on photo */
+  .photo-tag {
+    position: absolute;
+    top: 32px;
+    left: 32px;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 8px 18px;
+    z-index: 10;
+    border-left: 4px solid #D94F00;
+  }
+
+  /* ── CONTENT BLOCK ── */
+  .content-block {
+    flex: 1;
+    background: #0a0a0a;
+    padding: 44px 56px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  /* Stars */
+  .stars-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .stars {
+    display: flex;
+    gap: 4px;
+  }
+
+  .star {
+    color: #D94F00;
+    font-size: 38px;
+    line-height: 1;
+  }
+
+  .review-count {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    color: #666;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  /* Quote */
+  .quote-mark {
+    font-family: Georgia, serif;
+    font-size: 120px;
+    color: #D94F00;
+    line-height: 0.6;
+    margin-bottom: 8px;
+    opacity: 0.8;
+  }
+
+  .quote-text {
+    font-family: 'Barlow', sans-serif;
+    font-size: 38px;
+    font-weight: 500;
+    color: #fff;
+    line-height: 1.35;
+    letter-spacing: -0.3px;
+  }
+
+  .quote-text em {
+    font-style: italic;
+    color: #ddd;
+  }
+
+  .attribution {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .attr-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #D94F00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .attr-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .attr-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 1px;
+  }
+
+  .attr-suburb {
+    font-family: 'Barlow', sans-serif;
+    font-size: 18px;
+    color: #777;
+  }
+
+  /* Bottom CTA bar */
+  .cta-bar {
+    background: #D94F00;
+    padding: 26px 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 -56px -40px;
+  }
+
+  .cta-left {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cta-tagline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.75);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .cta-main {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 46px;
+    color: #fff;
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+
+  .cta-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .cta-price-label {
+    font-family: 'Barlow', sans-serif;
+    font-size: 17px;
+    color: rgba(255,255,255,0.7);
+    text-decoration: line-through;
+    margin-bottom: 2px;
+  }
+
+  .cta-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 58px;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .cta-price-note {
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    color: rgba(255,255,255,0.6);
+    text-align: right;
+  }
+
+  /* Dulux logo area */
+  .dulux-badge {
+    position: absolute;
+    top: 44px;
+    right: 56px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .dulux-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #D94F00;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .dulux-years {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    color: #fff;
+    line-height: 1;
+    text-align: center;
+  }
+
+  .dulux-sub {
+    font-family: 'Barlow', sans-serif;
+    font-size: 13px;
+    color: #666;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="ad">
+
+  <!-- PHOTO BLOCK -->
+  <div class="photo-block">
+    <!-- REPLACE: <img src="../after_photo.jpg" alt="After roof"> -->
+    <div class="photo-placeholder">
+      <span>🏠</span>
+      After Photo — after_roof.jpg
+    </div>
+    <div class="photo-tag">📍 Noosaville, QLD</div>
+  </div>
+
+  <!-- CONTENT BLOCK -->
+  <div class="content-block">
+
+    <!-- Dulux badge top right -->
+    <div class="dulux-badge">
+      <span class="dulux-text">Dulux</span>
+      <span class="dulux-years">10<br>YRS</span>
+      <span class="dulux-sub">Warranty</span>
+    </div>
+
+    <!-- Stars -->
+    <div>
+      <div class="stars-row">
+        <div class="stars">
+          <span class="star">★</span>
+          <span class="star">★</span>
+          <span class="star">★</span>
+          <span class="star">★</span>
+          <span class="star">★</span>
+        </div>
+        <span class="review-count">127 Google Reviews</span>
+      </div>
+
+      <!-- Quote -->
+      <div class="quote-mark">"</div>
+      <div class="quote-text">
+        <em>Honestly couldn't believe the difference.</em> Sam was on time, fixed things I didn't even know needed doing, and the warranty gave us real peace of mind.
+      </div>
+
+      <div class="attribution">
+        <div class="attr-avatar">KM</div>
+        <div class="attr-info">
+          <span class="attr-name">Karen M.</span>
+          <span class="attr-suburb">Noosaville QLD · Verified customer</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-bar">
+      <div class="cta-left">
+        <span class="cta-tagline">Free quote · Zero deposit</span>
+        <span class="cta-main">Call Sam → 0412 345 678</span>
+      </div>
+      <div class="cta-right">
+        <span class="cta-price-label">Standard $7,400</span>
+        <span class="cta-price">$5,920</span>
+        <span class="cta-price-note">Area rate · This month</span>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>

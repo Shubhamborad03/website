@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1080">
+<title>Ad 1 — Before/After Split Feed 1:1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1080px;
+    height: 1080px;
+    overflow: hidden;
+    background: #0a0a0a;
+    font-family: 'Barlow', sans-serif;
+  }
+
+  .ad {
+    width: 1080px;
+    height: 1080px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ── PHOTO HALVES ── */
+  .photos {
+    display: flex;
+    width: 100%;
+    height: 780px;
+    position: relative;
+  }
+
+  .photo-half {
+    width: 50%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .photo-half img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* BEFORE — desaturated dark treatment */
+  .photo-before img {
+    filter: grayscale(80%) brightness(0.55) contrast(1.1);
+  }
+  .photo-before::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(139,30,0,0.18) 0%, rgba(0,0,0,0.55) 100%);
+  }
+
+  /* AFTER — vibrant saturated treatment */
+  .photo-after img {
+    filter: saturate(1.3) brightness(1.0) contrast(1.05);
+  }
+  .photo-after::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(217,79,0,0.08) 0%, rgba(0,0,0,0.40) 100%);
+  }
+
+  /* ── BEFORE / AFTER STAMPS ── */
+  .stamp {
+    position: absolute;
+    top: 28px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    letter-spacing: 4px;
+    z-index: 10;
+    padding: 6px 22px;
+  }
+  .stamp-before {
+    left: 28px;
+    color: #fff;
+    background: rgba(0,0,0,0.72);
+    border-left: 5px solid #888;
+  }
+  .stamp-after {
+    left: 28px;
+    color: #fff;
+    background: rgba(217,79,0,0.92);
+    border-left: 5px solid #ff9a5c;
+  }
+
+  /* ── CENTRE DIVIDER ── */
+  .divider {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 780px;
+    background: #D94F00;
+    z-index: 20;
+  }
+  .divider-badge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #D94F00;
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 2px;
+    padding: 14px 10px;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    white-space: nowrap;
+    z-index: 30;
+    border: 3px solid #fff;
+  }
+
+  /* ── SUBURB BADGE top ── */
+  .suburb-badge {
+    position: absolute;
+    top: 28px;
+    right: 28px;
+    background: #fff;
+    color: #0a0a0a;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 6px 16px;
+    z-index: 15;
+    text-transform: uppercase;
+  }
+
+  /* ── BOTTOM BAR ── */
+  .bottom-bar {
+    width: 100%;
+    height: 300px;
+    background: #0a0a0a;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 52px;
+    position: relative;
+  }
+
+  .bottom-bar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: #D94F00;
+  }
+
+  .headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 86px;
+    color: #fff;
+    line-height: 0.92;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+  }
+
+  .headline span {
+    color: #D94F00;
+  }
+
+  .sub-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+
+  .sub-text {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px;
+    color: #ccc;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+
+  .sub-text strong {
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .cta-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .cta-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+
+  .cta-phone {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    color: #D94F00;
+    letter-spacing: 3px;
+    line-height: 1;
+  }
+
+  .bottom-footer {
+    position: absolute;
+    bottom: 20px;
+    left: 52px;
+    right: 52px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .badges {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .badge {
+    font-family: 'Barlow', sans-serif;
+    font-size: 16px;
+    color: #555;
+    border: 1px solid #333;
+    padding: 4px 12px;
+  }
+
+  .stars {
+    color: #D94F00;
+    font-size: 22px;
+    letter-spacing: 2px;
+  }
+
+  /* Placeholder styling for images */
+  .photo-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Barlow', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    gap: 8px;
+  }
+  .photo-before .photo-placeholder {
+    background: linear-gradient(135deg, #2a1a0a 0%, #4a3520 30%, #1a1208 60%, #3d2c15 100%);
+    color: rgba(255,255,255,0.5);
+  }
+  .photo-after .photo-placeholder {
+    background: linear-gradient(135deg, #8b4513 0%, #cd853f 30%, #d2691e 60%, #a0522d 100%);
+    color: rgba(255,255,255,0.7);
+  }
+  .photo-placeholder .icon { font-size: 42px; opacity: 0.6; }
+  .photo-placeholder .label { text-transform: uppercase; letter-spacing: 2px; opacity: 0.7; }
+  .photo-placeholder .hint { font-size: 13px; opacity: 0.4; font-weight: 400; }
+</style>
+</head>
+<body>
+<div class="ad">
+
+  <!-- PHOTO HALVES -->
+  <div class="photos">
+    <div class="photo-half photo-before">
+      <!-- REPLACE: <img src="../before_photo.jpg" alt="Before"> -->
+      <div class="photo-placeholder">
+        <span class="icon">🏠</span>
+        <span class="label">Before Photo</span>
+        <span class="hint">before_roof.jpg</span>
+      </div>
+      <div class="stamp stamp-before">Before</div>
+    </div>
+
+    <div class="photo-half photo-after">
+      <!-- REPLACE: <img src="../after_photo.jpg" alt="After"> -->
+      <div class="photo-placeholder">
+        <span class="icon">✨</span>
+        <span class="label">After Photo</span>
+        <span class="hint">after_roof.jpg</span>
+      </div>
+      <div class="stamp stamp-after">After</div>
+    </div>
+
+    <!-- DIVIDER -->
+    <div class="divider">
+      <div class="divider-badge">3 DAYS</div>
+    </div>
+
+    <!-- SUBURB -->
+    <div class="suburb-badge">📍 Noosaville — this week</div>
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="bottom-bar">
+    <div class="headline">Same roof.<br><span>Completely</span> transformed.</div>
+    <div class="sub-row">
+      <div class="sub-text">
+        Restore, don't replace. <strong>Save $15,000+.</strong> Dulux 10-year warranty.
+      </div>
+      <div class="cta-block">
+        <span class="cta-label">Free quote</span>
+        <span class="cta-phone">0412 345 678</span>
+      </div>
+    </div>
+    <div class="bottom-footer">
+      <div class="badges">
+        <span class="badge">QBCC 15207890</span>
+        <span class="badge">ABN 52 161 234 567</span>
+        <span class="badge">30 Years Experience</span>
+      </div>
+      <div class="stars">★★★★★</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
