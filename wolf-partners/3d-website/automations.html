@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>AI Automations — Wolf Partners</title>
+<meta name="description" content="Specialised AI agents that handle lead generation, email follow-ups, quoting, booking, and testimonial collection — 24/7. Built on Claude AI." />
+<link rel="icon" type="image/png" href="assets/wolf-partners-logo.png" />
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,700,800,900&f[]=general-sans@300,400,500,700&display=swap" />
+<script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","lenis":"https://unpkg.com/lenis@1.1.20/dist/lenis.mjs"}}</script>
+<style>
+:root{--bg:#0a0a0d;--bg-2:#0e0e12;--panel:#141418;--ink:#f2ede3;--ink-soft:#c8c3b8;--muted:#7a776f;--line:rgba(242,237,227,.06);--line-2:rgba(242,237,227,.14);--gold:#C5A44E;--gold-soft:#D4B968;--gold-dim:rgba(197,164,78,.12);--gold-line:rgba(197,164,78,.25);--light-bg:#F5F4F0;--light-card:#FFFFFF;--light-fg:#1A1A1F;--light-muted:#6B6A65;--light-border:rgba(0,0,0,.08);--ff-d:'Cabinet Grotesk','Archivo Black',Impact,system-ui,sans-serif;--ff-b:'General Sans','Inter',system-ui,sans-serif;--ease:cubic-bezier(.2,.7,.2,1);--max:1280px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);overflow-x:hidden}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--ff-b);font-weight:400;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}a{color:inherit;text-decoration:none}
+::selection{background:var(--gold);color:#0a0a0d}
+button{font:inherit;cursor:pointer}
+body::after{content:"";position:fixed;inset:0;z-index:9990;pointer-events:none;opacity:.016;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:256px}
+#worldCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:18px 32px;transition:background .35s,padding .35s,border-color .35s;border-bottom:1px solid transparent}
+.nav.scrolled{background:rgba(10,10,13,.7);backdrop-filter:blur(16px) saturate(1.3);padding:12px 32px;border-bottom-color:var(--line)}
+.nav .brand{display:flex;align-items:center;gap:10px}
+.nav .brand img{height:28px;width:auto;opacity:.85}
+.nav ul{display:flex;gap:28px;list-style:none;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+.nav ul a{opacity:.6;transition:opacity .25s}
+.nav ul a:hover,.nav ul a.active{opacity:1}
+.nav .cta-btn{border:1px solid var(--gold-line);background:var(--gold-dim);padding:10px 20px;border-radius:10px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--gold-soft);transition:background .25s,color .25s,border-color .25s}
+.nav .cta-btn:hover{background:var(--gold);color:#0a0a0d;border-color:var(--gold)}
+@media(max-width:780px){.nav ul{display:none}.nav{padding:14px 18px}}
+
+.hero{position:relative;height:100svh;min-height:700px;overflow:hidden;display:grid;place-items:end start;z-index:1}
+.hero .vignette{position:absolute;inset:0;pointer-events:none;z-index:2;background:radial-gradient(120% 90% at 50% 60%,transparent 25%,rgba(10,10,13,.5) 100%),linear-gradient(180deg,rgba(10,10,13,.35) 0%,transparent 18%,transparent 55%,rgba(10,10,13,.9) 100%)}
+.hero .copy{position:relative;z-index:3;padding:0 6vw 9vh;max-width:var(--max);width:100%}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:28px;padding:9px 16px;border:1px solid var(--gold-line);border-radius:999px;background:rgba(197,164,78,.06);font-weight:500;opacity:0}
+.eyebrow .dot{width:6px;height:6px;border-radius:999px;background:var(--gold);box-shadow:0 0 12px rgba(197,164,78,.6);animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
+.hero h1{font-family:var(--ff-d);font-weight:800;font-size:clamp(40px,7vw,100px);line-height:.95;letter-spacing:-.025em}
+.hero h1 .gold{background:linear-gradient(135deg,#C5A44E,#D4B968,#E8D48B);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero h1 .word{display:inline-block;overflow:hidden;vertical-align:top}
+.hero h1 .word .w-in{display:inline-block;transform:translateY(115%);will-change:transform}
+.hero .sub{margin-top:24px;max-width:600px;color:var(--ink-soft);font-size:clamp(15px,1.2vw,17px);line-height:1.7;opacity:0}
+.hero .sub strong{color:var(--gold-soft);font-weight:600}
+.hero .ctas{margin-top:32px;display:flex;gap:14px;flex-wrap:wrap;opacity:0}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border-radius:12px;font-family:var(--ff-b);font-size:13px;letter-spacing:.06em;font-weight:600;transition:transform .35s var(--ease),background .25s,color .25s,box-shadow .3s,border-color .25s;border:0;white-space:nowrap}
+.btn.solid{background:var(--gold);color:#0a0a0d}
+.btn.solid:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(197,164,78,.3)}
+.btn.solid svg{width:16px;height:16px;transition:transform .3s var(--ease)}
+.btn.solid:hover svg{transform:translate(3px,-3px)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line-2)}
+.btn.ghost:hover{background:rgba(242,237,227,.04);border-color:var(--ink)}
+.scroll-cue{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);font-size:10px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;z-index:3;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;font-weight:500}
+.scroll-cue .bar{width:1px;height:36px;background:linear-gradient(180deg,var(--gold),transparent);transform-origin:top;animation:cue 1.9s ease-in-out infinite}
+@keyframes cue{0%{transform:scaleY(.1)}50%{transform:scaleY(1)}100%{transform-origin:bottom;transform:scaleY(.1)}}
+
+.dark-section{position:relative;z-index:1;background:transparent}
+.light-section{position:relative;z-index:2;background:var(--light-bg)}
+section{position:relative;padding:clamp(100px,14vw,160px) 6vw;contain:layout paint}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;margin-bottom:64px;flex-wrap:wrap;max-width:var(--max);margin-left:auto;margin-right:auto;width:100%}
+.sec-head .label{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:16px;font-weight:500}
+.sec-head h2{font-family:var(--ff-d);font-weight:800;font-size:clamp(36px,5vw,72px);line-height:.98;letter-spacing:-.02em}
+.sec-head .lede{max-width:480px;color:var(--ink-soft);font-size:15px;line-height:1.7}
+.light-section{color:var(--light-fg)}
+.light-section .sec-head h2{color:var(--light-fg)}
+.light-section .sec-head .lede{color:var(--light-muted)}
+.light-section .sec-head .label{color:var(--gold)}
+
+/* ── AGENT MODULES ── */
+.agent-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:var(--max);margin:0 auto;perspective:1200px}
+.agent-card{background:var(--light-card);border:1px solid var(--light-border);border-radius:16px;padding:40px;box-shadow:0 1px 3px rgba(0,0,0,.04);transform-style:preserve-3d;transition:box-shadow .4s,border-color .4s;will-change:transform;position:relative}
+.agent-card:hover{box-shadow:0 25px 60px rgba(0,0,0,.1);border-color:rgba(197,164,78,.2)}
+.agent-card>*{transform:translateZ(16px)}
+.agent-card .status{position:absolute;top:20px;right:20px;display:flex;align-items:center;gap:6px;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:500;transform:translateZ(16px)}
+.agent-card .status .live{width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px rgba(74,222,128,.5);animation:pulse 2s ease infinite}
+.agent-card .ic{width:48px;height:48px;border-radius:12px;background:var(--gold-dim);display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+.agent-card .ic svg{width:24px;height:24px;color:var(--gold)}
+.agent-card h3{font-family:var(--ff-d);font-size:22px;font-weight:700;letter-spacing:-.01em;margin-bottom:10px;color:var(--light-fg)}
+.agent-card p{font-size:13.5px;line-height:1.7;color:var(--light-muted);margin-bottom:16px}
+.agent-card .caps{display:flex;flex-wrap:wrap;gap:8px}
+.agent-card .cap{font-size:10px;padding:4px 12px;border-radius:999px;background:var(--gold-dim);color:var(--gold);font-weight:500;letter-spacing:.05em}
+@media(max-width:700px){.agent-grid{grid-template-columns:1fr}}
+
+/* ── HOW IT WORKS (dark) ── */
+.how-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);max-width:var(--max);margin:0 auto}
+.how-step{padding:48px 28px;border-right:1px solid var(--line);position:relative;transition:background .4s}
+.how-step:last-child{border-right:0}
+.how-step:hover{background:rgba(197,164,78,.03)}
+.how-step .n{font-family:var(--ff-d);font-weight:900;font-size:56px;line-height:1;color:rgba(197,164,78,.08);margin-bottom:16px;letter-spacing:-.03em;transition:color .4s}
+.how-step:hover .n{color:rgba(197,164,78,.16)}
+.how-step h4{font-family:var(--ff-d);font-weight:700;font-size:18px;margin-bottom:10px;letter-spacing:-.01em}
+.how-step p{color:var(--ink-soft);font-size:13px;line-height:1.65;max-width:28ch}
+@media(max-width:900px){.how-steps{grid-template-columns:1fr 1fr}.how-step:nth-child(2){border-right:0}}
+@media(max-width:600px){.how-steps{grid-template-columns:1fr}.how-step{border-right:0;border-bottom:1px solid var(--line)}}
+
+/* ── BUILT ON (dark) — trust strip ── */
+.built-on{max-width:var(--max);margin:0 auto;display:flex;align-items:center;gap:40px;padding:40px 0}
+.built-on .bo-label{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);font-weight:500;white-space:nowrap}
+.built-on .bo-line{flex:1;height:1px;background:var(--line)}
+.built-on .bo-tech{display:flex;gap:24px;align-items:center}
+.built-on .bo-badge{font-size:11px;padding:6px 16px;border:1px solid var(--line);border-radius:999px;color:var(--ink-soft);font-weight:500;letter-spacing:.06em}
+
+/* ── CTA ── */
+.cta-section{padding:100px 6vw 140px}
+.cta-card{background:rgba(10,10,13,.7);color:var(--ink);border-radius:20px;padding:72px 48px;text-align:center;position:relative;overflow:hidden;max-width:800px;margin:0 auto;border:1px solid var(--line);backdrop-filter:blur(12px)}
+.cta-glow{position:absolute;top:-40%;left:50%;transform:translateX(-50%);width:500px;height:500px;border-radius:50%;background:var(--gold);filter:blur(160px);opacity:.06;pointer-events:none}
+.cta-card .label{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:24px;position:relative;font-weight:500}
+.cta-card h2{font-family:var(--ff-d);font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:700;letter-spacing:-.02em;margin-bottom:16px;position:relative}
+.cta-card .desc{font-size:15px;color:var(--ink-soft);max-width:440px;margin:0 auto 40px;line-height:1.7;position:relative}
+.cta-card .btn{position:relative}
+.cta-email{font-size:12px;color:var(--muted);margin-top:16px;position:relative}
+
+footer{position:relative;z-index:2;background:var(--bg);padding:80px 6vw 40px;border-top:1px solid var(--line)}
+footer .top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px;margin-bottom:56px;max-width:var(--max);margin-left:auto;margin-right:auto}
+footer h5{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;font-weight:500}
+footer a{display:block;padding:5px 0;color:var(--ink-soft);font-size:13.5px;transition:color .2s}
+footer a:hover{color:var(--ink)}
+footer .lockup{font-family:var(--ff-d);font-weight:900;font-size:clamp(40px,6.5vw,100px);line-height:.92;text-transform:uppercase;color:var(--ink);border-top:1px solid var(--line);padding-top:28px;margin-top:28px;letter-spacing:-.03em;max-width:var(--max);margin-left:auto;margin-right:auto}
+footer .lockup .gold{background:linear-gradient(135deg,#C5A44E,#D4B968);-webkit-background-clip:text;background-clip:text;color:transparent}
+footer .bot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;font-size:12px;color:var(--muted);margin-top:36px;max-width:var(--max);margin-left:auto;margin-right:auto}
+@media(max-width:780px){footer .top{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<canvas id="worldCanvas"></canvas>
+
+<nav class="nav" id="nav">
+  <a class="brand" href="index.html"><img src="assets/wolf-partners-logo.png" alt="Wolf Partners" /></a>
+  <ul>
+    <li><a href="websites.html">Websites</a></li>
+    <li><a href="automations.html" class="active">Automations</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <a class="cta-btn" href="index.html#contact">Book a Call</a>
+</nav>
+
+<!-- HERO -->
+<header class="hero dark-section" id="heroWrap">
+  <div class="vignette"></div>
+  <div class="copy">
+    <div class="eyebrow" id="eyebrow"><span class="dot"></span>AI-Powered Operations</div>
+    <h1 id="heroH1"></h1>
+    <p class="sub" id="heroSub">Specialised AI agents that handle lead generation, follow-ups, quoting, booking, and client management. <strong>Each agent is trained on your business</strong> — not a generic chatbot.</p>
+    <div class="ctas" id="heroCtas">
+      <a class="btn solid" href="#">See What We Can Automate <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"/></svg></a>
+      <a class="btn ghost" href="#agents">View Agents</a>
+    </div>
+  </div>
+  <div class="scroll-cue" id="scrollCue"><span>Scroll</span><span class="bar"></span></div>
+</header>
+
+<!-- AGENT MODULES -->
+<section id="agents" class="light-section">
+  <div class="sec-head">
+    <div>
+      <div class="label gsap-fade">01 / Agent Suite</div>
+      <h2 class="gsap-fade">One agent per job.<br/>All running 24/7.</h2>
+    </div>
+    <p class="lede gsap-fade">Each automation is a specialised Claude AI agent — trained on your pricing, your services, your voice. Not a template. Not a generic bot.</p>
+  </div>
+  <div class="agent-grid">
+    <article class="agent-card gsap-card">
+      <div class="status"><span class="live"></span>Active</div>
+      <div class="ic"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg></div>
+      <h3>Follow-Up Agent</h3>
+      <p>Automatically follows up with every lead via email and SMS. Personalised sequences based on enquiry type, response behaviour, and timing. No lead goes cold.</p>
+      <div class="caps"><span class="cap">Email sequences</span><span class="cap">SMS follow-up</span><span class="cap">Smart timing</span><span class="cap">CRM sync</span></div>
+    </article>
+    <article class="agent-card gsap-card">
+      <div class="status"><span class="live"></span>Active</div>
+      <div class="ic"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25H5.625a2.25 2.25 0 01-2.25-2.25V8.625c0-.621.504-1.125 1.125-1.125H8.25"/></svg></div>
+      <h3>Lead Gen & Content Agent</h3>
+      <p>Creates and publishes content that generates inbound leads — blog posts, social content, Google Business updates. Writes in your brand voice, posts on your schedule.</p>
+      <div class="caps"><span class="cap">Content creation</span><span class="cap">Social posting</span><span class="cap">SEO articles</span><span class="cap">Brand voice</span></div>
+    </article>
+    <article class="agent-card gsap-card">
+      <div class="status"><span class="live"></span>Active</div>
+      <div class="ic"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z"/></svg></div>
+      <h3>AI Quoting Agent</h3>
+      <p>Instant, accurate quotes generated from satellite imagery, property data, and your real pricing model. Roof size, pitch, materials — calculated automatically. Works for any trade.</p>
+      <div class="caps"><span class="cap">Satellite imagery</span><span class="cap">Property data</span><span class="cap">Custom pricing</span><span class="cap">Instant delivery</span></div>
+    </article>
+    <article class="agent-card gsap-card">
+      <div class="status"><span class="live"></span>Active</div>
+      <div class="ic"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg></div>
+      <h3>Booking & Scheduling Agent</h3>
+      <p>Customers book directly from your website, Google listing, or via SMS. The agent checks your real availability, avoids double-bookings, sends confirmations and reminders.</p>
+      <div class="caps"><span class="cap">Calendar sync</span><span class="cap">Auto-reminders</span><span class="cap">SMS confirmation</span><span class="cap">Rescheduling</span></div>
+    </article>
+    <article class="agent-card gsap-card">
+      <div class="status"><span class="live"></span>Active</div>
+      <div class="ic"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.562.562 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg></div>
+      <h3>Testimonial Collector</h3>
+      <p>After every completed job, the agent sends a personalised review request via email and SMS. Follows up twice if needed. Routes positive reviews to Google and your website.</p>
+      <div class="caps"><span class="cap">Auto-request</span><span class="cap">Google Reviews</span><span class="cap">Website feed</span><span class="cap">Smart follow-up</span></div>
+    </article>
+    <article class="agent-card gsap-card">
+      <div class="status"><span class="live"></span>Active</div>
+      <div class="ic"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z"/></svg></div>
+      <h3>Custom Agent Builder</h3>
+      <p>Need something specific? We build custom AI agents for any repeatable business process — data entry, report generation, inventory management, client onboarding. If a human does it the same way twice, an agent can do it.</p>
+      <div class="caps"><span class="cap">Custom workflows</span><span class="cap">API integrations</span><span class="cap">Any process</span><span class="cap">Claude AI</span></div>
+    </article>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" class="dark-section">
+  <div class="sec-head">
+    <div>
+      <div class="label gsap-fade">02 / How It Works</div>
+      <h2 class="gsap-fade">From brief to<br/>running in days.</h2>
+    </div>
+    <p class="lede gsap-fade">We don't sell software licences. We build, deploy, and maintain your agents. You just use them.</p>
+  </div>
+  <div class="how-steps">
+    <div class="how-step gsap-step"><div class="n">01</div><h4>We map your processes</h4><p>Which tasks eat your time? Which ones are repeatable? We find the highest-ROI automation targets.</p></div>
+    <div class="how-step gsap-step"><div class="n">02</div><h4>We build the agent</h4><p>Custom Claude AI agent trained on your data, your pricing, your brand voice. Not a template — yours.</p></div>
+    <div class="how-step gsap-step"><div class="n">03</div><h4>We deploy & connect</h4><p>Integrated into your existing tools — email, CRM, calendar, website. No migration, no disruption.</p></div>
+    <div class="how-step gsap-step"><div class="n">04</div><h4>We monitor & improve</h4><p>Ongoing optimisation. We track agent performance, fix edge cases, and improve accuracy over time.</p></div>
+  </div>
+</section>
+
+<!-- BUILT ON -->
+<section class="dark-section" style="padding-top:0;padding-bottom:40px">
+  <div class="built-on gsap-fade">
+    <span class="bo-label">Built on</span>
+    <span class="bo-line"></span>
+    <div class="bo-tech">
+      <span class="bo-badge">Claude AI</span>
+      <span class="bo-badge">Anthropic API</span>
+      <span class="bo-badge">Custom Agents</span>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="contact" class="cta-section dark-section">
+  <div class="cta-card gsap-fade">
+    <div class="cta-glow"></div>
+    <div class="label">Ready to automate?</div>
+    <h2>Replace headcount with infrastructure.</h2>
+    <p class="desc">Book a 15-minute call. We'll identify your top 3 automation opportunities and show you exactly what the agents would do.</p>
+    <a class="btn solid" href="#">Book Your Automation Audit <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"/></svg></a>
+    <p class="cta-email">Or email: dave@wolfpartners.com.au</p>
+  </div>
+</section>
+
+<footer>
+  <div class="top">
+    <div>
+      <a class="brand" href="index.html" style="display:flex;gap:10px;align-items:center"><img src="assets/wolf-partners-logo.png" alt="" style="height:24px" /></a>
+      <p style="color:var(--muted);margin-top:16px;max-width:300px;font-size:13px;line-height:1.7">Growth, investment, and automation for businesses that already have traction. Based in SE Queensland.</p>
+    </div>
+    <div><h5>Services</h5><a href="websites.html">Websites</a><a href="automations.html">AI Automations</a><a href="index.html#services">Growth & Investment</a></div>
+    <div><h5>Company</h5><a href="index.html#about">About</a><a href="index.html#contact">Contact</a></div>
+    <div><h5>Connect</h5><a href="mailto:dave@wolfpartners.com.au">Email</a><a href="#">LinkedIn</a></div>
+  </div>
+  <div class="lockup">Wolf <span class="gold">Partners</span></div>
+  <div class="bot"><span>&copy; 2026 Wolf Partners &middot; All rights reserved</span><span>dave@wolfpartners.com.au</span></div>
+</footer>
+
+<script type="module">
+import * as THREE from 'three';
+import Lenis from 'lenis';
+
+const lenis=new Lenis({lerp:0.1,smoothWheel:true,wheelMultiplier:1.2,touchMultiplier:2,syncTouch:true});
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',(e)=>{const id=a.getAttribute('href');if(id==='#'||id.length<2)return;const t=document.querySelector(id);if(!t)return;e.preventDefault();lenis.scrollTo(t,{offset:-40,duration:1.2})})});
+lenis.on('scroll',ScrollTrigger.update);
+gsap.ticker.add((time)=>lenis.raf(time*1000));
+gsap.ticker.lagSmoothing(0);
+const nav=document.getElementById('nav');
+let currentScroll=0;
+lenis.on('scroll',({scroll})=>{nav.classList.toggle('scrolled',scroll>60);currentScroll=scroll});
+
+/* HERO WORD REVEAL */
+const heroH1=document.getElementById('heroH1');
+const lines=['Your business runs 24/7.','Your systems should too.'];
+lines.forEach((line,li)=>{
+  if(li>0) heroH1.appendChild(document.createElement('br'));
+  line.split(' ').forEach((w,wi,arr)=>{
+    const span=document.createElement('span');span.className='word';
+    const inner=document.createElement('span');inner.className='w-in';
+    if(li===1){inner.classList.add('gold');inner.style.cssText='background:linear-gradient(135deg,#C5A44E,#D4B968,#E8D48B);-webkit-background-clip:text;background-clip:text;color:transparent'}
+    inner.textContent=w;span.appendChild(inner);heroH1.appendChild(span);
+    if(wi<arr.length-1) heroH1.appendChild(document.createTextNode(' '));
+  });
+});
+const heroTL=gsap.timeline({delay:0.4});
+heroTL.to('#eyebrow',{opacity:1,y:0,duration:0.6,ease:'power3.out'})
+  .to('.w-in',{y:'0%',duration:0.7,ease:'power3.out',stagger:0.06},'-=0.3')
+  .to('#heroSub',{opacity:1,y:0,duration:0.6,ease:'power3.out'},'-=0.2')
+  .to('#heroCtas',{opacity:1,y:0,duration:0.6,ease:'power3.out'},'-=0.3')
+  .to('#scrollCue',{opacity:0.7,duration:0.5},'-=0.2');
+
+/* GSAP SCROLL ANIMATIONS */
+gsap.registerPlugin(ScrollTrigger);
+gsap.utils.toArray('.gsap-fade').forEach(el=>{gsap.from(el,{y:40,opacity:0,duration:0.8,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 85%',toggleActions:'play none none none'}})});
+gsap.from('.gsap-card',{y:60,opacity:0,scale:0.95,duration:0.8,ease:'power3.out',stagger:0.12,scrollTrigger:{trigger:'.agent-grid',start:'top 80%',toggleActions:'play none none none'}});
+gsap.from('.gsap-step',{y:40,opacity:0,duration:0.7,ease:'power3.out',stagger:0.15,scrollTrigger:{trigger:'.how-steps',start:'top 80%',toggleActions:'play none none none'}});
+
+/* CSS 3D TILT */
+const isMobile=window.matchMedia('(max-width:900px)').matches;
+if(!isMobile){
+  document.querySelectorAll('.agent-card').forEach(card=>{
+    card.addEventListener('mousemove',(e)=>{const r=card.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-0.5;const y=(e.clientY-r.top)/r.height-0.5;gsap.to(card,{rotateY:x*16,rotateX:-y*16,duration:0.4,ease:'power2.out',transformPerspective:800})});
+    card.addEventListener('mouseleave',()=>{gsap.to(card,{rotateY:0,rotateX:0,duration:0.6,ease:'elastic.out(1,0.4)'})});
+  });
+}
+
+/* THREE.JS */
+const canvas=document.getElementById('worldCanvas');
+const dpr=Math.min(window.devicePixelRatio||1,1.5);
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'high-performance'});
+renderer.setPixelRatio(dpr);renderer.setClearColor(0x0a0a0d,1);
+renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.2;
+const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x0a0a0d,0.006);
+const camera=new THREE.PerspectiveCamera(50,1,0.1,500);camera.position.set(0,2,22);
+scene.add(new THREE.AmbientLight(0xC5A44E,0.2));
+const ml=new THREE.DirectionalLight(0xFFE8A0,1.0);ml.position.set(8,12,10);scene.add(ml);
+const rl=new THREE.DirectionalLight(0xD4B968,0.5);rl.position.set(-10,4,-8);scene.add(rl);
+const bl=new THREE.PointLight(0xC5A44E,0.8,40);bl.position.set(0,-6,0);scene.add(bl);
+const tl=new THREE.PointLight(0xD4B968,0.4,50);tl.position.set(5,10,-5);scene.add(tl);
+
+const CP=new THREE.Vector3(5,0,-4);
+const cG=new THREE.IcosahedronGeometry(3.2,4);const cBP=new Float32Array(cG.attributes.position.array);
+const cW=new THREE.Mesh(cG,new THREE.MeshPhongMaterial({color:0xC5A44E,emissive:0x3D2E10,wireframe:true,transparent:true,opacity:0.35}));cW.position.copy(CP);scene.add(cW);
+const cIG=new THREE.IcosahedronGeometry(3.0,4);const cIBP=new Float32Array(cIG.attributes.position.array);
+const cS=new THREE.Mesh(cIG,new THREE.MeshPhongMaterial({color:0xC5A44E,emissive:0x1A1206,specular:0xD4B968,shininess:60,transparent:true,opacity:0.08,side:THREE.DoubleSide}));cS.position.copy(CP);scene.add(cS);
+
+function mkR(r,tb,op,tx,tz){const m=new THREE.Mesh(new THREE.TorusGeometry(r,tb,12,100),new THREE.MeshPhongMaterial({color:0xD4B968,emissive:0x2A200A,wireframe:false,transparent:true,opacity:op}));m.position.copy(CP);m.rotation.x=tx;m.rotation.z=tz;scene.add(m);return m}
+const r1=mkR(5,.025,.2,Math.PI*.35,Math.PI*.1),r2=mkR(5.8,.018,.12,Math.PI*.6,Math.PI*.4),r3=mkR(4.3,.015,.1,Math.PI*.15,Math.PI*.5);
+
+const nodes=[];const nC=[{t:'oct',s:.6,r:7,sp:.18,y:1.8,ph:0,op:.25},{t:'tet',s:.5,r:8.5,sp:-.14,y:-1.2,ph:Math.PI*.5,op:.2},{t:'dod',s:.4,r:6.5,sp:.22,y:2.8,ph:Math.PI,op:.2},{t:'oct',s:.35,r:9.5,sp:-.1,y:-2.2,ph:Math.PI*1.5,op:.15},{t:'ico',s:.3,r:5.8,sp:.2,y:.8,ph:Math.PI*.7,op:.18},{t:'tet',s:.25,r:10.5,sp:.12,y:-.6,ph:Math.PI*1.2,op:.12},{t:'dod',s:.45,r:7.5,sp:-.16,y:1,ph:Math.PI*.3,op:.2},{t:'oct',s:.35,r:11,sp:.09,y:3.2,ph:Math.PI*1.8,op:.1}];
+const gM={oct:s=>new THREE.OctahedronGeometry(s),tet:s=>new THREE.TetrahedronGeometry(s),dod:s=>new THREE.DodecahedronGeometry(s),ico:s=>new THREE.IcosahedronGeometry(s,0)};
+nC.forEach(c=>{const m=new THREE.Mesh(gM[c.t](c.s),new THREE.MeshPhongMaterial({color:0xC5A44E,emissive:0x2A200A,wireframe:true,transparent:true,opacity:c.op}));scene.add(m);nodes.push({mesh:m,...c})});
+
+const lM=new THREE.LineBasicMaterial({color:0xC5A44E,transparent:true,opacity:0.06});
+const nL=nodes.map(()=>{const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(),new THREE.Vector3()]);const l=new THREE.Line(g,lM.clone());scene.add(l);return l});
+const iP=[[0,2],[1,3],[2,4],[3,5],[4,6],[5,7],[0,6],[1,7]];
+const iL=iP.map(()=>{const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(),new THREE.Vector3()]);const l=new THREE.Line(g,new THREE.LineBasicMaterial({color:0xD4B968,transparent:true,opacity:0.03}));scene.add(l);return l});
+
+function mkP(cnt,spr,sz,op,col){const g=new THREE.BufferGeometry();const p=new Float32Array(cnt*3);for(let i=0;i<cnt;i++){const th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1),r=Math.random()*spr;p[i*3]=r*Math.sin(ph)*Math.cos(th)+CP.x;p[i*3+1]=r*Math.sin(ph)*Math.sin(th)+CP.y;p[i*3+2]=r*Math.cos(ph)+CP.z}g.setAttribute('position',new THREE.BufferAttribute(p,3));const pts=new THREE.Points(g,new THREE.PointsMaterial({color:col,size:sz,transparent:true,opacity:op,depthWrite:false,sizeAttenuation:true}));scene.add(pts);return pts}
+const pC=mkP(250,9,.04,.45,0xC5A44E),pM=mkP(350,20,.025,.18,0xD4B968),pF=mkP(200,40,.018,.08,0xC5A44E);
+
+const dS=[];for(let i=0;i<8;i++){const gs=[new THREE.IcosahedronGeometry(1.8,1),new THREE.OctahedronGeometry(1.4),new THREE.DodecahedronGeometry(1.2),new THREE.TetrahedronGeometry(1.5)];const m=new THREE.Mesh(gs[i%4],new THREE.MeshPhongMaterial({color:0xC5A44E,emissive:0x1A1206,wireframe:true,transparent:true,opacity:.04+Math.random()*.03}));const a=(i/8)*Math.PI*2,rv=28+Math.random()*20;m.position.set(Math.cos(a)*rv+CP.x,(Math.random()-.5)*16,Math.sin(a)*rv+CP.z-10);m.rotation.set(Math.random()*Math.PI,Math.random()*Math.PI,0);scene.add(m);dS.push({mesh:m,rx:.0004+Math.random()*.0006,ry:.0005+Math.random()*.0008})}
+
+function pn(x,y,z,t){return Math.sin(x*1.4+t*.5)*Math.cos(y*1.7+t*.35)*Math.sin(z*1.1+t*.45)*.5+Math.sin(x*2.8+t*1.1)*Math.cos(y*2.3+t*.7)*.25+Math.sin(z*3.5+t*.9)*Math.cos(x*1.6+t*.6)*.15}
+
+let tmx=0,tmy=0,mx=0,my=0;
+document.addEventListener('pointermove',(e)=>{tmx=((e.clientX/window.innerWidth)-.5)*2;tmy=((e.clientY/window.innerHeight)-.5)*2},{passive:true});
+let sP=0;const dE=document.documentElement;
+function resize(){renderer.setSize(window.innerWidth,window.innerHeight,false);camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix()}
+resize();window.addEventListener('resize',resize);
+let tab=!document.hidden;document.addEventListener('visibilitychange',()=>tab=!document.hidden);
+
+function loop(time){
+  if(!tab){requestAnimationFrame(loop);return}
+  const t=time*.001,dH=dE.scrollHeight-window.innerHeight;sP=dH>0?currentScroll/dH:0;
+  const mi=.22+sP*.12,a=cW.geometry.attributes.position.array,aI=cS.geometry.attributes.position.array;
+  for(let i=0;i<cBP.length;i+=3){const bx=cBP[i],by=cBP[i+1],bz=cBP[i+2],n=pn(bx,by,bz,t),s=1+n*mi;a[i]=bx*s;a[i+1]=by*s;a[i+2]=bz*s}cW.geometry.attributes.position.needsUpdate=true;
+  for(let i=0;i<cIBP.length;i+=3){const bx=cIBP[i],by=cIBP[i+1],bz=cIBP[i+2],n=pn(bx,by,bz,t*.85-.4),s=1+n*(mi*.85);aI[i]=bx*s;aI[i+1]=by*s;aI[i+2]=bz*s}cS.geometry.attributes.position.needsUpdate=true;
+  const rs=.0015+sP*.002;cW.rotation.y+=rs;cW.rotation.x+=rs*.35;cS.rotation.y=cW.rotation.y*.95;cS.rotation.x=cW.rotation.x*.95;
+  cW.material.opacity=.3+Math.sin(t*.6)*.05;cS.material.opacity=.06+Math.sin(t*.6+1)*.02;
+  r1.rotation.z+=.004;r1.rotation.y+=.0015;r2.rotation.z-=.003;r2.rotation.x+=.002;r3.rotation.y+=.005;r3.rotation.z-=.0015;
+  nodes.forEach((n,i)=>{const ang=t*n.sp+n.ph;n.mesh.position.x=CP.x+Math.cos(ang)*n.r;n.mesh.position.y=CP.y+n.y+Math.sin(t*.4+n.ph)*.8;n.mesh.position.z=CP.z+Math.sin(ang)*n.r;n.mesh.rotation.x+=.01;n.mesh.rotation.y+=.015;nL[i].geometry.setFromPoints([CP.clone(),n.mesh.position.clone()]);const d=CP.distanceTo(n.mesh.position);nL[i].material.opacity=Math.max(.015,.07-d*.004)});
+  iP.forEach(([a,b],i)=>{if(nodes[a]&&nodes[b])iL[i].geometry.setFromPoints([nodes[a].mesh.position.clone(),nodes[b].mesh.position.clone()])});
+  pC.rotation.y+=.0003;pC.rotation.x+=.0001;pM.rotation.y-=.0001;pM.rotation.z+=.00008;pF.rotation.y+=.00005;
+  dS.forEach(s=>{s.mesh.rotation.x+=s.rx;s.mesh.rotation.y+=s.ry});
+  mx+=(tmx-mx)*.03;my+=(tmy-my)*.03;
+  const oA=sP*Math.PI*1.4-.3,oR=22-sP*5;
+  camera.position.x=CP.x+Math.sin(oA)*oR+mx*2.5;camera.position.y=2+sP*8+Math.sin(sP*Math.PI)*4+my;camera.position.z=CP.z+Math.cos(oA)*oR;camera.lookAt(CP.x,CP.y,CP.z);
+  renderer.render(scene,camera);requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
