@@ -1,0 +1,1244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>BitumenCo — We lay the ground others build on.</title>
+<meta name="description" content="Hot-mix asphalt, civil paving and line marking across South East Queensland. Owner-operated by Jack Alley. Brisbane → Gold Coast → Sunshine Coast." />
+
+<link rel="icon" type="image/png" href="assets/logo.png" />
+
+<!-- Premium type via Fontshare: Cabinet Grotesk (display) + Satoshi (body) -->
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,700,800,900&f[]=satoshi@300,400,500,700&display=swap" />
+
+<!-- Preload hero-critical assets -->
+<link rel="preload" as="image" href="assets/logo.png" />
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "lenis": "https://unpkg.com/lenis@1.1.20/dist/lenis.mjs"
+  }
+}
+</script>
+
+<style>
+  /* ---------- Design tokens ---------- */
+  :root{
+    --bg:#0a0907;
+    --bg-2:#0e0d0b;
+    --panel:#141210;
+    --panel-2:#1a1816;
+    --ink:#f2ede3;          /* road-paint white (warm off-white) */
+    --ink-soft:#cec9be;
+    --muted:#8a857c;
+    --line:rgba(242,237,227,.07);
+    --line-2:rgba(242,237,227,.18);
+    --accent:#f2ede3;
+
+    --ff-display:'Cabinet Grotesk','Archivo Black',Impact,system-ui,sans-serif;
+    --ff-body:'Satoshi','Inter',system-ui,-apple-system,sans-serif;
+
+    --ease-out:cubic-bezier(.2,.7,.2,1);
+    --ease-soft:cubic-bezier(.25,.46,.45,.94);
+
+    --max:1360px;
+  }
+
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{background:var(--bg);overflow-x:hidden;-webkit-text-size-adjust:100%}
+  html.lenis,html.lenis body{height:auto}
+  html.lenis body{overflow:hidden}
+  .lenis.lenis-smooth{scroll-behavior:auto!important}
+  .lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
+  .lenis.lenis-stopped{overflow:clip}
+
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--ff-body);
+    font-weight:400;line-height:1.55;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    overflow-x:hidden;min-height:100vh;
+  }
+  img{display:block;max-width:100%}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--accent);color:#0a0907}
+  button{font:inherit}
+
+  /* ---------- NAV ---------- */
+  .nav{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:18px 32px;transition:background .35s var(--ease-out),padding .35s var(--ease-out),border-color .35s;
+    border-bottom:1px solid transparent;
+  }
+  .nav.scrolled{background:rgba(10,9,7,.72);padding:12px 32px;border-bottom-color:var(--line)}
+  .nav .brand{display:flex;align-items:center;gap:12px;font-family:var(--ff-display);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:14px;color:var(--ink)}
+  .nav .brand img{width:26px;height:26px}
+  .nav ul{display:flex;gap:28px;list-style:none;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+  .nav ul a{opacity:.7;transition:opacity .2s}
+  .nav ul a:hover{opacity:1}
+  .nav .call{
+    border:1px solid var(--line-2);padding:10px 18px;border-radius:999px;
+    font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    transition:background .25s,color .25s,border-color .25s;font-weight:500;
+  }
+  .nav .call:hover{background:var(--ink);color:#0a0907;border-color:var(--ink)}
+  @media (max-width:780px){.nav ul{display:none}.nav{padding:14px 18px}}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;height:100svh;min-height:700px;max-height:1100px;
+    overflow:hidden;background:var(--bg);
+    display:grid;place-items:end start;
+    contain:layout paint;
+  }
+  .hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .hero .vignette{
+    position:absolute;inset:0;pointer-events:none;z-index:2;
+    background:
+      radial-gradient(140% 85% at 50% 65%, transparent 35%, rgba(10,9,7,.55) 100%),
+      linear-gradient(180deg, rgba(10,9,7,.4) 0%, transparent 22%, transparent 55%, rgba(10,9,7,.92) 100%);
+  }
+  .hero .copy{
+    position:relative;z-index:3;padding:0 6vw 10vh;max-width:var(--max);width:100%;
+  }
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-soft);
+    margin-bottom:28px;padding:9px 15px;border:1px solid var(--line-2);border-radius:999px;
+    background:rgba(10,9,7,.3);font-weight:500;
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:999px;background:var(--accent);box-shadow:0 0 12px rgba(242,237,227,.55)}
+  .hero h1{
+    font-family:var(--ff-display);font-weight:800;
+    font-size:clamp(56px,9.2vw,148px);line-height:.92;letter-spacing:-.018em;
+    color:var(--ink);
+  }
+  .hero h1 .it{font-family:'Satoshi',sans-serif;font-weight:300;font-style:italic;letter-spacing:-.02em;color:var(--ink-soft);text-transform:none}
+  .hero h1 .u{
+    display:inline-block;position:relative;
+    background:linear-gradient(180deg,var(--ink) 30%,#a69d8d 120%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero h1 .u::after{
+    content:"";position:absolute;left:0;right:0;bottom:-.08em;height:3px;
+    background:var(--accent);transform:scaleX(0);transform-origin:left;
+    animation:underline 1.1s .5s var(--ease-out) forwards;
+  }
+  @keyframes underline{to{transform:scaleX(1)}}
+  .hero .sub{margin-top:26px;max-width:600px;color:var(--ink-soft);font-size:clamp(15px,1.25vw,17px);line-height:1.65;font-weight:400}
+  .hero .ctas{margin-top:34px;display:flex;gap:14px;flex-wrap:wrap}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;padding:15px 24px;border-radius:999px;
+    font-family:var(--ff-body);font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;
+    transition:transform .35s var(--ease-out),background .25s,color .25s,box-shadow .3s,border-color .25s;
+    cursor:pointer;border:0;white-space:nowrap;
+  }
+  .btn.solid{background:var(--ink);color:#0a0907}
+  .btn.solid:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(242,237,227,.2)}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line-2)}
+  .btn.ghost:hover{background:rgba(242,237,227,.05);border-color:var(--ink)}
+
+  .scroll-cue{
+    position:absolute;left:50%;bottom:24px;transform:translateX(-50%);
+    font-size:10px;letter-spacing:.3em;color:var(--ink-soft);text-transform:uppercase;z-index:3;
+    display:flex;flex-direction:column;align-items:center;gap:10px;opacity:.7;font-weight:500;
+  }
+  .scroll-cue .bar{width:1px;height:36px;background:linear-gradient(180deg,var(--ink),transparent);transform-origin:top;animation:cue 1.9s ease-in-out infinite}
+  @keyframes cue{0%{transform:scaleY(.1)}50%{transform:scaleY(1)}100%{transform-origin:bottom;transform:scaleY(.1)}}
+
+  /* ---------- Marquee ---------- */
+  .marquee{
+    overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    padding:22px 0;background:var(--bg-2);contain:layout paint;
+  }
+  .marquee .track{display:flex;gap:72px;white-space:nowrap;width:max-content;animation:scroll 42s linear infinite}
+  .marquee .item{font-family:var(--ff-display);font-weight:700;letter-spacing:0;text-transform:uppercase;font-size:22px;color:var(--ink-soft);display:flex;align-items:center;gap:72px}
+  .marquee .item::after{content:"";width:8px;height:8px;border-radius:999px;background:var(--accent)}
+  @keyframes scroll{to{transform:translate3d(-50%,0,0)}}
+
+  /* ---------- Section shell ---------- */
+  section{position:relative;padding:140px 6vw;contain:layout paint}
+  .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;margin-bottom:64px;flex-wrap:wrap;max-width:var(--max);margin-left:auto;margin-right:auto;width:100%}
+  .sec-head .label{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);margin-bottom:18px;font-weight:500}
+  .sec-head h2{font-family:var(--ff-display);font-weight:800;font-size:clamp(42px,5.6vw,86px);line-height:.95;text-transform:uppercase;letter-spacing:-.015em;max-width:13ch}
+  .sec-head .lede{max-width:460px;color:var(--ink-soft);font-size:16px;line-height:1.65;font-weight:400}
+
+  /* ---------- Services ---------- */
+  .services{background:linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%)}
+  .grid-svc{display:grid;grid-template-columns:repeat(12,1fr);gap:18px;max-width:var(--max);margin:0 auto}
+  .card{
+    position:relative;grid-column:span 4;aspect-ratio:4/5;border-radius:14px;overflow:hidden;
+    background:var(--panel);border:1px solid var(--line);
+    transition:transform .6s var(--ease-out),border-color .3s;
+    transform-style:preserve-3d;
+  }
+  .card:hover{border-color:var(--line-2)}
+  .card img.bg{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    transition:transform 1.1s var(--ease-out);
+  }
+  .card:hover img.bg{transform:scale(1.06)}
+  .card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,9,7,0) 25%,rgba(10,9,7,.9) 100%);pointer-events:none}
+  .card .meta{position:absolute;inset:auto 0 0 0;padding:26px;z-index:2}
+  .card .idx{font-family:var(--ff-body);font-weight:500;font-size:11px;letter-spacing:.3em;color:var(--ink-soft);margin-bottom:10px;text-transform:uppercase;opacity:.85}
+  .card h3{font-family:var(--ff-display);font-weight:800;font-size:clamp(22px,2.1vw,30px);text-transform:uppercase;line-height:1;color:var(--ink);letter-spacing:-.01em}
+  .card p{color:var(--ink-soft);font-size:14px;line-height:1.55;margin-top:10px;max-width:38ch}
+  .card .arrow{
+    position:absolute;top:20px;right:20px;width:40px;height:40px;
+    border:1px solid var(--line-2);border-radius:999px;display:grid;place-items:center;
+    transition:background .25s,color .25s,transform .3s;background:rgba(10,9,7,.35);
+    color:var(--ink);z-index:3;
+  }
+  .card:hover .arrow{background:var(--ink);color:#0a0907;transform:translate(2px,-2px)}
+  .card .arrow svg{width:15px;height:15px}
+  @media (max-width:1100px){.card{grid-column:span 6}}
+  @media (max-width:680px){.card{grid-column:span 12;aspect-ratio:5/4}}
+
+  /* ---------- Process ---------- */
+  .process{background:var(--bg)}
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);max-width:var(--max);margin:0 auto}
+  .step{padding:44px 28px;border-right:1px solid var(--line);position:relative;min-height:320px;overflow:hidden;transition:background .4s var(--ease-out)}
+  .step:last-child{border-right:0}
+  .step:hover{background:var(--panel)}
+  .step .n{font-family:var(--ff-display);font-weight:900;font-size:clamp(90px,11vw,160px);line-height:1;color:rgba(242,237,227,.05);position:absolute;right:12px;bottom:-18px;user-select:none;transition:color .5s;letter-spacing:-.03em}
+  .step:hover .n{color:rgba(242,237,227,.11)}
+  .step h4{font-family:var(--ff-display);font-weight:800;font-size:26px;text-transform:uppercase;margin-bottom:14px;color:var(--ink);letter-spacing:-.01em}
+  .step p{color:var(--ink-soft);font-size:14px;line-height:1.6;max-width:34ch}
+  .step .tag{display:inline-block;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin-bottom:22px;font-weight:500}
+  @media (max-width:900px){.steps{grid-template-columns:repeat(2,1fr)}.step:nth-child(2n){border-right:0}.step:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+  @media (max-width:540px){.steps{grid-template-columns:1fr}.step{border-right:0!important;border-bottom:1px solid var(--line)}}
+
+  /* ---------- Cinema (full colour) ---------- */
+  .cinema{padding:0;position:relative;overflow:hidden;background:var(--bg)}
+  .cinema .reel{position:relative;height:80svh;min-height:540px;display:grid;grid-template-columns:1fr 1fr}
+  .cinema figure{position:relative;overflow:hidden}
+  .cinema figure img{
+    width:100%;height:100%;object-fit:cover;
+    transform:scale(1.06);transition:transform 1.8s var(--ease-out);
+  }
+  .cinema.in-view figure img{transform:scale(1)}
+  .cinema figure::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(10,9,7,.55));pointer-events:none}
+  .cinema figcaption{position:absolute;left:24px;bottom:22px;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--ink);z-index:2;font-weight:500}
+  .cinema .text{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;z-index:3;pointer-events:none;padding:0 20px}
+  .cinema .text .big{
+    font-family:var(--ff-display);font-weight:900;font-size:clamp(60px,10.2vw,172px);line-height:.9;
+    text-transform:uppercase;letter-spacing:-.022em;color:var(--ink);
+    text-shadow:0 6px 40px rgba(0,0,0,.55);
+  }
+  .cinema .text .small{margin-top:18px;letter-spacing:.32em;text-transform:uppercase;font-size:12px;color:var(--ink-soft);font-weight:500}
+  @media (max-width:720px){.cinema .reel{grid-template-columns:1fr;grid-template-rows:1fr 1fr;min-height:80svh}}
+
+  /* ---------- Gallery: horizontal scroll + lightbox ---------- */
+  .gallery{background:var(--bg-2);padding-bottom:120px}
+  .hscroll-wrap{position:relative;max-width:100vw}
+  .hscroll{
+    display:flex;gap:20px;
+    padding:20px max(6vw,40px) 40px;
+    overflow-x:auto;overflow-y:hidden;
+    scroll-snap-type:x mandatory;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+    scroll-behavior:smooth;
+    scroll-padding-left:max(6vw,40px);
+  }
+  .hscroll::-webkit-scrollbar{display:none}
+  .hs-card{
+    flex:0 0 auto;width:min(560px,88vw);height:380px;
+    scroll-snap-align:start;
+    border-radius:14px;overflow:hidden;position:relative;cursor:zoom-in;
+    background:var(--panel);border:1px solid var(--line);
+    transition:transform .45s var(--ease-out),border-color .3s;
+    will-change:transform;
+  }
+  .hs-card:hover{transform:translateY(-6px);border-color:var(--line-2)}
+  .hs-card img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease-out);pointer-events:none}
+  .hs-card:hover img{transform:scale(1.05)}
+  .hs-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(10,9,7,.85) 100%);pointer-events:none}
+  .hs-card .cap{
+    position:absolute;left:18px;bottom:16px;color:var(--ink);font-size:11px;letter-spacing:.24em;text-transform:uppercase;
+    background:rgba(10,9,7,.55);padding:7px 12px;border-radius:999px;font-weight:500;z-index:2;
+  }
+  .hs-card .expand{
+    position:absolute;top:16px;right:16px;width:38px;height:38px;
+    background:rgba(10,9,7,.55);border:1px solid var(--line-2);border-radius:999px;
+    display:grid;place-items:center;color:var(--ink);z-index:2;
+    transition:background .25s,color .25s;
+  }
+  .hs-card:hover .expand{background:var(--ink);color:#0a0907}
+  .hs-card .expand svg{width:15px;height:15px}
+
+  .gallery .controls{display:flex;gap:12px;justify-content:center;margin-top:20px}
+  .gallery .controls button{
+    background:transparent;color:var(--ink);border:1px solid var(--line-2);
+    width:56px;height:56px;border-radius:999px;cursor:pointer;font-size:18px;
+    transition:background .25s,color .25s,transform .2s,border-color .25s;
+  }
+  .gallery .controls button:hover{background:var(--ink);color:#0a0907;border-color:var(--ink);transform:translateY(-2px)}
+  .gallery .hs-hint{text-align:center;color:var(--muted);font-size:11px;letter-spacing:.24em;text-transform:uppercase;margin-top:18px;font-weight:500}
+
+  /* Lightbox */
+  .lightbox{
+    position:fixed;inset:0;z-index:100;
+    background:rgba(5,4,3,.95);
+    display:grid;place-items:center;
+    opacity:0;pointer-events:none;transition:opacity .3s var(--ease-out);
+  }
+  .lightbox.open{opacity:1;pointer-events:auto}
+  .lightbox .lb-fig{
+    position:relative;max-width:92vw;max-height:86vh;
+    transform:scale(.96);transition:transform .35s var(--ease-out);
+  }
+  .lightbox.open .lb-fig{transform:scale(1)}
+  .lightbox .lb-img{max-width:92vw;max-height:86vh;object-fit:contain;border-radius:10px;box-shadow:0 40px 100px rgba(0,0,0,.6)}
+  .lightbox .lb-cap{margin-top:16px;text-align:center;color:var(--ink-soft);font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;font-weight:500}
+  .lightbox .lb-btn{
+    position:absolute;z-index:2;background:rgba(10,9,7,.7);color:var(--ink);
+    border:1px solid var(--line-2);width:52px;height:52px;border-radius:999px;cursor:pointer;
+    display:grid;place-items:center;font-size:22px;font-family:var(--ff-display);line-height:1;
+    transition:background .25s,color .25s,transform .2s;
+  }
+  .lightbox .lb-btn:hover{background:var(--ink);color:#0a0907;transform:scale(1.06)}
+  .lightbox .lb-close{top:24px;right:24px}
+  .lightbox .lb-prev{left:24px;top:50%;transform:translateY(-50%)}
+  .lightbox .lb-prev:hover{transform:translateY(-50%) scale(1.06)}
+  .lightbox .lb-next{right:24px;top:50%;transform:translateY(-50%)}
+  .lightbox .lb-next:hover{transform:translateY(-50%) scale(1.06)}
+  .lightbox .lb-counter{position:absolute;top:28px;left:32px;font-size:11px;color:var(--ink-soft);letter-spacing:.26em;text-transform:uppercase;font-weight:500}
+  @media (max-width:640px){
+    .lightbox .lb-prev,.lightbox .lb-next{width:44px;height:44px}
+    .lightbox .lb-close{top:16px;right:16px}
+  }
+
+  /* ---------- Quote (lighter, no fixed bg, no blur) ---------- */
+  .quote{
+    position:relative;overflow:hidden;background:var(--panel);
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  }
+  .quote .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.1fr 1fr;gap:72px;align-items:center;max-width:var(--max);margin:0 auto}
+  .quote h2{font-family:var(--ff-display);font-weight:800;font-size:clamp(40px,5.4vw,82px);line-height:.95;text-transform:uppercase;color:var(--ink);letter-spacing:-.018em}
+  .quote p.lede{color:var(--ink-soft);margin-top:22px;max-width:460px;font-size:16px;line-height:1.7}
+  form{background:rgba(10,9,7,.7);border:1px solid var(--line-2);border-radius:18px;padding:34px}
+  form .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  form label{display:block;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin:16px 0 8px;font-weight:500}
+  form .row label:first-child,form>label:first-of-type{margin-top:0}
+  form input,form select,form textarea{
+    width:100%;background:var(--bg);border:1px solid var(--line);color:var(--ink);
+    padding:14px 16px;border-radius:10px;font:inherit;font-size:14px;font-family:var(--ff-body);
+    transition:border-color .25s;
+  }
+  form input:focus,form select:focus,form textarea:focus{outline:none;border-color:var(--ink)}
+  form textarea{resize:vertical;min-height:100px}
+  form .btn{width:100%;justify-content:center;margin-top:24px}
+  form .micro{font-size:11px;color:var(--muted);margin-top:14px;text-align:center;letter-spacing:.04em}
+  @media (max-width:900px){.quote .wrap{grid-template-columns:1fr;gap:40px}}
+
+  /* ---------- About ---------- */
+  .about{background:var(--bg);padding-top:200px}
+  .about .wrap{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;max-width:var(--max);margin:0 auto}
+  .about .frame{position:relative;aspect-ratio:4/5;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+  .about .frame img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--ease-out)}
+  .about .frame:hover img{transform:scale(1.04)}
+  .about .frame::after{content:"JACK ALLEY — DIRECTOR";position:absolute;left:20px;bottom:20px;color:var(--ink);font-size:10px;letter-spacing:.3em;background:rgba(10,9,7,.65);padding:8px 12px;border-radius:999px;font-weight:500}
+  .about h2{font-family:var(--ff-display);font-weight:800;font-size:clamp(40px,4.8vw,72px);line-height:.98;text-transform:uppercase;color:var(--ink);letter-spacing:-.018em}
+  .about p{color:var(--ink-soft);margin-top:22px;line-height:1.75;font-size:16px;max-width:52ch}
+  .about .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:42px;padding-top:30px;border-top:1px solid var(--line)}
+  .about .stats .num{font-family:var(--ff-display);font-weight:800;font-size:48px;line-height:1;color:var(--ink);letter-spacing:-.02em}
+  .about .stats .txt{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:6px;font-weight:500}
+  @media (max-width:900px){.about .wrap{grid-template-columns:1fr}}
+
+  /* ---------- Areas ---------- */
+  .areas{background:var(--bg-2);padding-top:160px}
+  .areas .wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:60px;align-items:center;max-width:var(--max);margin:0 auto}
+  .areas svg{width:100%;max-width:560px}
+  .areas ul{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:2px 36px;margin-top:24px}
+  .areas li{padding:14px 0;border-bottom:1px solid var(--line);font-size:14px;color:var(--ink-soft);display:flex;justify-content:space-between;transition:color .2s}
+  .areas li:hover{color:var(--ink)}
+  .areas li span{color:var(--muted);font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:500}
+  @media (max-width:900px){.areas .wrap{grid-template-columns:1fr}}
+
+  /* ---------- Footer ---------- */
+  footer{background:var(--bg);padding:80px 6vw 40px;border-top:1px solid var(--line)}
+  footer .top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px;margin-bottom:56px;max-width:var(--max);margin-left:auto;margin-right:auto}
+  footer h5{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin-bottom:18px;font-weight:500}
+  footer a{display:block;padding:6px 0;color:var(--ink-soft);font-size:14px;transition:color .2s}
+  footer a:hover{color:var(--ink)}
+  footer .lockup{font-family:var(--ff-display);font-weight:900;font-size:clamp(48px,7vw,120px);line-height:.9;text-transform:uppercase;color:var(--ink);border-top:1px solid var(--line);padding-top:30px;margin-top:30px;letter-spacing:-.03em}
+  footer .bot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;font-size:12px;color:var(--muted);margin-top:40px;max-width:var(--max);margin-left:auto;margin-right:auto}
+  @media (max-width:780px){footer .top{grid-template-columns:1fr 1fr}}
+
+  /* ---------- SIDE ROAD-BUILD (3D dashboard, bottom-right) ---------- */
+  .sidebuild{
+    position:fixed;right:22px;bottom:22px;
+    width:272px;height:138px;z-index:30;
+    display:flex;align-items:stretch;
+    background:rgba(10,9,7,.82);
+    border:1px solid var(--line-2);
+    border-radius:14px;overflow:hidden;
+    box-shadow:0 20px 60px rgba(0,0,0,.5);
+    pointer-events:none;
+    opacity:0;transform:translateY(16px);
+    transition:opacity .6s var(--ease-out),transform .6s var(--ease-out);
+  }
+  .sidebuild.visible{opacity:1;transform:translateY(0)}
+  .sidebuild .sb-scene{position:relative;width:168px;height:100%;background:linear-gradient(180deg,#0f0d0b 0%,#1a1714 100%)}
+  .sidebuild #sbCanvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .sidebuild .sb-scan{
+    position:absolute;left:0;right:0;top:0;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(242,237,227,.5),transparent);
+    animation:sbscan 3s ease-in-out infinite;
+  }
+  @keyframes sbscan{0%,100%{top:14%}50%{top:78%}}
+  .sidebuild .sb-meta{
+    display:flex;flex-direction:column;justify-content:center;
+    padding:14px 16px;gap:4px;
+    border-left:1px solid var(--line);flex:1;min-width:0;
+  }
+  .sidebuild .sb-label{
+    font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--muted);font-weight:500;
+  }
+  .sidebuild .sb-pct{
+    font-family:var(--ff-display);font-weight:800;
+    font-size:36px;letter-spacing:-.025em;color:var(--ink);
+    line-height:1;display:flex;align-items:baseline;gap:1px;margin:2px 0;
+  }
+  .sidebuild .sb-pct .u{font-size:16px;color:var(--ink-soft);font-weight:500;margin-left:2px}
+  .sidebuild .sb-sub{
+    font-size:10px;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--ink-soft);font-weight:500;
+  }
+  .sidebuild .sb-bar{
+    position:relative;height:3px;background:rgba(242,237,227,.08);
+    border-radius:2px;margin-top:8px;overflow:hidden;
+  }
+  .sidebuild .sb-bar::before{
+    content:"";position:absolute;inset:0 auto 0 0;width:var(--sbp,0%);
+    background:var(--accent);border-radius:2px;
+    box-shadow:0 0 8px rgba(242,237,227,.6);
+    transition:width .15s linear;
+  }
+  @media (max-width:900px){.sidebuild{display:none}}
+
+  /* ---------- Reveal ---------- */
+  .reveal{opacity:0;transform:translate3d(0,28px,0);transition:opacity .9s var(--ease-out),transform .9s var(--ease-out)}
+  .reveal.in{opacity:1;transform:translate3d(0,0,0)}
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a class="brand" href="#"><img src="assets/logo.png" alt="BitumenCo" /><span>BitumenCo</span></a>
+  <ul>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#areas">Coverage</a></li>
+  </ul>
+  <a class="call" href="tel:0421333728">0421 333 728</a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <canvas id="heroCanvas"></canvas>
+  <div class="vignette"></div>
+
+  <div class="copy">
+    <div class="eyebrow"><span class="dot"></span>Estd 2016 · SE QLD · Owner-operated</div>
+    <h1>
+      We lay the <span class="it">ground</span><br/>
+      <span class="u">others build on.</span>
+    </h1>
+    <p class="sub">Hot-mix asphalt, civil paving and line marking across South East Queensland. Ten years on the tools, run by Jack Alley — the same crew that quotes your driveway is the one laying it. No subs, no surprise invoices.</p>
+    <div class="ctas">
+      <a class="btn solid" href="#quote">Request a quote →</a>
+      <a class="btn ghost" href="#work">See the work</a>
+    </div>
+  </div>
+
+  <div class="scroll-cue"><span>Scroll</span><span class="bar"></span></div>
+</header>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="track">
+    <span class="item">Hot-mix Asphalt</span>
+    <span class="item">Civil Construction</span>
+    <span class="item">Line Marking</span>
+    <span class="item">Commercial Car Parks</span>
+    <span class="item">Residential Driveways</span>
+    <span class="item">24hr Quote Turnaround</span>
+    <span class="item">10+ Years On The Tools</span>
+    <span class="item">Insured & Licensed</span>
+    <span class="item">Hot-mix Asphalt</span>
+    <span class="item">Civil Construction</span>
+    <span class="item">Line Marking</span>
+    <span class="item">Commercial Car Parks</span>
+    <span class="item">Residential Driveways</span>
+    <span class="item">24hr Quote Turnaround</span>
+    <span class="item">10+ Years On The Tools</span>
+    <span class="item">Insured & Licensed</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services" class="services">
+  <div class="sec-head reveal">
+    <div>
+      <div class="label">01 / Services</div>
+      <h2>Surface to substrate, one crew.</h2>
+    </div>
+    <p class="lede">Every job runs with the same hands, same gear, same answer on the phone. Nothing gets subbed out. Nothing lands on the invoice that wasn't in the quote.</p>
+  </div>
+
+  <div class="grid-svc">
+    <article class="card reveal">
+      <img class="bg" src="assets/residential-driveway.jpg" alt="Residential asphalt driveway" loading="lazy" decoding="async" />
+      <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div>
+      <div class="meta"><div class="idx">01 / Residential</div><h3>Asphalt Driveways</h3><p>Hot-mix laid and compacted in a single visit. Sharp edges, proper drainage, a finish that still looks right after a Queensland summer.</p></div>
+    </article>
+    <article class="card reveal">
+      <img class="bg" src="assets/pinkenba-3.jpg" alt="Pinkenba commercial asphalt paving" loading="lazy" decoding="async" />
+      <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div>
+      <div class="meta"><div class="idx">02 / Commercial</div><h3>Car parks & civil</h3><p>Commercial bays, service roads, site access. We run alongside Hutchinson, IQ and Veolia — so we know how a site's meant to run.</p></div>
+    </article>
+    <article class="card reveal">
+      <img class="bg" src="assets/pothole-repair-workers.jpg" alt="Pothole asphalt repair crew" loading="lazy" decoding="async" />
+      <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div>
+      <div class="meta"><div class="idx">03 / Repairs</div><h3>Patching & potholes</h3><p>Caught before it turns into a resurface. Saw-cut, clean, tack, pack, compact. The fix that actually lasts — not a cold-mix patch.</p></div>
+    </article>
+    <article class="card reveal">
+      <img class="bg" src="assets/line-marking-2.jpg" alt="Fresh car park line marking" loading="lazy" decoding="async" />
+      <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div>
+      <div class="meta"><div class="idx">04 / Line marking</div><h3>Car-park marking</h3><p>Bays, arrows, hatching, DDA. AS/NZS-compliant layouts, drying quick — the site reopens same-day, not next week.</p></div>
+    </article>
+    <article class="card reveal">
+      <img class="bg" src="assets/excavator.jpg" alt="Civil construction excavation" loading="lazy" decoding="async" />
+      <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div>
+      <div class="meta"><div class="idx">05 / Civil</div><h3>Civil construction</h3><p>Site dev, stormwater, kerb & channel, base prep. The parts most paving mobs call a sub for — we're already on site, already kitted out.</p></div>
+    </article>
+    <article class="card reveal">
+      <img class="bg" src="assets/roller.jpg" alt="Concrete driveway finishing" loading="lazy" decoding="async" />
+      <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 5l7 7-7 7"/></svg></div>
+      <div class="meta"><div class="idx">06 / Concrete</div><h3>Concrete driveways</h3><p>When asphalt isn't the call. Exposed-agg, plain finish, reinforced for vehicle loads. One crew for the whole job, start to finish.</p></div>
+    </article>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process" class="process">
+  <div class="sec-head reveal">
+    <div>
+      <div class="label">02 / Process</div>
+      <h2>First call to final roll.</h2>
+    </div>
+    <p class="lede">A straight line, not a sales funnel. Jack picks up, Jack quotes, Jack's crew lays it — the same person on the call as on the driveway.</p>
+  </div>
+  <div class="steps">
+    <div class="step reveal"><div class="tag">Step 01</div><h4>Site visit</h4><p>We drive out, measure up, and talk through access, drainage and timing. No quote sent sight-unseen.</p><div class="n">01</div></div>
+    <div class="step reveal"><div class="tag">Step 02</div><h4>Fixed quote</h4><p>Written price within 24 hrs, itemised — so you can see exactly what the spend is going on.</p><div class="n">02</div></div>
+    <div class="step reveal"><div class="tag">Step 03</div><h4>Pour & compact</h4><p>Hot-mix from approved plants, laid at temperature, rolled to spec. One mobilisation — in, done, cleaned up.</p><div class="n">03</div></div>
+    <div class="step reveal"><div class="tag">Step 04</div><h4>Final walkthrough</h4><p>We walk the job with you before we leave. Anything not right gets fixed then, not "next visit".</p><div class="n">04</div></div>
+  </div>
+</section>
+
+<!-- CINEMA -->
+<section class="cinema" id="work">
+  <div class="reel">
+    <figure><img src="assets/samford-after.jpg" alt="Samford resurfaced driveway" loading="lazy" decoding="async" /><figcaption>Samford · Resurfaced driveway</figcaption></figure>
+    <figure><img src="assets/pinkenba-2.jpg" alt="Pinkenba commercial yard" loading="lazy" decoding="async" /><figcaption>Pinkenba · Commercial yard</figcaption></figure>
+    <div class="text">
+      <div class="big">Laid it. Rolled it. Done.</div>
+      <div class="small">Recent work — Q1 2026</div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery">
+  <div class="sec-head reveal">
+    <div>
+      <div class="label">03 / Recent work</div>
+      <h2>Real jobs. Real driveways.</h2>
+    </div>
+    <p class="lede">Drag, swipe, arrow through. Shots off our own phones — nothing staged, nothing stock.</p>
+  </div>
+  <div class="hscroll-wrap">
+    <div class="hscroll" id="hscroll" data-lenis-prevent>
+      <article class="hs-card" data-src="assets/samford-after.jpg"      data-cap="Samford · Residential"><img src="assets/samford-after.jpg"      alt="Samford residential driveway" loading="lazy" decoding="async" /><span class="cap">Samford · Residential</span><span class="expand" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 14v6h6M20 10V4h-6M4 20l7-7M20 4l-7 7"/></svg></span></article>
+      <article class="hs-card" data-src="assets/pinkenba-2.jpg"         data-cap="Pinkenba · Commercial"><img src="assets/pinkenba-2.jpg"         alt="Pinkenba commercial yard" loading="lazy" decoding="async" /><span class="cap">Pinkenba · Commercial</span><span class="expand" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 14v6h6M20 10V4h-6M4 20l7-7M20 4l-7 7"/></svg></span></article>
+      <article class="hs-card" data-src="assets/pinkenba-3.jpg"         data-cap="Pinkenba · Yard"><img src="assets/pinkenba-3.jpg"         alt="Pinkenba yard asphalt" loading="lazy" decoding="async" /><span class="cap">Pinkenba · Yard</span><span class="expand" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 14v6h6M20 10V4h-6M4 20l7-7M20 4l-7 7"/></svg></span></article>
+      <article class="hs-card" data-src="assets/pothole-hero.jpg"       data-cap="Pothole · Repair"><img src="assets/pothole-hero.jpg"       alt="Pothole repair" loading="lazy" decoding="async" /><span class="cap">Pothole · Repair</span><span class="expand" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 14v6h6M20 10V4h-6M4 20l7-7M20 4l-7 7"/></svg></span></article>
+      <article class="hs-card" data-src="assets/line-marking-1.jpg"     data-cap="Line marking · Bays"><img src="assets/line-marking-1.jpg"     alt="Car park line marking bays" loading="lazy" decoding="async" /><span class="cap">Line marking · Bays</span><span class="expand" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 14v6h6M20 10V4h-6M4 20l7-7M20 4l-7 7"/></svg></span></article>
+      <article class="hs-card" data-src="assets/line-marking-3.jpg"     data-cap="Line marking · Arrows"><img src="assets/line-marking-3.jpg"     alt="Line marking arrows" loading="lazy" decoding="async" /><span class="cap">Line marking · Arrows</span><span class="expand" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 14v6h6M20 10V4h-6M4 20l7-7M20 4l-7 7"/></svg></span></article>
+      <article class="hs-card" data-src="assets/residential-driveway.jpg" data-cap="Driveway · Residential"><img src="assets/residential-driveway.jpg" alt="Residential driveway" loading="lazy" decoding="async" /><span class="cap">Driveway · Residential</span><span class="expand" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 14v6h6M20 10V4h-6M4 20l7-7M20 4l-7 7"/></svg></span></article>
+      <article class="hs-card" data-src="assets/excavator.jpg"          data-cap="Civil · Prep"><img src="assets/excavator.jpg"          alt="Civil construction excavator" loading="lazy" decoding="async" /><span class="cap">Civil · Prep</span><span class="expand" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 14v6h6M20 10V4h-6M4 20l7-7M20 4l-7 7"/></svg></span></article>
+    </div>
+  </div>
+  <div class="controls"><button aria-label="Previous" id="prev">←</button><button aria-label="Next" id="next">→</button></div>
+  <div class="hs-hint">Tap an image to open · drag or use arrows</div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <div class="lb-counter"><span id="lbNum">1</span> / <span id="lbTotal">8</span></div>
+  <button class="lb-btn lb-close" id="lbClose" aria-label="Close">×</button>
+  <button class="lb-btn lb-prev" id="lbPrev" aria-label="Previous">‹</button>
+  <figure class="lb-fig">
+    <img class="lb-img" id="lbImg" alt="" />
+    <figcaption class="lb-cap" id="lbCap"></figcaption>
+  </figure>
+  <button class="lb-btn lb-next" id="lbNext" aria-label="Next">›</button>
+</div>
+
+<!-- QUOTE -->
+<section class="quote" id="quote">
+  <div class="wrap">
+    <div class="reveal">
+      <h2>Fixed price. 24 hours.</h2>
+      <p class="lede">Drop a few details and Jack will call back with a site-visit time. No call centre, no forms forwarded through three reps before you hear back.</p>
+      <div style="margin-top:30px;font-size:12px;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;font-weight:500">Or call <a style="color:var(--ink)" href="tel:0421333728">0421 333 728</a></div>
+    </div>
+    <form id="quoteForm" class="reveal">
+      <div class="row">
+        <div><label>Name</label><input type="text" required placeholder="Your full name" /></div>
+        <div><label>Phone</label><input type="tel" required placeholder="04__ ___ ___" /></div>
+      </div>
+      <label>Job type</label>
+      <select>
+        <option>Residential driveway</option>
+        <option>Commercial / car park</option>
+        <option>Patching or repair</option>
+        <option>Line marking</option>
+        <option>Civil construction</option>
+        <option>Not sure yet</option>
+      </select>
+      <label>Anything we should know?</label>
+      <textarea placeholder="Rough size, timing, site access..."></textarea>
+      <button class="btn solid" type="submit">Request quote →</button>
+      <div class="micro">Details only used to quote the job. No newsletter. No spam.</div>
+    </form>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="wrap">
+    <div class="frame reveal"><img src="assets/pothole-repair-workers.jpg" alt="Jack Alley on site" loading="lazy" decoding="async" /></div>
+    <div class="reveal">
+      <div style="font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--muted);margin-bottom:18px;font-weight:500">04 / About</div>
+      <h2>Run by the bloke quoting the job.</h2>
+      <p>Jack Alley started on the tools as a builder. Ten-plus years into asphalt and civil, he's kept the setup small on purpose — small enough that the person quoting your driveway is the same one laying it.</p>
+      <p>BitumenCo works residential through commercial, from Pinkenba yards to Samford driveways. Trusted by Hutchinson Builders, IQ Construction and Veolia for the jobs that need to run on time.</p>
+      <div class="stats">
+        <div><div class="num">10+</div><div class="txt">Years on asphalt</div></div>
+        <div><div class="num">24h</div><div class="txt">Quote turnaround</div></div>
+        <div><div class="num">SE QLD</div><div class="txt">Brisbane → Sunshine Coast</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AREAS -->
+<section id="areas" class="areas">
+  <div class="sec-head reveal">
+    <div>
+      <div class="label">05 / Coverage</div>
+      <h2>Gold Coast to Sunshine Coast.</h2>
+    </div>
+    <p class="lede">The full SE QLD corridor. If it's in the belt from Southport to Noosa, we'll quote it.</p>
+  </div>
+  <div class="wrap">
+    <svg viewBox="0 0 600 620" aria-hidden="true">
+      <defs>
+        <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#f2ede3" stop-opacity=".38"/>
+          <stop offset="70%" stop-color="#f2ede3" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <path d="M 80 60 C 140 100, 160 200, 200 260 C 260 340, 220 420, 280 500 C 330 580, 470 600, 520 540" stroke="rgba(242,237,227,.25)" stroke-width="1.2" fill="none" stroke-dasharray="4 6"/>
+      <circle cx="300" cy="320" r="240" fill="url(#glow)" opacity=".22"/>
+      <circle cx="300" cy="320" r="180" fill="none" stroke="rgba(242,237,227,.14)"/>
+      <circle cx="300" cy="320" r="120" fill="none" stroke="rgba(242,237,227,.28)"/>
+      <g font-family="Satoshi,Inter,sans-serif" font-size="11" font-weight="500" letter-spacing="2" fill="#f2ede3" text-anchor="middle">
+        <g><circle cx="300" cy="200" r="6" fill="#f2ede3"/><text x="300" y="188">BRISBANE</text></g>
+        <g><circle cx="200" cy="110" r="4" fill="#f2ede3"/><text x="200" y="96">SUNSHINE COAST</text></g>
+        <g><circle cx="400" cy="430" r="4" fill="#f2ede3"/><text x="400" y="454">GOLD COAST</text></g>
+        <g opacity=".7"><circle cx="270" cy="280" r="3" fill="#f2ede3"/><text x="270" y="266">IPSWICH</text></g>
+        <g opacity=".7"><circle cx="360" cy="350" r="3" fill="#f2ede3"/><text x="360" y="336">LOGAN</text></g>
+      </g>
+    </svg>
+    <ul>
+      <li>Brisbane <span>CBD · Inner</span></li>
+      <li>Redlands <span>Bayside</span></li>
+      <li>Ipswich <span>West</span></li>
+      <li>Logan <span>South</span></li>
+      <li>Gold Coast <span>SC · South</span></li>
+      <li>Sunshine Coast <span>North</span></li>
+      <li>Samford <span>NW</span></li>
+      <li>Pinkenba <span>Port</span></li>
+      <li>Caboolture <span>Moreton Bay</span></li>
+      <li>Noosa <span>NE</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="top">
+    <div>
+      <a class="brand" href="#" style="display:flex;gap:12px;align-items:center;font-family:var(--ff-display);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:14px;color:var(--ink)"><img src="assets/logo.png" alt="" style="width:26px" /> BitumenCo</a>
+      <p style="color:var(--muted);margin-top:18px;max-width:320px;font-size:13px;line-height:1.7">Heavy-duty asphalt, civil and line marking across South East Queensland. Owner-operated by Jack Alley.</p>
+    </div>
+    <div><h5>Contact</h5><a href="tel:0421333728">0421 333 728</a><a href="mailto:jack@bitumenco.com">jack@bitumenco.com</a><a href="#quote">Request a quote</a></div>
+    <div><h5>Services</h5><a href="#services">Driveways</a><a href="#services">Commercial</a><a href="#services">Line marking</a><a href="#services">Civil</a></div>
+    <div><h5>Coverage</h5><a href="#areas">Brisbane</a><a href="#areas">Gold Coast</a><a href="#areas">Sunshine Coast</a><a href="#areas">Ipswich · Logan</a></div>
+  </div>
+  <div class="lockup">BITUMENCO · SE QLD</div>
+  <div class="bot"><span>© 2026 BitumenCo · ABN 22 168 612 758</span><span>Licensed & Insured</span></div>
+</footer>
+
+<!-- SCROLL-DRIVEN ROAD-BUILD (3D dashboard, desktop only) -->
+<aside class="sidebuild" aria-hidden="true">
+  <div class="sb-scene">
+    <canvas id="sbCanvas"></canvas>
+    <div class="sb-scan"></div>
+  </div>
+  <div class="sb-meta">
+    <div class="sb-label">Road build</div>
+    <div class="sb-pct"><span id="sbPct">0</span><span class="u">%</span></div>
+    <div class="sb-sub">paved</div>
+    <div class="sb-bar"></div>
+  </div>
+</aside>
+
+<script type="module">
+  import * as THREE from 'three';
+  import Lenis from 'lenis';
+
+  /* ============================================================
+     LENIS smooth scroll (single rAF loop)
+  ============================================================ */
+  const lenis = new Lenis({
+    lerp: 0.14,            // frame-linked interp — feels snappy, no "waiting"
+    smoothWheel: true,
+    wheelMultiplier: 1.25, // bigger step per wheel tick
+    touchMultiplier: 2,
+    syncTouch: true,
+  });
+
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',(e)=>{
+      const id=a.getAttribute('href');
+      if(id==='#'||id.length<2)return;
+      const t=document.querySelector(id); if(!t)return;
+      e.preventDefault();
+      lenis.scrollTo(t,{offset:-40,duration:1.3});
+    });
+  });
+
+  /* ============================================================
+     HERO WebGL — road + 3D road-roller + dust
+  ============================================================ */
+  const canvas = document.getElementById('heroCanvas');
+  const hero = canvas.parentElement;
+  const dpr = Math.min(window.devicePixelRatio || 1, 1.6);
+
+  const renderer = new THREE.WebGLRenderer({
+    canvas, antialias: true, alpha: false, powerPreference: 'high-performance'
+  });
+  renderer.setPixelRatio(dpr);
+  renderer.setClearColor(0x0a0907, 1);
+
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x0a0907, 0.028);
+
+  const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 200);
+  camera.position.set(0, 4.3, 9);
+  camera.lookAt(0, 1.4, -12);
+
+  // ---- Lights (Lambert roller lighting) ----
+  scene.add(new THREE.AmbientLight(0xf2ede3, 0.35));
+  const dir = new THREE.DirectionalLight(0xf2ede3, 0.95);
+  dir.position.set(6, 10, 4);
+  scene.add(dir);
+  const rim = new THREE.DirectionalLight(0xa69d8d, 0.35);
+  rim.position.set(-5, 6, -3);
+  scene.add(rim);
+
+  // ---- Road (CanvasTexture with asphalt + paint dashes) ----
+  const roadCanvas = document.createElement('canvas');
+  roadCanvas.width = 512; roadCanvas.height = 2048;
+  const rctx = roadCanvas.getContext('2d');
+  const grad = rctx.createLinearGradient(0,0,0,2048);
+  grad.addColorStop(0,'#1a1714'); grad.addColorStop(1,'#0d0c0a');
+  rctx.fillStyle = grad; rctx.fillRect(0,0,512,2048);
+  for(let i=0;i<5200;i++){
+    const x=Math.random()*512,y=Math.random()*2048;
+    const s=.5+Math.random()*1.6, sh=90+Math.random()*70;
+    rctx.fillStyle=`rgba(${sh},${sh-6},${sh-12},${.18+Math.random()*.32})`;
+    rctx.fillRect(x,y,s,s);
+  }
+  for(let i=0;i<70;i++){
+    rctx.fillStyle=`rgba(255,255,255,${.006+Math.random()*.013})`;
+    rctx.fillRect(0,Math.random()*2048,512,1+Math.random()*2);
+  }
+  // centre dashes (road-paint white)
+  rctx.fillStyle = '#f2ede3';
+  rctx.shadowColor = 'rgba(242,237,227,.45)'; rctx.shadowBlur = 14;
+  for(let y=0;y<2048;y+=180) rctx.fillRect(244, y, 10, 110);
+  rctx.shadowBlur = 0;
+  // edge lines
+  rctx.fillStyle = '#f2ede3';
+  rctx.fillRect(56, 0, 5, 2048); rctx.fillRect(451, 0, 5, 2048);
+  // outer shoulder darker
+  rctx.fillStyle = 'rgba(0,0,0,.32)';
+  rctx.fillRect(0, 0, 40, 2048); rctx.fillRect(472, 0, 40, 2048);
+
+  const roadTex = new THREE.CanvasTexture(roadCanvas);
+  roadTex.wrapS = THREE.RepeatWrapping; roadTex.wrapT = THREE.RepeatWrapping;
+  roadTex.anisotropy = 4; roadTex.repeat.set(1, 6);
+
+  const road = new THREE.Mesh(
+    new THREE.PlaneGeometry(24, 240, 1, 1),
+    new THREE.MeshBasicMaterial({ map: roadTex })
+  );
+  road.rotation.x = -Math.PI / 2;
+  road.position.z = -60;
+  scene.add(road);
+
+  // ---- Horizon soft glow ----
+  const hCanvas = document.createElement('canvas');
+  hCanvas.width = 1024; hCanvas.height = 256;
+  const hctx = hCanvas.getContext('2d');
+  const hg = hctx.createLinearGradient(0,0,0,256);
+  hg.addColorStop(0,'rgba(10,9,7,0)');
+  hg.addColorStop(.55,'rgba(60,50,42,.5)');
+  hg.addColorStop(.82,'rgba(170,155,130,.3)');
+  hg.addColorStop(1,'rgba(242,237,227,.16)');
+  hctx.fillStyle=hg; hctx.fillRect(0,0,1024,256);
+  const hTex = new THREE.CanvasTexture(hCanvas);
+  const horizon = new THREE.Mesh(
+    new THREE.PlaneGeometry(180, 50),
+    new THREE.MeshBasicMaterial({ map: hTex, transparent: true, depthWrite: false, fog: false })
+  );
+  horizon.position.set(0, 8, -120);
+  scene.add(horizon);
+
+  // ---- Shared: build a detailed 3D road-roller (low-poly, procedural) ----
+  function buildRoller(){
+    const g = new THREE.Group();
+    const paint  = new THREE.MeshLambertMaterial({ color: 0xe8e1d5 });
+    const dark   = new THREE.MeshLambertMaterial({ color: 0x1c1a17 });
+    const drumM  = new THREE.MeshLambertMaterial({ color: 0x2a2724 });
+    const winM   = new THREE.MeshLambertMaterial({ color: 0x0a0907 });
+
+    const chassis = new THREE.Mesh(new THREE.BoxGeometry(1.9,0.55,2.9), dark);
+    chassis.position.y = 0.95; g.add(chassis);
+
+    const body = new THREE.Mesh(new THREE.BoxGeometry(1.8,1.1,1.9), paint);
+    body.position.set(0,1.75,-0.1); g.add(body);
+
+    const cab = new THREE.Mesh(new THREE.BoxGeometry(1.35,0.95,1.35), dark);
+    cab.position.set(0,2.77,0.18); g.add(cab);
+
+    // windows (front + 2 sides)
+    const wF = new THREE.Mesh(new THREE.PlaneGeometry(1.18,0.6), winM);
+    wF.position.set(0,2.82,0.87); g.add(wF);
+    const wL = new THREE.Mesh(new THREE.PlaneGeometry(1.05,0.6), winM);
+    wL.position.set(-0.68,2.82,0.18); wL.rotation.y = Math.PI/2; g.add(wL);
+    const wR = new THREE.Mesh(new THREE.PlaneGeometry(1.05,0.6), winM);
+    wR.position.set(0.68,2.82,0.18);  wR.rotation.y = -Math.PI/2; g.add(wR);
+
+    // exhaust stack
+    const ex = new THREE.Mesh(new THREE.CylinderGeometry(0.09,0.09,0.55,10), dark);
+    ex.position.set(0.55,2.95,-0.25); g.add(ex);
+
+    // roof beacon
+    const beacon = new THREE.Mesh(new THREE.CylinderGeometry(0.08,0.08,0.18,12), paint);
+    beacon.position.set(-0.38,3.33,0.1); g.add(beacon);
+
+    // drums
+    const drumGeo = new THREE.CylinderGeometry(0.85,0.85,2.2,28);
+    drumGeo.rotateZ(Math.PI/2);
+    const front = new THREE.Mesh(drumGeo, drumM);
+    front.position.set(0,0.85,1.55); g.add(front);
+    const rear  = new THREE.Mesh(drumGeo, drumM);
+    rear.position.set(0,0.85,-1.55); g.add(rear);
+
+    // drum rings (paint accents)
+    const ringGeo = new THREE.TorusGeometry(0.88,0.04,8,24);
+    ringGeo.rotateY(Math.PI/2);
+    for(const z of [1.55,-1.55]){
+      for(const x of [-0.88,0.88]){
+        const r = new THREE.Mesh(ringGeo, paint);
+        r.position.set(x,0.85,z); g.add(r);
+      }
+    }
+
+    // hydraulic arms between chassis & drums
+    const armGeo = new THREE.BoxGeometry(0.18,0.42,0.32);
+    for(const z of [1.2,-1.2]){
+      const arm = new THREE.Mesh(armGeo, dark);
+      arm.position.set(0,1.15,z); g.add(arm);
+    }
+
+    // expose drums so the caller can spin them
+    g.userData.frontDrum = front;
+    g.userData.rearDrum  = rear;
+    return g;
+  }
+
+  // ---- Hero roller ----
+  const roller = buildRoller();
+  roller.scale.setScalar(0.78);
+  roller.position.set(0, 0, -20);
+  roller.rotation.y = Math.PI;
+  scene.add(roller);
+  const frontDrum = roller.userData.frontDrum;
+  const rearDrum  = roller.userData.rearDrum;
+
+  // fresh-asphalt strip behind the roller (a slightly darker quad that follows it)
+  const freshTex = new THREE.CanvasTexture((() => {
+    const c = document.createElement('canvas'); c.width=64; c.height=64;
+    const x = c.getContext('2d');
+    x.fillStyle='#0e0c0a'; x.fillRect(0,0,64,64);
+    for(let i=0;i<120;i++){
+      x.fillStyle=`rgba(255,255,255,${Math.random()*.02})`;
+      x.fillRect(Math.random()*64,Math.random()*64,1,1);
+    }
+    return c;
+  })());
+  const fresh = new THREE.Mesh(
+    new THREE.PlaneGeometry(2.8, 6),
+    new THREE.MeshBasicMaterial({ map: freshTex, transparent: true, opacity: .85 })
+  );
+  fresh.rotation.x = -Math.PI/2;
+  fresh.position.set(0, 0.01, 0);
+  scene.add(fresh);
+
+  // ---- Dust particles ----
+  const dustGeo = new THREE.BufferGeometry();
+  const dustCount = 160;
+  const dustPos = new Float32Array(dustCount * 3);
+  for(let i=0;i<dustCount;i++){
+    dustPos[i*3]   = (Math.random()-.5)*30;
+    dustPos[i*3+1] = Math.random()*9 + .4;
+    dustPos[i*3+2] = -Math.random()*110;
+  }
+  dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+  const dust = new THREE.Points(
+    dustGeo,
+    new THREE.PointsMaterial({ color: 0xf2ede3, size: .05, transparent: true, opacity: .32, depthWrite: false, sizeAttenuation: true })
+  );
+  scene.add(dust);
+
+  // ---- Resize ----
+  function resize(){
+    const w = hero.clientWidth, h = hero.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w/h;
+    camera.updateProjectionMatrix();
+  }
+  resize();
+  new ResizeObserver(resize).observe(hero);
+
+  // ---- Pointer parallax (lerped) ----
+  let tmx = 0, tmy = 0, mx = 0, my = 0;
+  hero.addEventListener('pointermove', (e)=>{
+    const r = hero.getBoundingClientRect();
+    tmx = ((e.clientX - r.left) / r.width - .5) * 2;
+    tmy = ((e.clientY - r.top) / r.height - .5) * 2;
+  }, { passive: true });
+  hero.addEventListener('pointerleave', ()=>{ tmx = 0; tmy = 0; });
+
+  // ---- Visibility gating ----
+  let heroVisible = true;
+  new IntersectionObserver((es)=> es.forEach(e=> heroVisible = e.isIntersecting), { threshold: 0.01 }).observe(hero);
+  let tabActive = !document.hidden;
+  document.addEventListener('visibilitychange', ()=> tabActive = !document.hidden);
+
+  /* ============================================================
+     SIDEBAR — mini 3D dashboard with the same detailed roller
+  ============================================================ */
+  const sbCanvas = document.getElementById('sbCanvas');
+  const sbRenderer = new THREE.WebGLRenderer({ canvas: sbCanvas, antialias: true, alpha: true });
+  sbRenderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+  sbRenderer.setClearColor(0x000000, 0);
+
+  const sbScene = new THREE.Scene();
+  const sbCamera = new THREE.PerspectiveCamera(36, 168/138, 0.1, 60);
+  sbCamera.position.set(3.6, 2.4, 4.8);
+  sbCamera.lookAt(0, 0.9, 0);
+
+  sbScene.add(new THREE.AmbientLight(0xf2ede3, 0.45));
+  const sbDir = new THREE.DirectionalLight(0xf2ede3, 0.95);
+  sbDir.position.set(4, 7, 4); sbScene.add(sbDir);
+  const sbRim = new THREE.DirectionalLight(0xa69d8d, 0.4);
+  sbRim.position.set(-4, 3, -2); sbScene.add(sbRim);
+
+  // tiny road for the sidebar (horizontal strip, along X)
+  const sbRoadCanvas = document.createElement('canvas');
+  sbRoadCanvas.width = 1024; sbRoadCanvas.height = 128;
+  const sbrctx = sbRoadCanvas.getContext('2d');
+  sbrctx.fillStyle = '#141210'; sbrctx.fillRect(0,0,1024,128);
+  for(let i=0;i<1200;i++){
+    const sh = 90 + Math.random()*70;
+    sbrctx.fillStyle = `rgba(${sh},${sh-6},${sh-12},${.2+Math.random()*.3})`;
+    sbrctx.fillRect(Math.random()*1024, Math.random()*128, 1, 1);
+  }
+  // dashed centre line running along X
+  sbrctx.fillStyle = '#f2ede3';
+  sbrctx.shadowColor = 'rgba(242,237,227,.4)'; sbrctx.shadowBlur = 6;
+  for(let x=0; x<1024; x+=70) sbrctx.fillRect(x, 60, 36, 8);
+  sbrctx.shadowBlur = 0;
+
+  const sbRoadTex = new THREE.CanvasTexture(sbRoadCanvas);
+  sbRoadTex.wrapS = THREE.RepeatWrapping; sbRoadTex.wrapT = THREE.RepeatWrapping;
+  sbRoadTex.repeat.set(3, 1);
+
+  const sbRoad = new THREE.Mesh(
+    new THREE.PlaneGeometry(16, 3),
+    new THREE.MeshBasicMaterial({ map: sbRoadTex })
+  );
+  sbRoad.rotation.x = -Math.PI/2;
+  sbScene.add(sbRoad);
+
+  // sidebar roller — shared builder, rotated to face along +X (rolling right)
+  const sbRoller = buildRoller();
+  sbRoller.scale.setScalar(0.55);
+  sbRoller.rotation.y = -Math.PI/2;
+  sbRoller.position.set(0, 0, 0);
+  sbScene.add(sbRoller);
+
+  // fresh-asphalt strip trailing the sidebar roller
+  const sbFresh = new THREE.Mesh(
+    new THREE.PlaneGeometry(2.8, 1.6),
+    new THREE.MeshBasicMaterial({ color: 0x0e0c0a, transparent: true, opacity: .9 })
+  );
+  sbFresh.rotation.x = -Math.PI/2;
+  sbFresh.position.y = 0.02;
+  sbScene.add(sbFresh);
+
+  function sbResize(){
+    const r = sbCanvas.getBoundingClientRect();
+    sbRenderer.setSize(r.width, r.height, false);
+    sbCamera.aspect = r.width / r.height;
+    sbCamera.updateProjectionMatrix();
+  }
+  sbResize();
+  new ResizeObserver(sbResize).observe(sbCanvas);
+
+  // the scroll-driven progress goes into this let, consumed in the loop
+  let sbProgress = 0;        // 0 → 1 based on page scroll
+  let sbProgressLerp = 0;    // smoothed
+
+  // ---- Single rAF: Lenis + Hero + Sidebar ----
+  const clock = new THREE.Clock();
+  function loop(time){
+    lenis.raf(time);
+    const dt = Math.min(clock.getDelta(), 0.05);
+
+    // Hero scene
+    if(heroVisible && tabActive){
+      roadTex.offset.y -= dt * 0.55;
+
+      roller.position.z += dt * 1.8;
+      if(roller.position.z > 10){
+        roller.position.z = -55;
+        roller.position.x = (Math.random()-.5) * 0.5;
+      }
+      frontDrum.rotation.x += dt * 3.2;
+      rearDrum.rotation.x  += dt * 3.2;
+
+      fresh.position.z = roller.position.z + 4;
+
+      mx += (tmx - mx) * 0.06;
+      my += (tmy - my) * 0.06;
+      camera.position.x = mx * 1.2;
+      camera.position.y = 4.3 + my * 0.3;
+      camera.rotation.y = -mx * 0.05;
+      camera.rotation.x = -0.28 + my * 0.03;
+
+      const p = dust.geometry.attributes.position.array;
+      for(let i=0;i<dustCount;i++){
+        p[i*3+2] += dt * 5.5;
+        if(p[i*3+2] > 5){ p[i*3+2] = -110; p[i*3] = (Math.random()-.5)*30; }
+      }
+      dust.geometry.attributes.position.needsUpdate = true;
+
+      renderer.render(scene, camera);
+    }
+
+    // Sidebar scene (always render — the panel is small & always-on on desktop)
+    if(tabActive){
+      // scroll texture to simulate roller rolling forward
+      sbRoadTex.offset.x -= dt * 0.45;
+
+      // drum spin
+      sbRoller.userData.frontDrum.rotation.x -= dt * 4.2;
+      sbRoller.userData.rearDrum.rotation.x  -= dt * 4.2;
+
+      // lerp scroll progress for smooth roller motion
+      sbProgressLerp += (sbProgress - sbProgressLerp) * 0.08;
+      sbRoller.position.x = -3.2 + sbProgressLerp * 6.4;
+
+      // fresh-asphalt strip sits behind the roller (to its left)
+      sbFresh.position.x = sbRoller.position.x - 1.6;
+      sbFresh.scale.x = Math.max(0.1, 0.4 + sbProgressLerp * 2);
+
+      // subtle bob
+      sbRoller.position.y = Math.sin(time*0.003) * 0.02;
+
+      sbRenderer.render(sbScene, sbCamera);
+    }
+
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  /* ============================================================
+     NAV scroll state + sidebuild scroll progress
+  ============================================================ */
+  const nav = document.getElementById('nav');
+  const sidebuild = document.querySelector('.sidebuild');
+  const sbPct = document.getElementById('sbPct');
+
+  // reveal the sidebar panel once hero is past
+  setTimeout(()=>sidebuild.classList.add('visible'), 600);
+
+  lenis.on('scroll', ({ scroll, limit })=>{
+    nav.classList.toggle('scrolled', scroll > 40);
+    const p01 = limit > 0 ? Math.max(0, Math.min(1, scroll/limit)) : 0;
+    sbProgress = p01;
+    const pct = Math.round(p01 * 100);
+    sbPct.textContent = pct;
+    sidebuild.style.setProperty('--sbp', pct + '%');
+  });
+
+  /* ============================================================
+     Reveal on scroll
+  ============================================================ */
+  const io = new IntersectionObserver((es)=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .14, rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  /* Cinema in-view flag */
+  const cinema = document.querySelector('.cinema');
+  new IntersectionObserver((es)=>{
+    es.forEach(e=>e.target.classList.toggle('in-view', e.isIntersecting));
+  }, { threshold: .25 }).observe(cinema);
+
+  /* ============================================================
+     Card tilt (throttled via rAF)
+  ============================================================ */
+  document.querySelectorAll('.card').forEach(card=>{
+    let pending = false, lx = 0, ly = 0;
+    const apply = ()=>{ card.style.transform = `rotateY(${lx*5}deg) rotateX(${-ly*5}deg)`; pending = false; };
+    card.addEventListener('pointermove', (e)=>{
+      const r = card.getBoundingClientRect();
+      lx = (e.clientX - r.left) / r.width - .5;
+      ly = (e.clientY - r.top) / r.height - .5;
+      if(!pending){ pending = true; requestAnimationFrame(apply); }
+    });
+    card.addEventListener('pointerleave', ()=>{ card.style.transform = ''; });
+  });
+
+  /* ============================================================
+     Horizontal gallery + lightbox
+  ============================================================ */
+  (function(){
+    const hs = document.getElementById('hscroll');
+    const cards = [...hs.querySelectorAll('.hs-card')];
+    const prev = document.getElementById('prev');
+    const next = document.getElementById('next');
+    const N = cards.length;
+
+    // step = card width + gap
+    const step = () => {
+      const card = cards[0];
+      const gap = parseFloat(getComputedStyle(hs).gap) || 20;
+      return card.getBoundingClientRect().width + gap;
+    };
+
+    prev.addEventListener('click', ()=> hs.scrollBy({ left: -step(), behavior: 'smooth' }));
+    next.addEventListener('click', ()=> hs.scrollBy({ left:  step(), behavior: 'smooth' }));
+
+    // mouse-wheel: translate vertical wheel into horizontal scroll while hovering
+    hs.addEventListener('wheel', (e)=>{
+      if(Math.abs(e.deltaY) > Math.abs(e.deltaX)){
+        e.preventDefault();
+        hs.scrollLeft += e.deltaY;
+      }
+    }, { passive: false });
+
+    // ---- Lightbox ----
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lbImg');
+    const lbCap = document.getElementById('lbCap');
+    const lbNum = document.getElementById('lbNum');
+    const lbTotal = document.getElementById('lbTotal');
+    const lbClose = document.getElementById('lbClose');
+    const lbPrev = document.getElementById('lbPrev');
+    const lbNext = document.getElementById('lbNext');
+    let lbIdx = 0;
+
+    lbTotal.textContent = N;
+
+    function openLb(i){
+      lbIdx = ((i % N) + N) % N;
+      const c = cards[lbIdx];
+      lbImg.src = c.dataset.src;
+      lbImg.alt = c.dataset.cap;
+      lbCap.textContent = c.dataset.cap;
+      lbNum.textContent = lbIdx + 1;
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      lenis.stop();
+    }
+    function closeLb(){
+      lb.classList.remove('open');
+      document.body.style.overflow = '';
+      lenis.start();
+    }
+    function nextLb(){ openLb(lbIdx + 1); }
+    function prevLb(){ openLb(lbIdx - 1); }
+
+    cards.forEach((card, i)=>{
+      card.addEventListener('click', ()=> openLb(i));
+    });
+    lbClose.addEventListener('click', closeLb);
+    lbNext.addEventListener('click', nextLb);
+    lbPrev.addEventListener('click', prevLb);
+    lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLb(); });
+    document.addEventListener('keydown', (e)=>{
+      if(!lb.classList.contains('open')) return;
+      if(e.key === 'Escape') closeLb();
+      else if(e.key === 'ArrowRight') nextLb();
+      else if(e.key === 'ArrowLeft') prevLb();
+    });
+  })();
+
+  /* Form submit (demo) */
+  document.getElementById('quoteForm').addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type=submit]');
+    btn.innerText = 'Thanks — Jack will be in touch';
+    btn.style.background = 'var(--panel-2)';
+    btn.style.color = 'var(--ink)';
+  });
+</script>
+</body>
+</html>
