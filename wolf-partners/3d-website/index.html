@@ -3,31 +3,17 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>Wolf Partners — Systems. Growth. Capital.</title>
-<meta name="description" content="We invest in, build for, and automate businesses that already have revenue. Websites, AI systems, and growth strategy — $80M+ in deals completed." />
-
+<title>Wolf Partners — I scale businesses that already work.</title>
+<meta name="description" content="$80M+ in deals completed. I invest in, restructure, and scale businesses that already have revenue. Systems, clients, capital." />
 <link rel="icon" type="image/png" href="assets/wolf-partners-logo.png" />
 <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,700,800,900&f[]=general-sans@300,400,500,700&display=swap" />
-
-<!-- GSAP + ScrollTrigger -->
 <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-    "lenis": "https://unpkg.com/lenis@1.1.20/dist/lenis.mjs"
-  }
-}
-</script>
-
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","lenis":"https://unpkg.com/lenis@1.1.20/dist/lenis.mjs"}}</script>
 <style>
 :root{
   --bg:#0a0a0d;
-  --bg-2:#0e0e12;
-  --panel:#141418;
   --ink:#f2ede3;
   --ink-soft:#c8c3b8;
   --muted:#7a776f;
@@ -37,15 +23,10 @@
   --gold-soft:#D4B968;
   --gold-dim:rgba(197,164,78,.12);
   --gold-line:rgba(197,164,78,.25);
-  --light-bg:#F5F4F0;
-  --light-card:#FFFFFF;
-  --light-fg:#1A1A1F;
-  --light-muted:#6B6A65;
-  --light-border:rgba(0,0,0,.08);
   --ff-d:'Cabinet Grotesk','Archivo Black',Impact,system-ui,sans-serif;
   --ff-b:'General Sans','Inter',system-ui,sans-serif;
   --ease:cubic-bezier(.2,.7,.2,1);
-  --max:1280px;
+  --max:1100px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{background:var(--bg);overflow-x:hidden}
@@ -55,720 +36,343 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ff-b);font-weight:4
 img{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 ::selection{background:var(--gold);color:#0a0a0d}
-button{font:inherit;cursor:pointer}
-
 body::after{content:"";position:fixed;inset:0;z-index:9990;pointer-events:none;opacity:.016;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:256px}
-
-/* ── 3D CANVAS ── */
 #worldCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
 
-/* ── NAV ── */
-.nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:18px 32px;transition:background .35s,padding .35s,border-color .35s;border-bottom:1px solid transparent}
-.nav.scrolled{background:rgba(10,10,13,.7);backdrop-filter:blur(16px) saturate(1.3);padding:12px 32px;border-bottom-color:var(--line)}
-.nav .brand{display:flex;align-items:center;gap:10px}
-.nav .brand img{height:28px;width:auto;opacity:.85}
-.nav ul{display:flex;gap:28px;list-style:none;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
-.nav ul a{opacity:.6;transition:opacity .25s}
-.nav ul a:hover{opacity:1}
-.nav .cta-btn{border:1px solid var(--gold-line);background:var(--gold-dim);padding:10px 20px;border-radius:10px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--gold-soft);transition:background .25s,color .25s,border-color .25s}
-.nav .cta-btn:hover{background:var(--gold);color:#0a0a0d;border-color:var(--gold)}
-@media(max-width:780px){.nav ul{display:none}.nav{padding:14px 18px}}
+/* ── NAV — minimal ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:20px 6vw;transition:background .35s,padding .35s,border-color .35s;border-bottom:1px solid transparent}
+.nav.scrolled{background:rgba(10,10,13,.7);backdrop-filter:blur(16px) saturate(1.3);padding:14px 6vw;border-bottom-color:var(--line)}
+.nav .brand img{height:26px;width:auto;opacity:.8}
+.nav .cta-nav{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;color:var(--ink-soft);opacity:.6;transition:opacity .25s}
+.nav .cta-nav:hover{opacity:1}
 
-/* ── HERO ── */
-.hero{position:relative;height:100svh;min-height:700px;overflow:hidden;display:grid;place-items:end start;z-index:1}
-.hero .vignette{position:absolute;inset:0;pointer-events:none;z-index:2;background:radial-gradient(120% 90% at 50% 60%,transparent 25%,rgba(10,10,13,.5) 100%),linear-gradient(180deg,rgba(10,10,13,.35) 0%,transparent 18%,transparent 55%,rgba(10,10,13,.9) 100%)}
-.hero .copy{position:relative;z-index:3;padding:0 6vw 9vh;max-width:var(--max);width:100%}
-.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:28px;padding:9px 16px;border:1px solid var(--gold-line);border-radius:999px;background:rgba(197,164,78,.06);font-weight:500;opacity:0}
-.eyebrow .dot{width:6px;height:6px;border-radius:999px;background:var(--gold);box-shadow:0 0 12px rgba(197,164,78,.6);animation:pulse 2s ease infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
-.hero h1{font-family:var(--ff-d);font-weight:800;font-size:clamp(44px,7.5vw,120px);line-height:.95;letter-spacing:-.025em}
-.hero h1 .gold{background:linear-gradient(135deg,#C5A44E,#D4B968,#E8D48B);-webkit-background-clip:text;background-clip:text;color:transparent}
+/* ── HERO — 3 seconds or less ── */
+.hero{position:relative;height:100svh;min-height:700px;display:flex;align-items:flex-end;z-index:1}
+.hero .vignette{position:absolute;inset:0;pointer-events:none;z-index:2;background:radial-gradient(120% 90% at 50% 60%,transparent 25%,rgba(10,10,13,.5) 100%),linear-gradient(180deg,rgba(10,10,13,.3) 0%,transparent 18%,transparent 55%,rgba(10,10,13,.92) 100%)}
+.hero .copy{position:relative;z-index:3;padding:0 6vw 10vh;max-width:var(--max);width:100%}
+.hero h1{font-family:var(--ff-d);font-weight:800;font-size:clamp(48px,8vw,110px);line-height:.92;letter-spacing:-.03em}
 .hero h1 .word{display:inline-block;overflow:hidden;vertical-align:top}
 .hero h1 .word .w-in{display:inline-block;transform:translateY(115%);will-change:transform}
-.hero .sub{margin-top:24px;max-width:560px;color:var(--ink-soft);font-size:clamp(15px,1.2vw,17px);line-height:1.7;opacity:0}
-.hero .sub strong{color:var(--gold-soft);font-weight:600}
-.hero .ctas{margin-top:32px;display:flex;gap:14px;flex-wrap:wrap;opacity:0}
-
-.btn{display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border-radius:12px;font-family:var(--ff-b);font-size:13px;letter-spacing:.06em;font-weight:600;transition:transform .35s var(--ease),background .25s,color .25s,box-shadow .3s,border-color .25s;border:0;white-space:nowrap}
-.btn.solid{background:var(--gold);color:#0a0a0d}
-.btn.solid:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(197,164,78,.3)}
-.btn.solid svg{width:16px;height:16px;transition:transform .3s var(--ease)}
-.btn.solid:hover svg{transform:translate(3px,-3px)}
-.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line-2)}
-.btn.ghost:hover{background:rgba(242,237,227,.04);border-color:var(--ink)}
-
-.scroll-cue{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);font-size:10px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;z-index:3;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;font-weight:500}
-.scroll-cue .bar{width:1px;height:36px;background:linear-gradient(180deg,var(--gold),transparent);transform-origin:top;animation:cue 1.9s ease-in-out infinite}
+.hero .tagline{margin-top:20px;font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:500;opacity:0}
+.hero .hero-cta{margin-top:40px;opacity:0}
+.hero .hero-cta a{display:inline-flex;align-items:center;gap:10px;padding:16px 32px;border:1px solid var(--line-2);border-radius:12px;font-size:13px;letter-spacing:.06em;font-weight:500;color:var(--ink);transition:background .25s,border-color .25s}
+.hero .hero-cta a:hover{background:rgba(242,237,227,.04);border-color:var(--ink)}
+.hero .hero-cta a svg{width:14px;height:14px;opacity:.5}
+.scroll-cue{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);font-size:9px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;z-index:3;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;font-weight:500}
+.scroll-cue .bar{width:1px;height:32px;background:linear-gradient(180deg,var(--gold),transparent);transform-origin:top;animation:cue 1.9s ease-in-out infinite}
 @keyframes cue{0%{transform:scaleY(.1)}50%{transform:scaleY(1)}100%{transform-origin:bottom;transform:scaleY(.1)}}
 
-/* ── SECTION BASES ── */
+/* ── SECTIONS ── */
 .dark-section{position:relative;z-index:1;background:transparent}
-.light-section{position:relative;z-index:2;background:var(--light-bg)}
-section{position:relative;padding:clamp(100px,14vw,160px) 6vw;contain:layout paint}
+section{position:relative;padding:clamp(100px,16vw,180px) 6vw;max-width:var(--max);margin:0 auto}
+section.full{max-width:none}
+.label{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:24px;font-weight:500}
 
-.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;margin-bottom:64px;flex-wrap:wrap;max-width:var(--max);margin-left:auto;margin-right:auto;width:100%}
-.sec-head .label{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:16px;font-weight:500}
-.sec-head h2{font-family:var(--ff-d);font-weight:800;font-size:clamp(36px,5vw,72px);line-height:.98;letter-spacing:-.02em}
-.sec-head .lede{max-width:440px;color:var(--ink-soft);font-size:15px;line-height:1.7}
+/* ── WHAT I DO — 3 pillars, not cards ── */
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.pillar{padding:48px 32px 48px 0;border-right:1px solid var(--line);transition:background .4s}
+.pillar:last-child{border-right:0}
+.pillar:hover{background:rgba(197,164,78,.02)}
+.pillar h3{font-family:var(--ff-d);font-size:22px;font-weight:700;letter-spacing:-.01em;margin-bottom:12px}
+.pillar p{font-size:14px;color:var(--ink-soft);line-height:1.65;max-width:28ch}
+@media(max-width:800px){.pillars{grid-template-columns:1fr}.pillar{border-right:0;border-bottom:1px solid var(--line);padding:32px 0}.pillar:last-child{border-bottom:0}}
 
-/* ── SERVICES — 3D tilt cards ── */
-.services{color:var(--light-fg)}
-.services .sec-head h2{color:var(--light-fg)}
-.services .sec-head .lede{color:var(--light-muted)}
-.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:var(--max);margin:0 auto;perspective:1200px}
-.svc-card{background:var(--light-card);border:1px solid var(--light-border);border-radius:16px;padding:40px;box-shadow:0 1px 3px rgba(0,0,0,.04);transform-style:preserve-3d;transition:box-shadow .4s,border-color .4s;will-change:transform}
-.svc-card:hover{box-shadow:0 25px 60px rgba(0,0,0,.1);border-color:rgba(197,164,78,.2)}
-.svc-card>*{transform:translateZ(20px)}
-.svc-icon{width:48px;height:48px;border-radius:12px;background:var(--gold-dim);display:flex;align-items:center;justify-content:center;margin-bottom:24px}
-.svc-icon svg{width:24px;height:24px;color:var(--gold)}
-.svc-card h3{font-family:var(--ff-d);font-size:22px;font-weight:700;letter-spacing:-.01em;margin-bottom:12px;color:var(--light-fg)}
-.svc-card p{font-size:14px;line-height:1.75;color:var(--light-muted);margin-bottom:20px}
-.tags{display:flex;flex-wrap:wrap;gap:8px}
-.tag{font-size:11px;padding:5px 14px;border-radius:999px;background:var(--gold-dim);color:var(--gold);font-weight:500}
-@media(max-width:900px){.svc-grid{grid-template-columns:1fr;perspective:none}.svc-card>*{transform:none}}
+/* ── PROOF — big numbers ── */
+.proof{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.proof-num{font-family:var(--ff-d);font-size:clamp(64px,12vw,120px);font-weight:800;letter-spacing:-.04em;line-height:.9;background:linear-gradient(135deg,#C5A44E,#D4B968,#E8D48B);-webkit-background-clip:text;background-clip:text;color:transparent}
+.proof-label{font-size:13px;color:var(--muted);margin-top:8px;letter-spacing:.1em;text-transform:uppercase;font-weight:500}
+.proof-line{font-size:14px;color:var(--ink-soft);margin-top:48px;line-height:1.7;max-width:36ch}
+@media(max-width:700px){.proof{grid-template-columns:1fr;gap:48px}}
 
-/* ── STATS ── */
-.stats-section{padding:80px 6vw}
-.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);max-width:var(--max);margin:0 auto;background:rgba(20,20,24,.55);border:1px solid var(--line);border-radius:16px;backdrop-filter:blur(8px)}
-.stat{text-align:center;padding:48px 20px}
-.stat+.stat{border-left:1px solid var(--line)}
-.stat-v{font-family:var(--ff-d);font-size:clamp(2rem,5vw,3.2rem);font-weight:800;letter-spacing:-.03em;background:linear-gradient(135deg,#C5A44E,#D4B968,#E8D48B);-webkit-background-clip:text;background-clip:text;color:transparent}
-.stat-l{font-size:12px;color:var(--muted);margin-top:8px;letter-spacing:.12em;text-transform:uppercase;font-weight:500}
-.stat-ctx{font-size:11px;color:var(--muted);margin-top:6px;opacity:.7;line-height:1.5;max-width:180px;margin-left:auto;margin-right:auto}
-@media(max-width:700px){.stats-bar{grid-template-columns:1fr 1fr}.stat:nth-child(3){border-left:0}}
+/* ── WHO IT'S FOR — filtering ── */
+.for-list{list-style:none;margin-top:32px}
+.for-list li{font-size:clamp(16px,1.4vw,19px);color:var(--ink-soft);padding:16px 0;border-bottom:1px solid var(--line);line-height:1.5;transition:color .3s}
+.for-list li:first-child{border-top:1px solid var(--line)}
+.for-list li:hover{color:var(--ink)}
+.for-not{margin-top:24px;font-size:13px;color:var(--muted);font-style:italic}
 
-/* ── PROCESS ── */
-.process-section{color:var(--light-fg)}
-.process-section .sec-head h2{color:var(--light-fg)}
-.process-section .sec-head .lede{color:var(--light-muted)}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--light-border);border-bottom:1px solid var(--light-border);max-width:var(--max);margin:0 auto}
-.step-item{padding:48px 32px;border-right:1px solid var(--light-border);position:relative;min-height:280px;transition:background .4s}
-.step-item:last-child{border-right:0}
-.step-item:hover{background:rgba(197,164,78,.04)}
-.step-item .n{font-family:var(--ff-d);font-weight:900;font-size:clamp(80px,10vw,140px);line-height:1;color:rgba(197,164,78,.06);position:absolute;right:12px;bottom:-16px;user-select:none;letter-spacing:-.03em;transition:color .4s}
-.step-item:hover .n{color:rgba(197,164,78,.12)}
-.step-item .tag-s{display:inline-block;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;font-weight:500}
-.step-item h4{font-family:var(--ff-d);font-weight:700;font-size:22px;margin-bottom:12px;color:var(--light-fg);letter-spacing:-.01em}
-.step-item p{color:var(--light-muted);font-size:14px;line-height:1.65;max-width:32ch}
-@media(max-width:900px){.steps{grid-template-columns:1fr}.step-item{border-right:0;border-bottom:1px solid var(--light-border);min-height:auto}}
+/* ── CURRENT FOCUS ── */
+.focus-items{margin-top:32px}
+.focus-item{padding-left:24px;border-left:2px solid var(--gold-line);margin-bottom:24px;transition:border-color .3s}
+.focus-item:hover{border-left-color:var(--gold)}
+.focus-item h4{font-family:var(--ff-d);font-size:17px;font-weight:700;margin-bottom:4px}
+.focus-item p{font-size:14px;color:var(--ink-soft);line-height:1.6}
 
-/* ── ABOUT ── */
-.about-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:72px;align-items:center;max-width:var(--max);margin:0 auto}
-.about-photo{position:relative;aspect-ratio:4/5;border-radius:16px;overflow:hidden;border:1px solid var(--line);max-width:400px}
-.about-photo img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--ease)}
-.about-photo:hover img{transform:scale(1.04)}
-.about-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 0%,transparent 40%);pointer-events:none}
-.about-name{font-family:var(--ff-d);font-size:28px;font-weight:700;margin-top:24px;letter-spacing:-.01em}
-.about-role{font-size:14px;color:var(--gold-soft);margin-top:4px}
-.about-sub{font-size:12px;color:var(--muted);margin-top:2px;letter-spacing:.1em;text-transform:uppercase}
-.insights-label{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:32px;font-weight:500}
-.insight{padding-left:24px;border-left:2px solid var(--gold-line);margin-bottom:28px;transition:border-color .4s}
-.insight:hover{border-left-color:var(--gold)}
-.insight p{font-size:16px;line-height:1.75;color:var(--ink-soft);font-weight:300;transition:color .4s}
-.insight:hover p{color:var(--ink)}
-@media(max-width:900px){.about-grid{grid-template-columns:1fr}}
+/* ── CTA — simple ── */
+.final-cta{text-align:left;max-width:600px}
+.final-cta p{font-size:clamp(18px,2vw,24px);font-family:var(--ff-d);font-weight:700;line-height:1.35;letter-spacing:-.015em;margin-bottom:36px}
+.final-cta a{display:inline-flex;align-items:center;gap:10px;padding:16px 32px;background:var(--gold);color:#0a0a0d;border-radius:12px;font-size:13px;letter-spacing:.06em;font-weight:600;border:0;transition:transform .35s var(--ease),box-shadow .3s}
+.final-cta a:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(197,164,78,.3)}
+.final-cta a svg{width:14px;height:14px}
+.final-cta .email{font-size:12px;color:var(--muted);margin-top:16px}
 
-/* ── CTA ── */
-.cta-section{padding:100px 6vw 140px}
-.cta-card{background:rgba(10,10,13,.7);color:var(--ink);border-radius:20px;padding:72px 48px;text-align:center;position:relative;overflow:hidden;max-width:800px;margin:0 auto;border:1px solid var(--line);backdrop-filter:blur(12px)}
-.cta-glow{position:absolute;top:-40%;left:50%;transform:translateX(-50%);width:500px;height:500px;border-radius:50%;background:var(--gold);filter:blur(160px);opacity:.06;pointer-events:none}
-.cta-card .label{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:24px;position:relative;font-weight:500}
-.cta-card h2{font-family:var(--ff-d);font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:700;letter-spacing:-.02em;margin-bottom:16px;position:relative}
-.cta-card .desc{font-size:15px;color:var(--ink-soft);max-width:440px;margin:0 auto 40px;line-height:1.7;position:relative}
-.cta-card .btn{position:relative}
-.cta-email{font-size:12px;color:var(--muted);margin-top:16px;position:relative}
-
-/* ── FOOTER ── */
-footer{position:relative;z-index:2;background:var(--bg);padding:80px 6vw 40px;border-top:1px solid var(--line)}
-footer .top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px;margin-bottom:56px;max-width:var(--max);margin-left:auto;margin-right:auto}
-footer h5{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;font-weight:500}
-footer a{display:block;padding:5px 0;color:var(--ink-soft);font-size:13.5px;transition:color .2s}
-footer a:hover{color:var(--ink)}
-footer .lockup{font-family:var(--ff-d);font-weight:900;font-size:clamp(40px,6.5vw,100px);line-height:.92;text-transform:uppercase;color:var(--ink);border-top:1px solid var(--line);padding-top:28px;margin-top:28px;letter-spacing:-.03em;max-width:var(--max);margin-left:auto;margin-right:auto}
+/* ── FOOTER — minimal ── */
+footer{position:relative;z-index:2;background:var(--bg);padding:60px 6vw 40px;border-top:1px solid var(--line)}
+footer .lockup{font-family:var(--ff-d);font-weight:900;font-size:clamp(36px,6vw,80px);line-height:.92;text-transform:uppercase;color:var(--ink);letter-spacing:-.03em;max-width:var(--max);margin:0 auto}
 footer .lockup .gold{background:linear-gradient(135deg,#C5A44E,#D4B968);-webkit-background-clip:text;background-clip:text;color:transparent}
-footer .bot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;font-size:12px;color:var(--muted);margin-top:36px;max-width:var(--max);margin-left:auto;margin-right:auto}
-@media(max-width:780px){footer .top{grid-template-columns:1fr 1fr}}
+footer .bot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;font-size:12px;color:var(--muted);margin-top:28px;max-width:var(--max);margin-left:auto;margin-right:auto}
+footer .bot a{color:var(--ink-soft);transition:color .2s}
+footer .bot a:hover{color:var(--ink)}
+
+/* ── DIVIDERS ── */
+.section-line{width:100%;max-width:var(--max);margin:0 auto;height:1px;background:var(--line);position:relative;z-index:1}
 
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
-
 <canvas id="worldCanvas"></canvas>
 
-<!-- NAV -->
+<!-- NAV — logo + one link, nothing else -->
 <nav class="nav" id="nav">
-  <a class="brand" href="#"><img src="assets/wolf-partners-logo.png" alt="Wolf Partners" /></a>
-  <ul>
-    <li><a href="websites.html">Websites</a></li>
-    <li><a href="automations.html">Automations</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <a class="cta-btn" href="#contact">Book a Call</a>
+  <a class="brand" href="/"><img src="assets/wolf-partners-logo.png" alt="Wolf Partners" /></a>
+  <a class="cta-nav" href="#contact">Start a conversation</a>
 </nav>
 
-<!-- HERO -->
+<!-- ═══════════════════════════════════
+     HERO — understood in 3 seconds
+     ═══════════════════════════════════ -->
 <header class="hero dark-section" id="heroWrap">
   <div class="vignette"></div>
   <div class="copy">
-    <div class="eyebrow" id="eyebrow"><span class="dot"></span>Growth · Websites · AI Automation</div>
     <h1 id="heroH1"></h1>
-    <p class="sub" id="heroSub"><strong>$80M+ in deals. Zero theory.</strong> We find the revenue you're missing — then build the machine that captures it.</p>
-    <div class="ctas" id="heroCtas">
-      <a class="btn solid" href="#contact">Book a Strategy Call <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"/></svg></a>
-      <a class="btn ghost" href="#services">See what we do</a>
+    <p class="tagline" id="tagline">Systems · Clients · Revenue · Capital</p>
+    <div class="hero-cta" id="heroCta">
+      <a href="#contact">Start a conversation <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"/></svg></a>
     </div>
   </div>
   <div class="scroll-cue" id="scrollCue"><span>Scroll</span><span class="bar"></span></div>
 </header>
 
-<!-- SERVICES -->
-<section id="services" class="services light-section">
-  <div class="sec-head">
-    <div>
-      <div class="label gsap-fade">01 / Services</div>
-      <h2 class="gsap-fade">Three ways we<br/>make you money.</h2>
+<!-- ═══════════════════════════════════
+     WHAT I DO — 3 pillars, not a catalogue
+     ═══════════════════════════════════ -->
+<section class="dark-section">
+  <div class="label gsap-fade">What I do</div>
+  <div class="pillars">
+    <div class="pillar gsap-fade">
+      <h3>Scale & optimise</h3>
+      <p>Fix systems, client flow, retention, and pricing.</p>
     </div>
-    <p class="lede gsap-fade">Investment, websites, or AI systems — every engagement is designed to increase revenue you're currently leaving on the table.</p>
-  </div>
-  <div class="svc-grid">
-    <article class="svc-card gsap-card">
-      <div class="svc-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941"/></svg></div>
-      <h3>Growth & Investment</h3>
-      <p>We invest in businesses with traction and work inside them. Fix unit economics, restructure operations, rebuild client flow — with real capital behind it.</p>
-      <div class="tags"><span class="tag">Mentoring</span><span class="tag">Deal Structuring</span><span class="tag">Capital</span></div>
-    </article>
-    <article class="svc-card gsap-card">
-      <div class="svc-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z"/></svg></div>
-      <h3>Websites That Convert</h3>
-      <p>Fast, modern websites designed to generate leads — not just look good. Built for businesses losing customers to competitors with better online presence.</p>
-      <div class="tags"><span class="tag">Lead Gen</span><span class="tag">Mobile-First</span><span class="tag">SEO</span><span class="tag">Custom Design</span></div>
-    </article>
-    <article class="svc-card gsap-card">
-      <div class="svc-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z"/></svg></div>
-      <h3>Automations & AI</h3>
-      <p>AI agents built on Claude that automate lead gen, client follow-up, internal operations, and reporting. Replace headcount with infrastructure.</p>
-      <div class="tags"><span class="tag">Claude AI</span><span class="tag">Lead Gen</span><span class="tag">CRM</span><span class="tag">Internal Systems</span></div>
-    </article>
-  </div>
-</section>
-
-<!-- STATS -->
-<section class="stats-section dark-section" id="statsSection">
-  <div class="stats-bar">
-    <div class="stat gsap-stat">
-      <p class="stat-v" data-count="80" data-prefix="$" data-suffix="M+">$0M+</p>
-      <p class="stat-l">Deals Completed</p>
-      <p class="stat-ctx">Acquisitions, growth equity & restructures</p>
+    <div class="pillar gsap-fade">
+      <h3>Strategic growth</h3>
+      <p>Positioning, partnerships, and commercial strategy.</p>
     </div>
-    <div class="stat gsap-stat">
-      <p class="stat-v" data-count="15" data-prefix="$" data-suffix="M+">$0M+</p>
-      <p class="stat-l">Active Pipeline</p>
-      <p class="stat-ctx">Deals in progress, not projections</p>
-    </div>
-    <div class="stat gsap-stat">
-      <p class="stat-v" data-count="50" data-prefix="" data-suffix="+">0+</p>
-      <p class="stat-l">Websites Shipped</p>
-      <p class="stat-ctx">Lead-generating, not just pretty</p>
-    </div>
-    <div class="stat gsap-stat">
-      <p class="stat-v">24/7</p>
-      <p class="stat-l">AI Systems Running</p>
-      <p class="stat-ctx">Automating what used to need people</p>
+    <div class="pillar gsap-fade">
+      <h3>Capital & deals</h3>
+      <p>Investing, structuring, and connecting capital.</p>
     </div>
   </div>
 </section>
 
-<!-- PROCESS -->
-<section id="process" class="process-section light-section">
-  <div class="sec-head">
-    <div>
-      <div class="label gsap-fade">02 / Process</div>
-      <h2 class="gsap-fade">First call to first result.</h2>
-    </div>
-    <p class="lede gsap-fade">No discovery phases. No 12-week timelines. We talk, we map the problem, we build the fix.</p>
-  </div>
-  <div class="steps">
-    <div class="step-item gsap-step"><div class="tag-s">Step 01</div><h4>We Talk</h4><p>15-minute call. You tell us what's broken, what's working, and where you want to go. No pitch — just fit.</p><div class="n">01</div></div>
-    <div class="step-item gsap-step"><div class="tag-s">Step 02</div><h4>We Map It</h4><p>We audit your systems, revenue leaks, and growth blockers. You see exactly what's costing you and what to fix first.</p><div class="n">02</div></div>
-    <div class="step-item gsap-step"><div class="tag-s">Step 03</div><h4>We Build It</h4><p>Website, automation, restructure — whatever moves the needle. We build, deploy, and measure. You run your business.</p><div class="n">03</div></div>
-  </div>
-</section>
+<div class="section-line"></div>
 
-<!-- ABOUT -->
-<section id="about" class="about-section dark-section">
-  <div class="sec-head">
-    <div>
-      <div class="label gsap-fade">03 / About</div>
-      <h2 class="gsap-fade">Run by the bloke<br/>doing the deals.</h2>
-    </div>
-  </div>
-  <div class="about-grid">
+<!-- ═══════════════════════════════════
+     PROOF — big numbers, nothing else
+     ═══════════════════════════════════ -->
+<section class="dark-section" id="proof">
+  <div class="proof">
     <div class="gsap-fade">
-      <div class="about-photo"><img src="assets/dave-heraud.png" alt="Dave Heraud" /></div>
-      <p class="about-name">Dave Heraud</p>
-      <p class="about-role">Founder, Wolf Partners</p>
-      <p class="about-sub">Investor · Operator · Builder</p>
+      <p class="proof-num" data-count="80">$0M+</p>
+      <p class="proof-label">Deals completed</p>
     </div>
-    <div>
-      <p class="insights-label gsap-fade">What I keep seeing</p>
-      <div class="insight gsap-insight"><p>Most service businesses are sitting on 20–30% more revenue without adding a single new customer. They just don't measure what they're losing.</p></div>
-      <div class="insight gsap-insight"><p>Founders who scaled to $2–5M on instinct hit a wall. The thing that got them here — doing everything themselves — is the thing stopping them.</p></div>
-      <div class="insight gsap-insight"><p>AI isn't coming for these businesses. It's already here. The ones using it are pulling away from the ones still thinking about it.</p></div>
+    <div class="gsap-fade">
+      <p class="proof-num" data-count="15">$0M+</p>
+      <p class="proof-label">Active pipeline</p>
+    </div>
+  </div>
+  <p class="proof-line gsap-fade">Real operators. Real businesses. Real outcomes.</p>
+</section>
+
+<div class="section-line"></div>
+
+<!-- ═══════════════════════════════════
+     WHO IT'S FOR — filtering, not selling
+     ═══════════════════════════════════ -->
+<section class="dark-section">
+  <div class="label gsap-fade">Who I work with</div>
+  <h2 class="gsap-fade" style="font-family:var(--ff-d);font-weight:800;font-size:clamp(28px,4vw,48px);line-height:1;letter-spacing:-.02em">Businesses that already have traction.</h2>
+  <ul class="for-list">
+    <li class="gsap-fade">Generating revenue but not scaling efficiently</li>
+    <li class="gsap-fade">Founders stuck at a growth plateau</li>
+    <li class="gsap-fade">Operators who know something isn't working</li>
+    <li class="gsap-fade">AI and tech-enabled businesses ready to move</li>
+  </ul>
+  <p class="for-not gsap-fade">If you're starting from zero, I'm not the right fit.</p>
+</section>
+
+<div class="section-line"></div>
+
+<!-- ═══════════════════════════════════
+     CURRENT FOCUS
+     ═══════════════════════════════════ -->
+<section class="dark-section">
+  <div class="label gsap-fade">What I'm working on now</div>
+  <div class="focus-items">
+    <div class="focus-item gsap-fade">
+      <h4>AI-driven businesses</h4>
+      <p>Working with and funding businesses using AI to replace headcount with infrastructure.</p>
+    </div>
+    <div class="focus-item gsap-fade">
+      <h4>Service & operating businesses</h4>
+      <p>Scaling revenue, fixing unit economics, rebuilding client acquisition systems.</p>
+    </div>
+    <div class="focus-item gsap-fade">
+      <h4>Deal structuring</h4>
+      <p>Equity and revenue-share deals with operators who want a partner, not a lender.</p>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
-<section id="contact" class="cta-section dark-section">
-  <div class="cta-card gsap-fade">
-    <div class="cta-glow"></div>
-    <div class="label">Ready?</div>
-    <h2>Let's see if there's a fit.</h2>
-    <p class="desc">15 minutes. No pitch. Just a conversation about whether we can actually help your business grow.</p>
-    <a class="btn solid" href="#">Book a Strategy Call <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"/></svg></a>
-    <p class="cta-email">Or email: dave@wolfpartners.com.au</p>
+<div class="section-line"></div>
+
+<!-- ═══════════════════════════════════
+     CTA — simple, one action
+     ═══════════════════════════════════ -->
+<section class="dark-section" id="contact">
+  <div class="final-cta gsap-fade">
+    <p>If you have something that's already working but not where it should be — let's talk.</p>
+    <a href="#">Start a conversation <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"/></svg></a>
+    <p class="email">dave@wolfpartners.com.au</p>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="top">
-    <div>
-      <a class="brand" href="#" style="display:flex;gap:10px;align-items:center"><img src="assets/wolf-partners-logo.png" alt="" style="height:24px" /></a>
-      <p style="color:var(--muted);margin-top:16px;max-width:300px;font-size:13px;line-height:1.7">Growth, investment, and automation for businesses that already have traction. Based in SE Queensland.</p>
-    </div>
-    <div><h5>Services</h5><a href="websites.html">Websites</a><a href="automations.html">AI Automations</a><a href="#services">Growth & Investment</a></div>
-    <div><h5>Company</h5><a href="#about">About</a><a href="#contact">Contact</a></div>
-    <div><h5>Connect</h5><a href="mailto:dave@wolfpartners.com.au">Email</a><a href="#">LinkedIn</a></div>
-  </div>
   <div class="lockup">Wolf <span class="gold">Partners</span></div>
-  <div class="bot"><span>&copy; 2026 Wolf Partners &middot; All rights reserved</span><span>dave@wolfpartners.com.au</span></div>
+  <div class="bot">
+    <span>&copy; 2026 Wolf Partners</span>
+    <span><a href="mailto:dave@wolfpartners.com.au">dave@wolfpartners.com.au</a></span>
+  </div>
 </footer>
 
 <script type="module">
 import * as THREE from 'three';
 import Lenis from 'lenis';
 
-/* ══════════════════════════════════════
-   LENIS SMOOTH SCROLL
-   ══════════════════════════════════════ */
-const lenis = new Lenis({ lerp:0.1, smoothWheel:true, wheelMultiplier:1.2, touchMultiplier:2, syncTouch:true });
-document.querySelectorAll('a[href^="#"]').forEach(a=>{
-  a.addEventListener('click',(e)=>{
-    const id=a.getAttribute('href'); if(id==='#'||id.length<2) return;
-    const t=document.querySelector(id); if(!t) return;
-    e.preventDefault(); lenis.scrollTo(t,{offset:-40,duration:1.2});
-  });
-});
-
-// Sync Lenis with GSAP ScrollTrigger
-lenis.on('scroll', ScrollTrigger.update);
-gsap.ticker.add((time) => lenis.raf(time * 1000));
+/* ── LENIS ── */
+const lenis=new Lenis({lerp:0.1,smoothWheel:true,wheelMultiplier:1.2,touchMultiplier:2,syncTouch:true});
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',(e)=>{const id=a.getAttribute('href');if(id==='#'||id.length<2)return;const t=document.querySelector(id);if(!t)return;e.preventDefault();lenis.scrollTo(t,{offset:-40,duration:1.2})})});
+lenis.on('scroll',ScrollTrigger.update);
+gsap.ticker.add((time)=>lenis.raf(time*1000));
 gsap.ticker.lagSmoothing(0);
-
 const nav=document.getElementById('nav');
 let currentScroll=0;
-lenis.on('scroll',({scroll})=>{
-  nav.classList.toggle('scrolled',scroll>60);
-  currentScroll=scroll;
-});
+lenis.on('scroll',({scroll})=>{nav.classList.toggle('scrolled',scroll>60);currentScroll=scroll});
 
-/* ══════════════════════════════════════
-   HERO — GSAP word-by-word reveal
-   ══════════════════════════════════════ */
+/* ── HERO WORD REVEAL ── */
 const heroH1=document.getElementById('heroH1');
-const lines=['Your business doesn\'t need more leads.','It needs better systems.'];
+const lines=['I scale businesses','that already work.'];
 lines.forEach((line,li)=>{
   if(li>0) heroH1.appendChild(document.createElement('br'));
   line.split(' ').forEach((w,wi,arr)=>{
-    const span=document.createElement('span');
-    span.className='word';
-    const inner=document.createElement('span');
-    inner.className='w-in';
-    if(li===1){inner.classList.add('gold');inner.style.cssText='background:linear-gradient(135deg,#C5A44E,#D4B968,#E8D48B);-webkit-background-clip:text;background-clip:text;color:transparent'}
-    inner.textContent=w;
-    span.appendChild(inner);
-    heroH1.appendChild(span);
+    const span=document.createElement('span');span.className='word';
+    const inner=document.createElement('span');inner.className='w-in';
+    inner.textContent=w;span.appendChild(inner);heroH1.appendChild(span);
     if(wi<arr.length-1) heroH1.appendChild(document.createTextNode(' '));
   });
 });
+const heroTL=gsap.timeline({delay:0.3});
+heroTL.to('.w-in',{y:'0%',duration:0.8,ease:'power3.out',stagger:0.07})
+  .to('#tagline',{opacity:1,duration:0.6,ease:'power3.out'},'-=0.3')
+  .to('#heroCta',{opacity:1,duration:0.6,ease:'power3.out'},'-=0.3')
+  .to('#scrollCue',{opacity:0.5,duration:0.5},'-=0.2');
 
-// GSAP hero entrance timeline
-const heroTL=gsap.timeline({delay:0.4});
-heroTL
-  .to('#eyebrow',{opacity:1,y:0,duration:0.6,ease:'power3.out'})
-  .to('.w-in',{y:'0%',duration:0.7,ease:'power3.out',stagger:0.06},'-=0.3')
-  .to('#heroSub',{opacity:1,y:0,duration:0.6,ease:'power3.out'},'-=0.2')
-  .to('#heroCtas',{opacity:1,y:0,duration:0.6,ease:'power3.out'},'-=0.3')
-  .to('#scrollCue',{opacity:0.7,duration:0.5},'-=0.2');
-
-/* ══════════════════════════════════════
-   GSAP SCROLL ANIMATIONS
-   ══════════════════════════════════════ */
+/* ── GSAP SCROLL ── */
 gsap.registerPlugin(ScrollTrigger);
-
-// General fade-up elements
 gsap.utils.toArray('.gsap-fade').forEach(el=>{
-  gsap.from(el,{
-    y:40,opacity:0,duration:0.8,ease:'power3.out',
-    scrollTrigger:{trigger:el,start:'top 85%',toggleActions:'play none none none'}
+  gsap.from(el,{y:30,opacity:0,duration:0.7,ease:'power3.out',
+    scrollTrigger:{trigger:el,start:'top 88%',toggleActions:'play none none none'}
   });
 });
 
-// Service cards — staggered with scale
-gsap.from('.gsap-card',{
-  y:60,opacity:0,scale:0.95,duration:0.8,ease:'power3.out',stagger:0.15,
-  scrollTrigger:{trigger:'.svc-grid',start:'top 80%',toggleActions:'play none none none'}
-});
-
-// Stats — each stat slides up with stagger
-gsap.from('.gsap-stat',{
-  y:50,opacity:0,duration:0.7,ease:'power3.out',stagger:0.12,
-  scrollTrigger:{trigger:'.stats-bar',start:'top 80%',toggleActions:'play none none none'}
-});
-
-// Stat counter animation
+/* ── STAT COUNTER ── */
 ScrollTrigger.create({
-  trigger:'.stats-bar',
-  start:'top 75%',
-  once:true,
+  trigger:'#proof',start:'top 75%',once:true,
   onEnter:()=>{
-    document.querySelectorAll('.stat-v[data-count]').forEach(el=>{
+    document.querySelectorAll('.proof-num[data-count]').forEach(el=>{
       const target=parseInt(el.dataset.count);
-      const pre=el.dataset.prefix||'';
-      const suf=el.dataset.suffix||'';
-      gsap.to({val:0},{
-        val:target,duration:2,ease:'power2.out',
-        onUpdate:function(){el.textContent=pre+Math.round(this.targets()[0].val)+suf}
+      gsap.to({val:0},{val:target,duration:2.2,ease:'power2.out',
+        onUpdate:function(){el.textContent='$'+Math.round(this.targets()[0].val)+'M+'}
       });
     });
   }
 });
 
-// Process steps — slide in from left, staggered
-gsap.from('.gsap-step',{
-  x:-60,opacity:0,duration:0.8,ease:'power3.out',stagger:0.2,
-  scrollTrigger:{trigger:'.steps',start:'top 80%',toggleActions:'play none none none'}
-});
-
-// About insights — wipe in from left (matching the left border)
-gsap.from('.gsap-insight',{
-  x:-30,opacity:0,duration:0.7,ease:'power3.out',stagger:0.15,
-  scrollTrigger:{trigger:'.gsap-insight',start:'top 85%',toggleActions:'play none none none'}
-});
-
-/* ══════════════════════════════════════
-   CSS 3D TILT on service cards
-   Mouse-tracking perspective rotation
-   ══════════════════════════════════════ */
-const isMobile=window.matchMedia('(max-width:900px)').matches;
-if(!isMobile){
-  document.querySelectorAll('.svc-card').forEach(card=>{
-    card.addEventListener('mousemove',(e)=>{
-      const rect=card.getBoundingClientRect();
-      const x=(e.clientX-rect.left)/rect.width-0.5;
-      const y=(e.clientY-rect.top)/rect.height-0.5;
-      gsap.to(card,{
-        rotateY:x*20,
-        rotateX:-y*20,
-        duration:0.4,
-        ease:'power2.out',
-        transformPerspective:800
-      });
-    });
-    card.addEventListener('mouseleave',()=>{
-      gsap.to(card,{rotateY:0,rotateX:0,duration:0.6,ease:'elastic.out(1,0.4)'});
-    });
-  });
-}
-
-/* ══════════════════════════════════════════════════════
-   THREE.JS — VISIBLE, MOVING 3D WORLD
-   ══════════════════════════════════════════════════════ */
+/* ── THREE.JS ── */
 const canvas=document.getElementById('worldCanvas');
 const dpr=Math.min(window.devicePixelRatio||1,1.5);
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'high-performance'});
-renderer.setPixelRatio(dpr);
-renderer.setClearColor(0x0a0a0d,1);
-renderer.toneMapping=THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure=1.2;
+renderer.setPixelRatio(dpr);renderer.setClearColor(0x0a0a0d,1);
+renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.2;
+const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x0a0a0d,0.006);
+const camera=new THREE.PerspectiveCamera(50,1,0.1,500);camera.position.set(0,2,22);
 
-const scene=new THREE.Scene();
-scene.fog=new THREE.FogExp2(0x0a0a0d,0.006);
-
-const camera=new THREE.PerspectiveCamera(50,1,0.1,500);
-camera.position.set(0,2,22);
-
-/* ── Lighting — bright enough to actually see ── */
 scene.add(new THREE.AmbientLight(0xC5A44E,0.2));
-const mainLight=new THREE.DirectionalLight(0xFFE8A0,1.0);
-mainLight.position.set(8,12,10);
-scene.add(mainLight);
-const rimLight=new THREE.DirectionalLight(0xD4B968,0.5);
-rimLight.position.set(-10,4,-8);
-scene.add(rimLight);
-const bottomLight=new THREE.PointLight(0xC5A44E,0.8,40);
-bottomLight.position.set(0,-6,0);
-scene.add(bottomLight);
-const topLight=new THREE.PointLight(0xD4B968,0.4,50);
-topLight.position.set(5,10,-5);
-scene.add(topLight);
+const ml=new THREE.DirectionalLight(0xFFE8A0,1.0);ml.position.set(8,12,10);scene.add(ml);
+const rl=new THREE.DirectionalLight(0xD4B968,0.5);rl.position.set(-10,4,-8);scene.add(rl);
+scene.add(Object.assign(new THREE.PointLight(0xC5A44E,0.8,40),{position:new THREE.Vector3(0,-6,0)}));
+scene.add(Object.assign(new THREE.PointLight(0xD4B968,0.4,50),{position:new THREE.Vector3(5,10,-5)}));
 
-/* ──────────────────────────────────────
-   CORE — morphing icosahedron
-   HIGH VISIBILITY — this is the hero
-   ────────────────────────────────────── */
-const CORE_POS=new THREE.Vector3(5,0,-4);
+const CP=new THREE.Vector3(6,0,-4);
 
-const coreGeo=new THREE.IcosahedronGeometry(3.2,4);
-const coreBasePos=new Float32Array(coreGeo.attributes.position.array);
-const coreWire=new THREE.Mesh(coreGeo,new THREE.MeshPhongMaterial({
-  color:0xC5A44E,
-  emissive:0x3D2E10,
-  wireframe:true,
-  transparent:true,
-  opacity:0.35
-}));
-coreWire.position.copy(CORE_POS);
-scene.add(coreWire);
+// Core morphing form
+const cG=new THREE.IcosahedronGeometry(3.2,4);const cBP=new Float32Array(cG.attributes.position.array);
+const cW=new THREE.Mesh(cG,new THREE.MeshPhongMaterial({color:0xC5A44E,emissive:0x3D2E10,wireframe:true,transparent:true,opacity:0.35}));
+cW.position.copy(CP);scene.add(cW);
+const cIG=new THREE.IcosahedronGeometry(3.0,4);const cIBP=new Float32Array(cIG.attributes.position.array);
+const cS=new THREE.Mesh(cIG,new THREE.MeshPhongMaterial({color:0xC5A44E,emissive:0x1A1206,specular:0xD4B968,shininess:60,transparent:true,opacity:0.08,side:THREE.DoubleSide}));
+cS.position.copy(CP);scene.add(cS);
 
-// Solid inner — gives volume, catches light
-const coreInnerGeo=new THREE.IcosahedronGeometry(3.0,4);
-const coreInnerBasePos=new Float32Array(coreInnerGeo.attributes.position.array);
-const coreSolid=new THREE.Mesh(coreInnerGeo,new THREE.MeshPhongMaterial({
-  color:0xC5A44E,
-  emissive:0x1A1206,
-  specular:0xD4B968,
-  shininess:60,
-  transparent:true,
-  opacity:0.08,
-  side:THREE.DoubleSide
-}));
-coreSolid.position.copy(CORE_POS);
-scene.add(coreSolid);
+// Rings
+function mkR(r,tb,op,tx,tz){const m=new THREE.Mesh(new THREE.TorusGeometry(r,tb,12,100),new THREE.MeshPhongMaterial({color:0xD4B968,emissive:0x2A200A,transparent:true,opacity:op}));m.position.copy(CP);m.rotation.x=tx;m.rotation.z=tz;scene.add(m);return m}
+const r1=mkR(5,.025,.2,Math.PI*.35,Math.PI*.1),r2=mkR(5.8,.018,.12,Math.PI*.6,Math.PI*.4),r3=mkR(4.3,.015,.1,Math.PI*.15,Math.PI*.5);
 
-/* ── ORBIT RINGS — visible, spinning ── */
-function makeRing(radius,tube,opacity,tiltX,tiltZ){
-  const m=new THREE.Mesh(
-    new THREE.TorusGeometry(radius,tube,12,100),
-    new THREE.MeshPhongMaterial({color:0xD4B968,emissive:0x2A200A,wireframe:false,transparent:true,opacity})
-  );
-  m.position.copy(CORE_POS);
-  m.rotation.x=tiltX;
-  m.rotation.z=tiltZ;
-  scene.add(m);
-  return m;
-}
-const ring1=makeRing(5.0,0.025,0.2,Math.PI*0.35,Math.PI*0.1);
-const ring2=makeRing(5.8,0.018,0.12,Math.PI*0.6,Math.PI*0.4);
-const ring3=makeRing(4.3,0.015,0.1,Math.PI*0.15,Math.PI*0.5);
-
-/* ── SATELLITE NODES — orbiting shapes ── */
+// Nodes
 const nodes=[];
-const nodeConfigs=[
-  {type:'oct',  s:0.6, r:7,   speed:0.18, yOff:1.8, phase:0,          opacity:0.25},
-  {type:'tet',  s:0.5, r:8.5, speed:-0.14,yOff:-1.2,phase:Math.PI*0.5,opacity:0.2},
-  {type:'dod',  s:0.4, r:6.5, speed:0.22, yOff:2.8, phase:Math.PI,    opacity:0.2},
-  {type:'oct',  s:0.35,r:9.5, speed:-0.1, yOff:-2.2,phase:Math.PI*1.5,opacity:0.15},
-  {type:'ico',  s:0.3, r:5.8, speed:0.2,  yOff:0.8, phase:Math.PI*0.7,opacity:0.18},
-  {type:'tet',  s:0.25,r:10.5,speed:0.12, yOff:-0.6,phase:Math.PI*1.2,opacity:0.12},
-  {type:'dod',  s:0.45,r:7.5, speed:-0.16,yOff:1.0, phase:Math.PI*0.3,opacity:0.2},
-  {type:'oct',  s:0.35,r:11,  speed:0.09, yOff:3.2, phase:Math.PI*1.8,opacity:0.1},
-];
-const geoMap={
-  oct:(s)=>new THREE.OctahedronGeometry(s),
-  tet:(s)=>new THREE.TetrahedronGeometry(s),
-  dod:(s)=>new THREE.DodecahedronGeometry(s),
-  ico:(s)=>new THREE.IcosahedronGeometry(s,0),
-};
-nodeConfigs.forEach(cfg=>{
-  const mesh=new THREE.Mesh(
-    geoMap[cfg.type](cfg.s),
-    new THREE.MeshPhongMaterial({color:0xC5A44E,emissive:0x2A200A,wireframe:true,transparent:true,opacity:cfg.opacity})
-  );
-  scene.add(mesh);
-  nodes.push({mesh,...cfg});
-});
+const nC=[{t:'oct',s:.6,r:7,sp:.18,y:1.8,ph:0,op:.25},{t:'tet',s:.5,r:8.5,sp:-.14,y:-1.2,ph:Math.PI*.5,op:.2},{t:'dod',s:.4,r:6.5,sp:.22,y:2.8,ph:Math.PI,op:.2},{t:'oct',s:.35,r:9.5,sp:-.1,y:-2.2,ph:Math.PI*1.5,op:.15},{t:'ico',s:.3,r:5.8,sp:.2,y:.8,ph:Math.PI*.7,op:.18},{t:'tet',s:.25,r:10.5,sp:.12,y:-.6,ph:Math.PI*1.2,op:.12},{t:'dod',s:.45,r:7.5,sp:-.16,y:1,ph:Math.PI*.3,op:.2},{t:'oct',s:.35,r:11,sp:.09,y:3.2,ph:Math.PI*1.8,op:.1}];
+const gM={oct:s=>new THREE.OctahedronGeometry(s),tet:s=>new THREE.TetrahedronGeometry(s),dod:s=>new THREE.DodecahedronGeometry(s),ico:s=>new THREE.IcosahedronGeometry(s,0)};
+nC.forEach(c=>{const m=new THREE.Mesh(gM[c.t](c.s),new THREE.MeshPhongMaterial({color:0xC5A44E,emissive:0x2A200A,wireframe:true,transparent:true,opacity:c.op}));scene.add(m);nodes.push({mesh:m,...c})});
 
-/* ── CONNECTION LINES ── */
-const lineMat=new THREE.LineBasicMaterial({color:0xC5A44E,transparent:true,opacity:0.06});
-const nodeLines=nodes.map(()=>{
-  const geo=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(),new THREE.Vector3()]);
-  const line=new THREE.Line(geo,lineMat.clone());
-  scene.add(line);
-  return line;
-});
-// Inter-node
-const interPairs=[[0,2],[1,3],[2,4],[3,5],[4,6],[5,7],[0,6],[1,7]];
-const interLines=interPairs.map(()=>{
-  const geo=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(),new THREE.Vector3()]);
-  const line=new THREE.Line(geo,new THREE.LineBasicMaterial({color:0xD4B968,transparent:true,opacity:0.03}));
-  scene.add(line);
-  return line;
-});
+// Lines
+const lM=new THREE.LineBasicMaterial({color:0xC5A44E,transparent:true,opacity:0.06});
+const nL=nodes.map(()=>{const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(),new THREE.Vector3()]);const l=new THREE.Line(g,lM.clone());scene.add(l);return l});
+const iP=[[0,2],[1,3],[2,4],[3,5],[4,6],[5,7],[0,6],[1,7]];
+const iL=iP.map(()=>{const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(),new THREE.Vector3()]);const l=new THREE.Line(g,new THREE.LineBasicMaterial({color:0xD4B968,transparent:true,opacity:0.03}));scene.add(l);return l});
 
-/* ── PARTICLES ── */
-function makeParticles(count,spread,size,opacity,color){
-  const geo=new THREE.BufferGeometry();
-  const pos=new Float32Array(count*3);
-  for(let i=0;i<count;i++){
-    const th=Math.random()*Math.PI*2;
-    const ph=Math.acos(2*Math.random()-1);
-    const r=Math.random()*spread;
-    pos[i*3]=r*Math.sin(ph)*Math.cos(th)+CORE_POS.x;
-    pos[i*3+1]=r*Math.sin(ph)*Math.sin(th)+CORE_POS.y;
-    pos[i*3+2]=r*Math.cos(ph)+CORE_POS.z;
-  }
-  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
-  const pts=new THREE.Points(geo,new THREE.PointsMaterial({color,size,transparent:true,opacity,depthWrite:false,sizeAttenuation:true}));
-  scene.add(pts);
-  return pts;
-}
-const pClose=makeParticles(250,9,0.04,0.45,0xC5A44E);
-const pMid=makeParticles(350,20,0.025,0.18,0xD4B968);
-const pFar=makeParticles(200,40,0.018,0.08,0xC5A44E);
+// Particles
+function mkP(cnt,spr,sz,op,col){const g=new THREE.BufferGeometry();const p=new Float32Array(cnt*3);for(let i=0;i<cnt;i++){const th=Math.random()*Math.PI*2,ph=Math.acos(2*Math.random()-1),r=Math.random()*spr;p[i*3]=r*Math.sin(ph)*Math.cos(th)+CP.x;p[i*3+1]=r*Math.sin(ph)*Math.sin(th)+CP.y;p[i*3+2]=r*Math.cos(ph)+CP.z}g.setAttribute('position',new THREE.BufferAttribute(p,3));const pts=new THREE.Points(g,new THREE.PointsMaterial({color:col,size:sz,transparent:true,opacity:op,depthWrite:false,sizeAttenuation:true}));scene.add(pts);return pts}
+const pC=mkP(250,9,.04,.45,0xC5A44E),pM=mkP(350,20,.025,.18,0xD4B968),pF=mkP(200,40,.018,.08,0xC5A44E);
 
-/* ── DISTANT BACKGROUND SHAPES ── */
-const distantShapes=[];
-for(let i=0;i<8;i++){
-  const geos=[new THREE.IcosahedronGeometry(1.8,1),new THREE.OctahedronGeometry(1.4),new THREE.DodecahedronGeometry(1.2),new THREE.TetrahedronGeometry(1.5)];
-  const m=new THREE.Mesh(geos[i%4],new THREE.MeshPhongMaterial({color:0xC5A44E,emissive:0x1A1206,wireframe:true,transparent:true,opacity:0.04+Math.random()*0.03}));
-  const angle=(i/8)*Math.PI*2;
-  const r=28+Math.random()*20;
-  m.position.set(Math.cos(angle)*r+CORE_POS.x,(Math.random()-0.5)*16,Math.sin(angle)*r+CORE_POS.z-10);
-  m.rotation.set(Math.random()*Math.PI,Math.random()*Math.PI,0);
-  scene.add(m);
-  distantShapes.push({mesh:m,rx:0.0004+Math.random()*0.0006,ry:0.0005+Math.random()*0.0008});
-}
+// Distant shapes
+const dS=[];for(let i=0;i<8;i++){const gs=[new THREE.IcosahedronGeometry(1.8,1),new THREE.OctahedronGeometry(1.4),new THREE.DodecahedronGeometry(1.2),new THREE.TetrahedronGeometry(1.5)];const m=new THREE.Mesh(gs[i%4],new THREE.MeshPhongMaterial({color:0xC5A44E,emissive:0x1A1206,wireframe:true,transparent:true,opacity:.04+Math.random()*.03}));const a=(i/8)*Math.PI*2,rv=28+Math.random()*20;m.position.set(Math.cos(a)*rv+CP.x,(Math.random()-.5)*16,Math.sin(a)*rv+CP.z-10);m.rotation.set(Math.random()*Math.PI,Math.random()*Math.PI,0);scene.add(m);dS.push({mesh:m,rx:.0004+Math.random()*.0006,ry:.0005+Math.random()*.0008})}
 
-/* ── PSEUDO-NOISE ── */
-function pnoise(x,y,z,t){
-  return Math.sin(x*1.4+t*0.5)*Math.cos(y*1.7+t*0.35)*Math.sin(z*1.1+t*0.45)*0.5
-    +Math.sin(x*2.8+t*1.1)*Math.cos(y*2.3+t*0.7)*0.25
-    +Math.sin(z*3.5+t*0.9)*Math.cos(x*1.6+t*0.6)*0.15;
-}
+function pn(x,y,z,t){return Math.sin(x*1.4+t*.5)*Math.cos(y*1.7+t*.35)*Math.sin(z*1.1+t*.45)*.5+Math.sin(x*2.8+t*1.1)*Math.cos(y*2.3+t*.7)*.25+Math.sin(z*3.5+t*.9)*Math.cos(x*1.6+t*.6)*.15}
 
-/* ── Mouse ── */
 let tmx=0,tmy=0,mx=0,my=0;
-document.addEventListener('pointermove',(e)=>{
-  tmx=((e.clientX/window.innerWidth)-0.5)*2;
-  tmy=((e.clientY/window.innerHeight)-0.5)*2;
-},{passive:true});
+document.addEventListener('pointermove',(e)=>{tmx=((e.clientX/window.innerWidth)-.5)*2;tmy=((e.clientY/window.innerHeight)-.5)*2},{passive:true});
+let sP=0;const dE=document.documentElement;
+function resize(){renderer.setSize(window.innerWidth,window.innerHeight,false);camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix()}
+resize();window.addEventListener('resize',resize);
+let tab=!document.hidden;document.addEventListener('visibilitychange',()=>tab=!document.hidden);
 
-/* ── Scroll state ── */
-let scrollProgress=0;
-const docEl=document.documentElement;
-
-/* ── Resize ── */
-function resize(){
-  renderer.setSize(window.innerWidth,window.innerHeight,false);
-  camera.aspect=window.innerWidth/window.innerHeight;
-  camera.updateProjectionMatrix();
-}
-resize();
-window.addEventListener('resize',resize);
-
-let tabActive=!document.hidden;
-document.addEventListener('visibilitychange',()=>tabActive=!document.hidden);
-
-/* ══════════════════════════════════════
-   RENDER LOOP
-   ══════════════════════════════════════ */
 function loop(time){
-  if(!tabActive){requestAnimationFrame(loop);return}
-
-  const t=time*0.001;
-  const docH=docEl.scrollHeight-window.innerHeight;
-  scrollProgress=docH>0?currentScroll/docH:0;
-
-  /* ── MORPH core ── */
-  const morphIntensity=0.22+scrollProgress*0.12; // morphs more as you scroll
-  const arr=coreWire.geometry.attributes.position.array;
-  const arrI=coreSolid.geometry.attributes.position.array;
-  for(let i=0;i<coreBasePos.length;i+=3){
-    const bx=coreBasePos[i],by=coreBasePos[i+1],bz=coreBasePos[i+2];
-    const n=pnoise(bx,by,bz,t);
-    const s=1+n*morphIntensity;
-    arr[i]=bx*s; arr[i+1]=by*s; arr[i+2]=bz*s;
-  }
-  coreWire.geometry.attributes.position.needsUpdate=true;
-  for(let i=0;i<coreInnerBasePos.length;i+=3){
-    const bx=coreInnerBasePos[i],by=coreInnerBasePos[i+1],bz=coreInnerBasePos[i+2];
-    const n=pnoise(bx,by,bz,t*0.85-0.4);
-    const s=1+n*(morphIntensity*0.85);
-    arrI[i]=bx*s; arrI[i+1]=by*s; arrI[i+2]=bz*s;
-  }
-  coreSolid.geometry.attributes.position.needsUpdate=true;
-
-  // Core rotation — accelerates slightly with scroll
-  const rotSpeed=0.0015+scrollProgress*0.002;
-  coreWire.rotation.y+=rotSpeed;
-  coreWire.rotation.x+=rotSpeed*0.35;
-  coreSolid.rotation.y=coreWire.rotation.y*0.95;
-  coreSolid.rotation.x=coreWire.rotation.x*0.95;
-
-  // Core opacity breathes
-  coreWire.material.opacity=0.3+Math.sin(t*0.6)*0.05;
-  coreSolid.material.opacity=0.06+Math.sin(t*0.6+1)*0.02;
-
-  /* ── RINGS spin ── */
-  ring1.rotation.z+=0.004;
-  ring1.rotation.y+=0.0015;
-  ring2.rotation.z-=0.003;
-  ring2.rotation.x+=0.002;
-  ring3.rotation.y+=0.005;
-  ring3.rotation.z-=0.0015;
-
-  /* ── NODES orbit ── */
-  nodes.forEach((n,i)=>{
-    const angle=t*n.speed+n.phase;
-    n.mesh.position.x=CORE_POS.x+Math.cos(angle)*n.r;
-    n.mesh.position.y=CORE_POS.y+n.yOff+Math.sin(t*0.4+n.phase)*0.8;
-    n.mesh.position.z=CORE_POS.z+Math.sin(angle)*n.r;
-    n.mesh.rotation.x+=0.01;
-    n.mesh.rotation.y+=0.015;
-
-    // Update connection line to core
-    nodeLines[i].geometry.setFromPoints([CORE_POS.clone(),n.mesh.position.clone()]);
-    const dist=CORE_POS.distanceTo(n.mesh.position);
-    nodeLines[i].material.opacity=Math.max(0.015,0.07-dist*0.004);
-  });
-
-  // Inter-node lines
-  interPairs.forEach(([a,b],i)=>{
-    if(nodes[a]&&nodes[b]){
-      interLines[i].geometry.setFromPoints([nodes[a].mesh.position.clone(),nodes[b].mesh.position.clone()]);
-    }
-  });
-
-  /* ── PARTICLES ── */
-  pClose.rotation.y+=0.0003;
-  pClose.rotation.x+=0.0001;
-  pMid.rotation.y-=0.0001;
-  pMid.rotation.z+=0.00008;
-  pFar.rotation.y+=0.00005;
-
-  /* ── DISTANT shapes ── */
-  distantShapes.forEach(s=>{
-    s.mesh.rotation.x+=s.rx;
-    s.mesh.rotation.y+=s.ry;
-  });
-
-  /* ── CAMERA — scroll orbit + mouse parallax ── */
-  mx+=(tmx-mx)*0.03;
-  my+=(tmy-my)*0.03;
-
-  const orbitAngle=scrollProgress*Math.PI*1.4-0.3;
-  const orbitRadius=22-scrollProgress*5;
-  camera.position.x=CORE_POS.x+Math.sin(orbitAngle)*orbitRadius+mx*2.5;
-  camera.position.y=2+scrollProgress*8+Math.sin(scrollProgress*Math.PI)*4+my*1;
-  camera.position.z=CORE_POS.z+Math.cos(orbitAngle)*orbitRadius;
-  camera.lookAt(CORE_POS.x,CORE_POS.y,CORE_POS.z);
-
-  renderer.render(scene,camera);
-  requestAnimationFrame(loop);
+  if(!tab){requestAnimationFrame(loop);return}
+  const t=time*.001,dH=dE.scrollHeight-window.innerHeight;sP=dH>0?currentScroll/dH:0;
+  const mi=.22+sP*.12,a=cW.geometry.attributes.position.array,aI=cS.geometry.attributes.position.array;
+  for(let i=0;i<cBP.length;i+=3){const bx=cBP[i],by=cBP[i+1],bz=cBP[i+2],n=pn(bx,by,bz,t),s=1+n*mi;a[i]=bx*s;a[i+1]=by*s;a[i+2]=bz*s}cW.geometry.attributes.position.needsUpdate=true;
+  for(let i=0;i<cIBP.length;i+=3){const bx=cIBP[i],by=cIBP[i+1],bz=cIBP[i+2],n=pn(bx,by,bz,t*.85-.4),s=1+n*(mi*.85);aI[i]=bx*s;aI[i+1]=by*s;aI[i+2]=bz*s}cS.geometry.attributes.position.needsUpdate=true;
+  const rs=.0015+sP*.002;cW.rotation.y+=rs;cW.rotation.x+=rs*.35;cS.rotation.y=cW.rotation.y*.95;cS.rotation.x=cW.rotation.x*.95;
+  cW.material.opacity=.3+Math.sin(t*.6)*.05;cS.material.opacity=.06+Math.sin(t*.6+1)*.02;
+  r1.rotation.z+=.004;r1.rotation.y+=.0015;r2.rotation.z-=.003;r2.rotation.x+=.002;r3.rotation.y+=.005;r3.rotation.z-=.0015;
+  nodes.forEach((n,i)=>{const ang=t*n.sp+n.ph;n.mesh.position.x=CP.x+Math.cos(ang)*n.r;n.mesh.position.y=CP.y+n.y+Math.sin(t*.4+n.ph)*.8;n.mesh.position.z=CP.z+Math.sin(ang)*n.r;n.mesh.rotation.x+=.01;n.mesh.rotation.y+=.015;nL[i].geometry.setFromPoints([CP.clone(),n.mesh.position.clone()]);const d=CP.distanceTo(n.mesh.position);nL[i].material.opacity=Math.max(.015,.07-d*.004)});
+  iP.forEach(([a,b],i)=>{if(nodes[a]&&nodes[b])iL[i].geometry.setFromPoints([nodes[a].mesh.position.clone(),nodes[b].mesh.position.clone()])});
+  pC.rotation.y+=.0003;pC.rotation.x+=.0001;pM.rotation.y-=.0001;pM.rotation.z+=.00008;pF.rotation.y+=.00005;
+  dS.forEach(s=>{s.mesh.rotation.x+=s.rx;s.mesh.rotation.y+=s.ry});
+  mx+=(tmx-mx)*.03;my+=(tmy-my)*.03;
+  const oA=sP*Math.PI*1.4-.3,oR=22-sP*5;
+  camera.position.x=CP.x+Math.sin(oA)*oR+mx*2.5;camera.position.y=2+sP*8+Math.sin(sP*Math.PI)*4+my;camera.position.z=CP.z+Math.cos(oA)*oR;camera.lookAt(CP.x,CP.y,CP.z);
+  renderer.render(scene,camera);requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
 </script>
