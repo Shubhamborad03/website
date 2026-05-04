@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+@theme {
+  --color-gold: #C5A44E;
+  --color-gold-soft: #E8D89A;
+  --color-gold-deep: #8B6F2A;
+  --color-ink: #0A0A0A;
+  --color-ink-soft: #1A1A1A;
+  --color-fog: #F5F5F0;
+  --color-fog-soft: #FAFAF7;
+  --color-mist: #E8E8E0;
+  --color-graphite: #6B6B6B;
+  --color-stone: #999991;
+
+  --font-display: "Cabinet Grotesk", "Inter", system-ui, sans-serif;
+  --font-body: "General Sans", "Inter", system-ui, sans-serif;
+}
+
+@font-face {
+  font-family: "Cabinet Grotesk";
+  src: url("https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700,800,900&display=swap");
+}
+
+@font-face {
+  font-family: "General Sans";
+  src: url("https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap");
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+  background: var(--color-fog-soft);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-feature-settings: "ss01", "ss02", "cv01";
+  letter-spacing: -0.005em;
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-ink);
+}
+
+/* Subtle grid pattern for depth */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(10, 10, 10, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(10, 10, 10, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.bg-grid-dark {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* Mono number styling for numerals */
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Apple-style soft glow on key elements */
+.glow-gold {
+  box-shadow:
+    0 0 0 1px rgba(197, 164, 78, 0.15),
+    0 24px 64px -12px rgba(197, 164, 78, 0.18);
+}
+
+/* Dotted leader for measurement lines */
+.dashed-gold {
+  background-image: linear-gradient(to right, var(--color-gold) 50%, transparent 50%);
+  background-size: 8px 1px;
+  background-repeat: repeat-x;
+}
+
+/* Smooth section divider */
+.divider-soft {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(10, 10, 10, 0.08), transparent);
+}
+
+/* Pulse for live indicators */
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.95); }
+}
+
+.pulse-live {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+/* Coverage-map marker pulse ring */
+@keyframes wp-pulse-ring {
+  0%   { transform: translate(-50%, -50%) scale(0.5); opacity: 0.85; }
+  100% { transform: translate(-50%, -50%) scale(2);   opacity: 0;    }
+}
+.wp-pulse {
+  animation: wp-pulse-ring 2.4s ease-out infinite;
+}
+
+/* Scroll-triggered reveal smoothing */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
