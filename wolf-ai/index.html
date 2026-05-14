@@ -1,5 +1,8 @@
 <!doctype html>
 <html lang="en">
+  <link rel="icon" type="image/png" href="/logo.png">
+<link rel="icon" type="image/x-icon" href="/logo.ico">
+<link rel="apple-touch-icon" href="/logo.png">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -60,9 +63,9 @@ header.site{
 .brand-mark{
   width:30px;height:30px;border-radius:7px;
   background:linear-gradient(135deg,var(--accent),#c46b22);
-  display:grid;place-items:center;font-weight:700;font-size:14px;color:#0a0807;
+  padding:5px;
+  object-fit:contain;
   box-shadow:0 0 0 1px rgba(240,136,59,.3);
-  letter-spacing:-.02em;
 }
 .brand-name{font-size:16px;font-weight:600;letter-spacing:-.02em;color:var(--ink)}
 .brand-name span{color:var(--accent)}
@@ -360,9 +363,9 @@ footer.site{padding:32px 0;border-top:1px solid var(--line);font-family:'Geist M
 <header class="site">
   <div class="wrap nav">
     <a class="brand" href="/">
-      <span class="brand-mark">W</span>
-      <span class="brand-name">Wolf<span>AI</span></span>
-    </a>
+  <img class="brand-mark" src="/logo.png" alt="Wolf AI logo">
+  <span class="brand-name">Wolf<span>AI</span></span>
+</a>
     <nav class="nav-links" aria-label="primary">
       <a href="#build">What we build</a>
       <a href="#changes">What changes</a>
