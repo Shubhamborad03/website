@@ -1,12 +1,13 @@
 <!doctype html>
 <html lang="en">
-  <link rel="icon" type="image/png" href="/logo.png">
-<link rel="apple-touch-icon" href="/logo.png">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Wolf AI / Do more with less</title>
 <meta name="description" content="Wolf AI builds custom AI agents that handle leads, calls, follow-ups, content and operations. Built to run 24/7. Owned by you.">
+
+<link rel="icon" type="image/png" href="/logo.png">
+<link rel="apple-touch-icon" href="/logo.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -66,20 +67,17 @@ header.site{
 }
 .brand-name{font-size:16px;font-weight:600;letter-spacing:-.02em;color:var(--ink)}
 .brand-name span{color:var(--accent)}
-.nav-links{display:flex;align-items:center;gap:32px;margin-left:auto;margin-right:24px}
-.nav-links a{font-size:14.5px;color:var(--ink-2);letter-spacing:-.005em;transition:color .2s ease}
-.nav-links a:hover{color:var(--ink)}
 .btn-head{
   padding:10px 18px;border-radius:8px;
   background:var(--ink);color:#0a0807;
   font-size:14px;font-weight:600;letter-spacing:-.005em;
   display:inline-flex;align-items:center;gap:7px;
   transition:all .18s ease;
+  margin-left:auto;
 }
 .btn-head:hover{background:#fff;box-shadow:0 6px 18px rgba(255,255,255,.08)}
 .btn-head .a{transition:transform .18s ease}
 .btn-head:hover .a{transform:translateX(2px)}
-@media(max-width:680px){.nav-links{display:none}}
 
 /* ============ HERO ============ */
 section.hero{
@@ -322,25 +320,9 @@ section.block{padding:140px 0;border-top:1px solid var(--line);position:relative
   .r-card.full{padding:40px 28px}
 }
 
-/* ============ CTA ============ */
-section.cta{padding:160px 0;text-align:center;border-top:1px solid var(--line);position:relative;overflow:hidden}
-.cta::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 55% 60% at 50% 50%,rgba(240,136,59,.10) 0%,transparent 65%);pointer-events:none}
-.cta .wrap{position:relative}
-.cta h2{
-  font-size:clamp(38px,5vw,62px);
-  line-height:1.04;letter-spacing:-.028em;font-weight:600;
-  color:var(--ink);margin:0 auto 22px;max-width:18ch;text-wrap:balance;
-}
-.cta h2 .amber{color:var(--accent)}
-.cta p{font-size:17px;color:var(--ink-2);max-width:46ch;margin:0 auto 36px;line-height:1.5}
-.btn-primary.btn-large{padding:18px 32px;font-size:16px}
-@media(max-width:560px){section.cta{padding:100px 0}}
-
 /* ============ FOOTER ============ */
 footer.site{padding:32px 0;border-top:1px solid var(--line);font-family:'Geist Mono',ui-monospace,monospace;font-size:12px;color:var(--muted);letter-spacing:.04em}
-.foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-.foot a{color:var(--ink-2);transition:color .2s ease}
-.foot a:hover{color:var(--accent)}
+.foot{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:12px}
 
 /* ============ REVEAL ============ */
 .reveal{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
@@ -360,14 +342,10 @@ footer.site{padding:32px 0;border-top:1px solid var(--line);font-family:'Geist M
 <header class="site">
   <div class="wrap nav">
     <a class="brand" href="/">
-  <img class="brand-mark" src="/logo.png" alt="Wolf AI logo">
-  <span class="brand-name">Wolf<span>AI</span></span>
-</a>
-    <nav class="nav-links" aria-label="primary">
-      <a href="#build">What we build</a>
-      <a href="#changes">What changes</a>
-    </nav>
-    <a class="btn-head" href="https://z8d9iav9qs2.typeform.com/to/zTzcDJPm">Talk to our agent <span class="a">&rarr;</span></a>
+      <img class="brand-mark" src="/logo.png" alt="Wolf AI logo">
+      <span class="brand-name">Wolf<span>AI</span></span>
+    </a>
+    <a class="btn-head" href="https://z8d9iav9qs2.typeform.com/to/zTzcDJPm">Contact us <span class="a">&rarr;</span></a>
   </div>
 </header>
 
@@ -377,7 +355,7 @@ footer.site{padding:32px 0;border-top:1px solid var(--line);font-family:'Geist M
       <h1>Do more <span class="amber">with less.</span></h1>
       <p class="tagline">Whether you&rsquo;re chasing leads, nurturing clients or running the back office, AI agents take the pressure off.</p>
       <p class="lead">Wolf AI builds custom AI agents that handle the work draining your week. Built to run 24/7. Owned by you.</p>
-      <a class="btn-primary" href="https://z8d9iav9qs2.typeform.com/to/zTzcDJPm">Talk to our agent <span class="a">&rarr;</span></a>
+      <a class="btn-primary" href="https://z8d9iav9qs2.typeform.com/to/zTzcDJPm">Contact us <span class="a">&rarr;</span></a>
     </div>
 
     <div class="activity-stack" aria-hidden="true">
@@ -476,7 +454,7 @@ footer.site{padding:32px 0;border-top:1px solid var(--line);font-family:'Geist M
 
     <div class="svc-cta reveal">
       <p class="svc-cta-text">Have a different bottleneck? <span>We&rsquo;ll build an agent for it.</span></p>
-      <a class="btn-ghost" href="https://z8d9iav9qs2.typeform.com/to/zTzcDJPm">Talk to our agent <span class="a">&rarr;</span></a>
+      <a class="btn-ghost" href="https://z8d9iav9qs2.typeform.com/to/zTzcDJPm">Contact us <span class="a">&rarr;</span></a>
     </div>
   </div>
 </section>
@@ -484,8 +462,7 @@ footer.site{padding:32px 0;border-top:1px solid var(--line);font-family:'Geist M
 <section class="block" id="changes">
   <div class="wrap">
     <div class="section-head reveal">
-      <h2>What <span class="amber">changes.</span></h2>
-      <p>Inside the first month, with agents running. Same six categories, six new defaults for how your business works.</p>
+      <h2>Benefits of <span class="amber">our agents.</span></h2>
     </div>
 
     <div class="bento reveal">
@@ -530,18 +507,9 @@ footer.site{padding:32px 0;border-top:1px solid var(--line);font-family:'Geist M
   </div>
 </section>
 
-<section class="cta" id="cta">
-  <div class="wrap">
-    <h2 class="reveal">Put <span class="amber">agents</span> to work.</h2>
-    <p class="reveal">Talk to our agent. Five minutes. No deck, no pitch. It figures out what you&rsquo;re trying to fix and books a call with us if it&rsquo;s a fit.</p>
-    <a class="btn-primary btn-large reveal" href="https://z8d9iav9qs2.typeform.com/to/zTzcDJPm">Talk to our agent <span class="a">&rarr;</span></a>
-  </div>
-</section>
-
 <footer class="site">
   <div class="wrap foot">
     <span>&copy; 2026 Wolf AI</span>
-    <a href="mailto:dave@wolfpartners.com.au">dave@wolfpartners.com.au</a>
   </div>
 </footer>
 
