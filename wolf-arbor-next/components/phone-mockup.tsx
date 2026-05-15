@@ -139,12 +139,11 @@ export function PhoneMockup() {
                       style={{ width: "100%", height: 138 }}
                     >
                       <Image
-                        src="/sms-backyard.jpg"
+                        src="/tree/sms-backyard.jpg"
                         alt="Customer photo of backyard tree near fence"
                         fill
                         sizes="188px"
                         className="object-cover"
-                        unoptimized
                       />
                     </div>
                   </div>

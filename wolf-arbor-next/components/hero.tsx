@@ -111,7 +111,7 @@ export function Hero() {
           className="relative aspect-[4/5] w-full rounded-3xl overflow-hidden shadow-card bg-forest"
         >
           <Image
-            src="/hero-arborist.jpg"
+            src="/tree/hero-arborist.jpg"
             alt="Arborist mid-cut with chainsaw, working at height"
             fill
             priority
