@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/tree",
+      "destination": "https://wolf-arbor-pitch.vercel.app/tree"
+    },
+    {
+      "source": "/tree/:path*",
+      "destination": "https://wolf-arbor-pitch.vercel.app/tree/:path*"
+    }
+  ]
+}
