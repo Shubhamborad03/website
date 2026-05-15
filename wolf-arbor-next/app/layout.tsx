@@ -13,6 +13,10 @@ export const metadata: Metadata = {
   title: "Wolf AI — Software that wins more tree jobs",
   description:
     "An SMS quote engine, vision-AI assessment, and ten automations built for Australian arborists. Live in days.",
+  icons: {
+    icon: "/tree/logo.png",
+    apple: "/tree/logo.png",
+  },
 };
 
 export default function RootLayout({

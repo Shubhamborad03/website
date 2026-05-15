@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -42,27 +43,21 @@ export function NavPill() {
               : "bg-bg/65 backdrop-blur-md border border-sand/60",
           )}
         >
-          {/* Logo + brand */}
-          <a href="#top" className="flex items-center gap-2 shrink-0 pl-1.5 pr-1">
-            <svg
-              className="w-5 h-5"
-              viewBox="0 0 24 24"
-              fill="none"
-              aria-hidden
-            >
-              <path
-                d="M12 3c-3.5 4-6 7.5-6 12 0 3.3 2.7 6 6 6s6-2.7 6-6c0-4.5-2.5-8-6-12z"
-                fill="#1F3A2E"
-              />
-              <path
-                d="M12 8v13"
-                stroke="#FAF7F0"
-                strokeWidth="1"
-                strokeLinecap="round"
-              />
-            </svg>
-            <span className="text-[14px] font-semibold tracking-tight text-ink whitespace-nowrap">
-              Wolf AI
+          {/* Logo + brand — matches wolf-ai.com.au landing-page treatment */}
+          <a
+            href="https://wolf-ai.com.au"
+            className="flex items-center gap-2.5 shrink-0 pl-1 pr-1"
+          >
+            <Image
+              src="/tree/logo.png"
+              alt="Wolf AI logo"
+              width={30}
+              height={30}
+              priority
+              className="w-7 h-7 rounded-md object-contain"
+            />
+            <span className="text-[15px] font-semibold tracking-tight text-ink whitespace-nowrap">
+              Wolf<span className="text-amber">AI</span>
             </span>
           </a>
 
