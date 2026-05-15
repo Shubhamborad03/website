@@ -1,4 +1,4 @@
-# Deploy `wolf-arbor-next` at `wolf.ai.eu.com/tree`
+# Deploy `wolf-arbor-next` at `wolf-ai.com.au/tree`
 
 This Next.js project is **already configured** to serve at the `/tree` subpath (via `basePath: '/tree'` in `next.config.mjs`).
 
@@ -36,7 +36,7 @@ Vercel will give the project a URL like `wolf-arbor-pitch.vercel.app` (or `wolf-
 
 ## Step 2 — Add this `vercel.json` to your existing landing-page repo
 
-In your **landing page repo** (the one with the `index.html` for `wolf.ai.eu.com`), create a new file at the repo root called `vercel.json`. Don't touch `index.html` — just add this new file:
+In your **landing page repo** (the one with the `index.html` for `wolf-ai.com.au`), create a new file at the repo root called `vercel.json`. Don't touch `index.html` — just add this new file:
 
 ```json
 {
@@ -69,7 +69,7 @@ Vercel will automatically redeploy the main site. Wait ~30 seconds.
 
 ## Step 3 — Verify
 
-Visit `https://wolf.ai.eu.com/tree` — you should see the arbor pitch site. Visit `https://wolf.ai.eu.com/` — you should still see your original HTML landing page. Both live, both independent.
+Visit `https://wolf-ai.com.au/tree` — you should see the arbor pitch site. Visit `https://wolf-ai.com.au/` — you should still see your original HTML landing page. Both live, both independent.
 
 If you ever update the arbor site, just `git push` to the `wolf-arbor-pitch` repo and Vercel rebuilds it automatically — the rewrite on the landing-page repo stays the same.
 
@@ -99,7 +99,7 @@ To move the site to a different subpath (e.g. `/arbor` instead of `/tree`):
 
 ## Troubleshooting
 
-**"404 when I visit `wolf.ai.eu.com/tree`"**
+**"404 when I visit `wolf-ai.com.au/tree`"**
 - Check the `vercel.json` rewrite URL — does it match your Vercel project URL exactly?
 - Check the landing-page project deployed successfully on Vercel after you pushed
 - Try the Next.js deployment URL directly: `https://wolf-arbor-pitch.vercel.app/tree` — if that works, the rewrite is the problem; if it doesn't, the Next.js project itself is the problem
@@ -107,7 +107,7 @@ To move the site to a different subpath (e.g. `/arbor` instead of `/tree`):
 **"Page loads but images / CSS are broken"**
 - This means `basePath` isn't being applied. Confirm `next.config.mjs` has `basePath: "/tree"` and that you redeployed after adding it.
 
-**"I want a subdomain instead, e.g. tree.wolf.ai.eu.com"**
+**"I want a subdomain instead, e.g. tree.wolf-ai.com.au"**
 - Remove `basePath` from `next.config.mjs` entirely
 - Skip the `vercel.json` rewrite step
-- In Vercel project settings for `wolf-arbor-pitch`, add a custom domain `tree.wolf.ai.eu.com` and follow Vercel's DNS instructions
+- In Vercel project settings for `wolf-arbor-pitch`, add a custom domain `tree.wolf-ai.com.au` and follow Vercel's DNS instructions
