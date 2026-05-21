@@ -1,4 +1,6 @@
 {
+  "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
     {
       "source": "/tree",
@@ -7,6 +9,13 @@
     {
       "source": "/tree/:path*",
       "destination": "https://wolf-arbor-pitch.vercel.app/tree/:path*"
-    }
+    },
+    { "source": "/roof", "destination": "/proposals/roof-quote-agent.html" },
+    { "source": "/tsba", "destination": "/proposals/tsba.html" },
+    { "source": "/tsba-flow", "destination": "/proposals/tsba-flow.html" },
+    { "source": "/tsba-honest", "destination": "/proposals/tsba-honest-breakdown.html" },
+    { "source": "/nu-level-flow", "destination": "/proposals/nu-level-quote-flow.html" },
+    { "source": "/aerowash", "destination": "/proposals/aerowash.html" },
+    { "source": "/clean-under-pressure", "destination": "/proposals/clean-under-pressure.html" }
   ]
 }
