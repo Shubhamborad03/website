@@ -1,0 +1,285 @@
+/* ============================================================
+  HELEN'S SWIM SCHOOL, interior page styles (pages-visit.css)
+  Loaded after helens.css. Holds: page hero + breadcrumb, the
+  FAQ accordion, the "what to bring" list, the Visit map
+  treatment and info blocks, the closing CTA band, and the
+  mobile nav panel (the home toggle adds .site-nav.open).
+  Built on the helens.css tokens: pool-blue brand, soft sky,
+  warm sun accent, eucalypt green. No em dashes or en dashes.
+  ============================================================ */
+
+/* ---------------- page hero + breadcrumb ---------------- */
+.page-hero{
+ position:relative;
+ padding:clamp(2.2rem,5vw,3.6rem) 0 clamp(2.4rem,5vw,3.6rem);
+ background:
+  radial-gradient(120% 140% at 100% 0%, var(--sky) 0%, transparent 55%),
+  linear-gradient(180deg, var(--sky-2), var(--white));
+ border-bottom:1px solid var(--line);
+ overflow:hidden;
+}
+.page-hero::after{
+ content:""; position:absolute; left:0; right:0; bottom:-1px; height:60px;
+ background:
+  radial-gradient(60px 30px at 12% 0, transparent 28px, var(--aqua-soft) 29px 30px, transparent 31px),
+  radial-gradient(60px 30px at 50% 0, transparent 28px, var(--aqua-soft) 29px 30px, transparent 31px),
+  radial-gradient(60px 30px at 88% 0, transparent 28px, var(--aqua-soft) 29px 30px, transparent 31px);
+ opacity:.35; pointer-events:none;
+}
+.crumb{
+ display:flex; align-items:center; gap:.55rem; flex-wrap:wrap;
+ font-family:var(--f-disp); font-weight:500; font-size:.86rem;
+ color:var(--ink-mute); margin-bottom:1.1rem;
+}
+.crumb a{ color:var(--pool-deep); text-decoration:none; }
+.crumb a:hover{ text-decoration:underline; text-underline-offset:3px; }
+.crumb span[aria-current]{ color:var(--ink-soft); }
+.page-h1{
+ font-size:clamp(2.2rem,5.2vw,3.7rem); color:var(--pool-ink);
+ max-width:18ch; margin:.2rem 0 0;
+}
+.page-lede{
+ margin:1.1rem 0 0; max-width:58ch;
+ font-size:clamp(1.05rem,1.4vw,1.2rem); color:var(--ink-soft);
+}
+.page-lede a{ color:var(--pool-deep); font-weight:600; text-decoration:none; border-bottom:2px solid var(--aqua-soft); }
+.page-lede a:hover{ border-color:var(--pool); }
+.page-hero-jump{
+ display:flex; flex-wrap:wrap; gap:.55rem; margin-top:1.7rem;
+}
+.page-hero-jump a{
+ font-family:var(--f-disp); font-weight:500; font-size:.9rem;
+ color:var(--pool-deep); text-decoration:none;
+ padding:.5rem .95rem; border-radius:var(--r-pill);
+ background:#fff; border:1px solid var(--line);
+ transition:background .2s, border-color .2s, transform .2s var(--ease);
+}
+.page-hero-jump a:hover{ background:var(--sky); border-color:var(--pool); transform:translateY(-2px); }
+
+/* ---------------- FAQ layout + accordion ---------------- */
+.faq-wrap{
+ display:grid; grid-template-columns:.85fr 1.15fr;
+ gap:clamp(1.6rem,4vw,3.4rem); align-items:start;
+}
+.faq-side{ position:sticky; top:84px; }
+.faq-side .sec-h2{ max-width:16ch; }
+.faq-side-note{
+ margin:1.1rem 0 0; color:var(--ink-soft);
+ font-size:1rem; line-height:1.55; max-width:34ch;
+}
+.faq-list{ display:grid; gap:.85rem; }
+
+.faq-item{
+ background:#fff; border:1px solid var(--line); border-radius:var(--r-md);
+ box-shadow:var(--shadow-sm); overflow:hidden;
+ transition:border-color .25s, box-shadow .3s var(--ease);
+}
+.faq-item[open]{ border-color:var(--aqua-soft); box-shadow:var(--shadow-md); }
+.faq-item summary{
+ list-style:none; cursor:pointer;
+ display:flex; align-items:center; justify-content:space-between; gap:1rem;
+ padding:1.15rem 1.35rem;
+ font-family:var(--f-disp); font-weight:600; font-size:1.1rem;
+ color:var(--pool-ink); line-height:1.3;
+}
+.faq-item summary::-webkit-details-marker{ display:none; }
+.faq-item summary::after{
+ content:""; flex:0 0 auto; width:24px; height:24px; border-radius:50%;
+ background:var(--sky); position:relative;
+ transition:background .25s, transform .35s var(--ease);
+ background-image:
+  linear-gradient(var(--pool-deep),var(--pool-deep)),
+  linear-gradient(var(--pool-deep),var(--pool-deep));
+ background-size:11px 2px, 2px 11px;
+ background-position:center, center;
+ background-repeat:no-repeat;
+}
+.faq-item[open] summary::after{ transform:rotate(135deg); background-color:var(--aqua-soft); }
+.faq-item summary:hover{ color:var(--pool-deep); }
+.faq-item summary:hover::after{ background-color:var(--aqua-soft); }
+.faq-answer{ padding:0 1.35rem 1.25rem; }
+.faq-answer p{ margin:0; color:var(--ink-soft); font-size:1.02rem; line-height:1.6; }
+.faq-answer a{ color:var(--pool-deep); font-weight:600; text-decoration:underline; text-underline-offset:3px; }
+
+/* ---------------- what to bring list ---------------- */
+.bring-list{ align-self:start; }
+.faq-bring{ list-style:none; margin:0; padding:0; display:grid; gap:.85rem; }
+.faq-bring li{
+ display:flex; gap:1rem; align-items:flex-start;
+ background:#fff; border:1px solid var(--line); border-radius:var(--r-md);
+ padding:1.1rem 1.25rem; box-shadow:var(--shadow-sm);
+}
+.bring-ic{
+ flex:0 0 auto; width:44px; height:44px; border-radius:13px;
+ background:var(--sky); color:var(--pool); display:grid; place-items:center;
+ border:1px solid var(--aqua-soft);
+}
+.bring-ic svg{ width:23px; height:23px; }
+.faq-bring b{ font-family:var(--f-disp); font-weight:700; font-size:1.08rem; color:var(--pool-ink); }
+.faq-bring p{ margin:.2rem 0 0; color:var(--ink-soft); font-size:.98rem; line-height:1.5; }
+
+/* ---------------- visit: map treatment ---------------- */
+.visit-map{ display:grid; grid-template-columns:1.25fr .75fr; gap:clamp(1.4rem,3vw,2.4rem); align-items:stretch; }
+.map-canvas{
+ position:relative; display:block; overflow:hidden;
+ border-radius:var(--r-xl); border:1px solid var(--line);
+ box-shadow:var(--shadow-md); text-decoration:none; color:inherit;
+ min-height:340px;
+ background:
+  radial-gradient(120% 120% at 80% 10%, var(--euc-soft) 0%, transparent 55%),
+  linear-gradient(160deg, var(--sky) 0%, var(--sky-2) 100%);
+ transition:transform .4s var(--ease), box-shadow .4s var(--ease);
+}
+.map-canvas:hover{ transform:translateY(-3px); box-shadow:var(--shadow-lg); }
+.map-grid{
+ position:absolute; inset:0;
+ background-image:
+  linear-gradient(var(--line) 1px, transparent 1px),
+  linear-gradient(90deg, var(--line) 1px, transparent 1px);
+ background-size:48px 48px; opacity:.55;
+}
+.map-road{ position:absolute; background:#fff; box-shadow:0 0 0 1px var(--line); border-radius:6px; }
+.map-road-1{ left:-5%; top:38%; width:110%; height:18px; transform:rotate(-7deg); }
+.map-road-2{ left:58%; top:-10%; width:16px; height:120%; transform:rotate(6deg); }
+.map-bush{
+ position:absolute; right:6%; bottom:8%; width:46%; height:46%;
+ background:radial-gradient(circle at 30% 40%, rgba(94,138,106,.5), rgba(94,138,106,.18) 60%, transparent 72%);
+ border-radius:50%; filter:blur(2px);
+}
+.map-pin{
+ position:absolute; left:34%; top:40%; transform:translate(-50%,-100%);
+ width:48px; height:48px; border-radius:50% 50% 50% 0;
+ background:var(--pool); color:#fff; display:grid; place-items:center;
+ box-shadow:var(--shadow-md); rotate:45deg;
+}
+.map-pin svg{ width:26px; height:26px; rotate:-45deg; }
+.map-pin::after{
+ content:""; position:absolute; left:50%; bottom:-16px; transform:translateX(-50%) rotate(-45deg);
+ width:26px; height:10px; border-radius:50%;
+ background:rgba(10,63,85,.18); filter:blur(2px); rotate:-45deg;
+}
+.map-label{
+ position:absolute; left:5%; bottom:5%;
+ background:rgba(255,255,255,.94); backdrop-filter:blur(4px);
+ border-radius:var(--r-sm); padding:.7rem .95rem; box-shadow:var(--shadow-sm);
+ font-family:var(--f-disp); font-weight:700; color:var(--pool-ink); font-size:1.02rem; line-height:1.2;
+}
+.map-label small{ display:block; font-family:var(--f-body); font-weight:400; color:var(--ink-soft); font-size:.84rem; margin-top:.2rem; }
+.map-badge{
+ position:absolute; right:5%; top:5%;
+ background:var(--ink); color:#fff; font-family:var(--f-disp); font-weight:600;
+ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase;
+ padding:.34rem .7rem; border-radius:var(--r-pill); opacity:.85;
+}
+.map-open{
+ position:absolute; right:5%; bottom:5%;
+ background:var(--pool); color:#fff; font-family:var(--f-disp); font-weight:600;
+ font-size:.86rem; padding:.5rem .95rem; border-radius:var(--r-pill);
+ box-shadow:var(--shadow-sm);
+}
+
+/* visit info column */
+.visit-info{ display:grid; gap:1rem; align-content:start; }
+.info-block{
+ background:#fff; border:1px solid var(--line); border-radius:var(--r-md);
+ padding:1.25rem 1.35rem; box-shadow:var(--shadow-sm);
+}
+.info-block h3{ font-size:1.12rem; color:var(--pool-ink); margin:0 0 .6rem; }
+.info-block p{ margin:0; color:var(--ink-soft); font-size:1rem; line-height:1.55; }
+.info-block .btn{ margin-top:.9rem; }
+.info-block a{ color:var(--pool-deep); }
+.info-list{ list-style:none; margin:0; padding:0; display:grid; gap:.6rem; }
+.info-list li{ display:flex; justify-content:space-between; gap:1rem; font-size:.96rem; border-bottom:1px solid var(--line); padding-bottom:.55rem; }
+.info-list li:last-child{ border-bottom:0; padding-bottom:0; }
+.info-list b{ font-family:var(--f-disp); font-weight:600; color:var(--pool-ink); }
+.info-list span{ color:var(--ink-soft); text-align:right; }
+.info-portal{ margin-top:.8rem; font-size:.95rem; }
+
+/* ---------------- closing CTA band ---------------- */
+.page-cta .page-cta-inner{
+ display:grid; grid-template-columns:1.3fr .7fr; gap:clamp(1.6rem,4vw,3rem); align-items:center;
+}
+.page-cta h2{ font-size:clamp(1.8rem,3.6vw,2.7rem); color:var(--pool-ink); max-width:20ch; }
+.page-cta p{ margin:1rem 0 0; color:var(--ink-soft); max-width:46ch; font-size:1.08rem; }
+.page-cta p a{ color:var(--pool-deep); font-weight:600; }
+.page-cta-actions{ display:flex; flex-wrap:wrap; gap:.7rem; }
+/* light outline button for use on dark/ink panels if needed */
+.btn-line-light{ background:transparent; color:var(--pool-deep); border-color:var(--aqua-soft); }
+.btn-line-light:hover{ background:var(--sky); border-color:var(--pool); transform:translateY(-2px); }
+
+/* ---------------- visit hero accent ---------------- */
+.visit-hero .page-h1{ max-width:20ch; }
+
+/* ============================================================
+  MOBILE NAV PANEL
+  helens.css hides .site-nav below 760px and the home toggle
+  adds .site-nav.open. Style that open state as a clean
+  slide-down panel in the pool-blue / white brand.
+  ============================================================ */
+@keyframes navDrop{
+ from{ opacity:0; transform:translateY(-10px); }
+ to{ opacity:1; transform:translateY(0); }
+}
+@media (prefers-reduced-motion: reduce){
+ .site-nav.open{ animation:none; }
+}
+@media (max-width: 760px){
+ .site-nav.open{
+  display:flex; flex-direction:column; gap:.25rem;
+  position:fixed; left:0; right:0; top:62px; z-index:55;
+  margin:0; padding:.7rem var(--gut) 1.1rem;
+  background:rgba(255,255,255,.98);
+  backdrop-filter:saturate(1.4) blur(14px);
+  border-bottom:1px solid var(--line);
+  box-shadow:var(--shadow-md);
+  animation:navDrop .32s var(--ease) both;
+ }
+ .site-nav.open a{
+  font-size:1.05rem; font-weight:600; color:var(--pool-ink);
+  padding:.85rem 1rem; border-radius:var(--r-sm);
+  border-bottom:1px solid var(--line);
+ }
+ .site-nav.open a:last-child{ border-bottom:0; }
+ .site-nav.open a:hover,
+ .site-nav.open a[aria-current="page"]{ background:var(--sky); color:var(--pool-deep); }
+
+ .nav-toggle{
+  display:inline-flex; align-items:center; gap:.5rem; margin-left:auto;
+  font-family:var(--f-disp); font-weight:600; font-size:.92rem;
+  color:var(--pool-deep); background:var(--sky);
+  border:1px solid var(--aqua-soft); border-radius:var(--r-pill);
+  padding:.5rem 1rem .5rem .85rem; cursor:pointer;
+  transition:background .2s, border-color .2s, color .2s;
+ }
+ /* three-bar glyph */
+ .nav-toggle::before{
+  content:""; width:17px; height:12px; flex:0 0 auto;
+  background:
+   linear-gradient(currentColor,currentColor) left top / 17px 2px no-repeat,
+   linear-gradient(currentColor,currentColor) left center / 17px 2px no-repeat,
+   linear-gradient(currentColor,currentColor) left bottom / 17px 2px no-repeat;
+ }
+ .nav-toggle[aria-expanded="true"]{ background:var(--pool); color:#fff; border-color:var(--pool); }
+ /* swap to a close glyph on open */
+ .nav-toggle[aria-expanded="true"]::before{
+  background:
+   linear-gradient(currentColor,currentColor) center / 17px 2px no-repeat,
+   linear-gradient(currentColor,currentColor) center / 2px 12px no-repeat;
+  transform:rotate(45deg);
+ }
+ /* keep the header call-to-action out of the way when the menu is the priority */
+ .head-call{ display:none; }
+}
+
+/* On the page hero, sticky FAQ side rail should not stick on small screens */
+@media (max-width: 880px){
+ .faq-wrap{ grid-template-columns:1fr; }
+ .faq-side{ position:static; }
+ .visit-map{ grid-template-columns:1fr; }
+ .page-cta .page-cta-inner{ grid-template-columns:1fr; }
+}
+
+@media (max-width: 760px){
+ .map-canvas{ min-height:260px; }
+ .info-list span{ text-align:left; }
+}

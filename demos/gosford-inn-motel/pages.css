@@ -1,0 +1,279 @@
+/* ============================================================
+  GOSFORD INN MOTEL, interior pages, concept by Wolf Partners
+  Shared page-hero + breadcrumb + interior section styles.
+  Extends styles.css ("The Tariff Board"). Loaded AFTER styles.css.
+  ============================================================ */
+
+/* ============ ACTIVE NAV ============ */
+.nav__links a[aria-current="page"] {
+ color: var(--ink);
+ border-bottom-color: var(--yellow);
+}
+
+/* ============ PAGE HERO + BREADCRUMB ============ */
+.page-hero {
+ padding: var(--s1) var(--pad) var(--s2);
+ border-bottom: 1px solid var(--rule-soft);
+}
+.crumb {
+ display: flex;
+ flex-wrap: wrap;
+ align-items: baseline;
+ gap: 0.5rem;
+ font-size: 0.74rem;
+ letter-spacing: 0.12em;
+ text-transform: uppercase;
+ color: var(--ink-soft);
+ margin-bottom: var(--s1);
+}
+.crumb a { text-decoration: none; }
+.crumb a:hover { color: var(--ink); }
+.crumb__sep { opacity: 0.4; }
+.crumb [aria-current="page"] { color: var(--ink); }
+
+.page-hero__inner {
+ display: grid;
+ grid-template-columns: 7fr 5fr;
+ gap: var(--s2);
+ align-items: end;
+}
+.page-hero__eyebrow {
+ font-size: 0.78rem;
+ letter-spacing: 0.14em;
+ text-transform: uppercase;
+ color: var(--ink-soft);
+ padding-bottom: 0.7rem;
+ border-bottom: 1px solid var(--rule);
+ margin-bottom: var(--s1);
+}
+.page-hero__title {
+ font-family: var(--display);
+ font-size: clamp(2.4rem, 4.6vw, 4.4rem);
+ line-height: 1.04;
+ letter-spacing: -0.02em;
+ font-weight: 500;
+ max-width: 16ch;
+}
+.page-hero__lede {
+ margin-top: var(--s1);
+ max-width: 50ch;
+ color: var(--ink-soft);
+ font-size: 1.08rem;
+}
+.page-hero__proof { margin-top: var(--s1); font-size: 0.92rem; font-weight: 500; }
+.page-hero__proof::before {
+ content: "";
+ display: inline-block;
+ width: 0.62em;
+ height: 0.62em;
+ margin-right: 0.55em;
+ background: var(--yellow);
+ border-radius: 50%;
+}
+.page-hero__aside { margin: 0; }
+.page-hero__aside .board { border-top: 0; }
+@media (max-width: 920px) {
+ .page-hero__inner { grid-template-columns: 1fr; align-items: start; }
+}
+
+/* ============ GENERIC SECTION WRAP ============ */
+.wrap { padding: var(--s2) var(--pad); }
+.section-lede {
+ display: grid;
+ grid-template-columns: 7fr 5fr;
+ gap: var(--s2);
+ align-items: end;
+ padding: var(--s2) var(--pad) var(--s1);
+}
+.section-lede__title {
+ font-family: var(--display);
+ font-size: clamp(1.9rem, 3.4vw, 3.2rem);
+ line-height: 1.07;
+ letter-spacing: -0.015em;
+ font-weight: 500;
+}
+.section-lede__copy { color: var(--ink-soft); max-width: 46ch; }
+@media (max-width: 920px) { .section-lede { grid-template-columns: 1fr; } }
+
+/* ============ ROOMS PAGE: stacked room cards ============ */
+.roomcards { padding: var(--s2) 0 var(--s3); }
+.roomcards__list { list-style: none; padding: 0; margin: 0; }
+.roomcard {
+ display: grid;
+ grid-template-columns: 5fr 7fr;
+ gap: var(--s2);
+ align-items: center;
+ padding: var(--s2) var(--pad);
+ border-top: 1px solid var(--rule);
+}
+.roomcard:last-child { border-bottom: 1px solid var(--rule); }
+.roomcard:nth-child(even) { background: rgba(28, 43, 34, 0.025); }
+.roomcard__media { margin: 0; }
+.roomcard__media .ph { aspect-ratio: 4 / 3; }
+.roomcard:nth-child(even) .roomcard__body { order: -1; }
+.roomcard__head {
+ display: flex;
+ align-items: baseline;
+ justify-content: space-between;
+ gap: var(--s0);
+ padding-bottom: 0.7rem;
+ border-bottom: 1px solid var(--rule);
+}
+.roomcard__name {
+ font-family: var(--display);
+ font-size: clamp(1.6rem, 2.6vw, 2.3rem);
+ font-weight: 500;
+ line-height: 1.08;
+}
+.roomcard__rate {
+ text-align: right;
+ font-family: var(--display);
+ font-size: 1.8rem;
+ font-weight: 600;
+ white-space: nowrap;
+ line-height: 1.05;
+}
+.roomcard__rate span:not(.fn-mark) {
+ display: block;
+ font-family: var(--body);
+ font-size: 0.7rem;
+ font-weight: 500;
+ letter-spacing: 0.1em;
+ text-transform: uppercase;
+ color: var(--ink-soft);
+}
+.roomcard__copy { margin-top: var(--s0); color: var(--ink-soft); max-width: 52ch; }
+.roomcard__meta {
+ display: flex;
+ flex-wrap: wrap;
+ gap: 0.5rem;
+ margin-top: var(--s1);
+}
+.tag {
+ font-size: 0.74rem;
+ letter-spacing: 0.08em;
+ text-transform: uppercase;
+ color: var(--ink-soft);
+ border: 1px solid var(--rule);
+ border-radius: 999px;
+ padding: 0.3rem 0.75rem;
+}
+.roomcard__cta { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: var(--s1); }
+@media (max-width: 920px) {
+ .roomcard { grid-template-columns: 1fr; gap: var(--s1); }
+ .roomcard__media { order: -1; }
+ .roomcard:nth-child(even) .roomcard__body { order: 0; }
+}
+
+/* ============ FACILITIES PAGE: feature rows ============ */
+.facgrid { padding: var(--s2) 0 var(--s3); }
+.facrow {
+ display: grid;
+ grid-template-columns: 7fr 5fr;
+ gap: var(--s2);
+ align-items: center;
+ padding: var(--s2) var(--pad);
+ border-top: 1px solid var(--rule);
+}
+.facrow:last-child { border-bottom: 1px solid var(--rule); }
+.facrow:nth-child(even) .facrow__media { order: -1; }
+.facrow__media { margin: 0; }
+.facrow__media .ph { aspect-ratio: 4 / 3; }
+.facrow__eyebrow {
+ font-size: 0.78rem;
+ letter-spacing: 0.14em;
+ text-transform: uppercase;
+ color: var(--ink-soft);
+ margin-bottom: 0.6rem;
+}
+.facrow__title {
+ font-family: var(--display);
+ font-size: clamp(1.7rem, 2.8vw, 2.4rem);
+ font-weight: 500;
+ line-height: 1.08;
+}
+.facrow__copy { margin-top: var(--s0); color: var(--ink-soft); max-width: 50ch; }
+.facrow__note { margin-top: var(--s0); font-size: 0.88rem; font-weight: 500; }
+.facrow__note a { text-decoration-color: var(--yellow); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+@media (max-width: 920px) {
+ .facrow { grid-template-columns: 1fr; gap: var(--s1); }
+ .facrow__media { order: -1; }
+ .facrow:nth-child(even) .facrow__media { order: -1; }
+}
+
+/* compact facilities list (the short essentials) */
+.fac-essentials { padding: var(--s2) var(--pad) 0; }
+.fac-essentials .ticks { columns: 2; margin-top: var(--s1); }
+@media (max-width: 560px) { .fac-essentials .ticks { columns: 1; } }
+
+/* ============ ABOUT PAGE ============ */
+.about-body {
+ display: grid;
+ grid-template-columns: 7fr 5fr;
+ gap: var(--s2);
+ padding: var(--s2) var(--pad);
+ align-items: start;
+}
+.about-prose p {
+ font-size: 1.08rem;
+ color: var(--ink);
+ margin-top: var(--s1);
+ max-width: 60ch;
+}
+.about-prose p:first-child { margin-top: 0; }
+.about-prose p .lead { color: var(--ink); }
+.about-prose strong { font-weight: 600; }
+.about-prose a { text-decoration-color: var(--yellow); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.about-aside { margin: 0; }
+.about-aside .ph { aspect-ratio: 3 / 4; }
+.about-aside figcaption { font-size: 0.78rem; color: var(--ink-soft); margin-top: 0.6rem; }
+.about-aside .board { margin-top: var(--s2); }
+@media (max-width: 920px) {
+ .about-body { grid-template-columns: 1fr; }
+ .about-aside { order: -1; }
+ .about-aside .ph { aspect-ratio: 16 / 10; }
+}
+
+/* honest value strip */
+.value-strip {
+ background: var(--spice);
+ color: var(--paper-on-dark);
+ padding: var(--s3) var(--pad);
+ margin-top: var(--s2);
+}
+.value-strip__inner { max-width: 56rem; }
+.value-strip__quote {
+ font-family: var(--display);
+ font-style: italic;
+ font-size: clamp(1.8rem, 4vw, 3.2rem);
+ line-height: 1.2;
+ color: var(--yellow);
+ font-weight: 400;
+}
+.value-strip__cite { display: block; font-style: normal; font-size: 0.85rem; color: var(--soft-on-dark); margin-top: var(--s1); }
+
+/* ============ COMPACT CTA BAND (interior pages) ============ */
+.cta-band { background: var(--green); color: var(--paper-on-dark); }
+.cta-band__inner {
+ display: grid;
+ grid-template-columns: 7fr 5fr;
+ gap: var(--s2);
+ align-items: center;
+ padding: var(--s3) var(--pad);
+}
+.cta-band__title {
+ font-family: var(--display);
+ font-size: clamp(2rem, 4vw, 3.4rem);
+ line-height: 1.05;
+ letter-spacing: -0.02em;
+ font-weight: 500;
+ max-width: 16ch;
+}
+.cta-band__copy { margin-top: var(--s0); color: var(--soft-on-dark); max-width: 48ch; }
+.cta-band__actions { display: flex; flex-direction: column; gap: 0.8rem; }
+.cta-band__actions .btn { justify-content: center; }
+.cta-band__small { font-size: 0.8rem; color: var(--soft-on-dark); }
+.cta-band__small a { color: var(--paper-on-dark); }
+@media (max-width: 920px) {
+ .cta-band__inner { grid-template-columns: 1fr; }
+}
