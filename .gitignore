@@ -4,3 +4,7 @@ node_modules/
 *.tsbuildinfo
 .env
 .env.local
+env
+**/_process/
+**/assets/raw/
+prospect-brain/tools/scraper/node_modules/

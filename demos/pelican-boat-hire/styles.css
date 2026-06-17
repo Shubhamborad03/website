@@ -1,0 +1,676 @@
+/* ============================================================
+   Pelican Boat Hire — "The River Ledger, est. 1957"
+   Direction doc: _process/direction.md
+   Palette: tannin river greens / sun-warmed sand / burnt amber
+   Type: Fraunces (display) + Familjen Grotesk (body)
+   Primitive: the riverline ledger — ruled lines everything hangs from
+   ============================================================ */
+
+:root{
+  /* river family */
+  --ink:#0F211C;
+  --river-900:#16302A;
+  --river-800:#1F4038;
+  --river-600:#2E574A;
+  --river-400:#4A7263;
+  --river-200:#9BB3A8;
+  /* sand family */
+  --sand:#EFE5D1;
+  --sand-raised:#F6EFE1;
+  --sand-deep:#E4D6BC;
+  /* accent — CTAs and links only */
+  --amber:#B14A0C;
+  --amber-deep:#933D0A;
+  --on-amber:#FFF6EA;
+  /* muted text */
+  --mut:#4A5B53;
+  --mut-dark:#9BB3A8;
+  /* rule colour (the riverline) */
+  --rule:#C2B098;
+  --rule-dark:#2E574A;
+
+  /* type */
+  --disp:"Fraunces", Georgia, serif;
+  --body:"Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+  /* scale ~1.333 */
+  --t-sm:.875rem;
+  --t-base:1.0625rem;
+  --t-md:1.4167rem;
+  --t-lg:1.8889rem;
+  --t-xl:2.5185rem;
+
+  --wrap:1320px;
+  --gut:clamp(1.25rem, 4vw, 3.5rem);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+
+body{
+  font-family:var(--body);
+  font-size:var(--t-base);
+  line-height:1.6;
+  color:var(--ink);
+  background:var(--sand);
+  -webkit-font-smoothing:antialiased;
+}
+
+::selection{background:var(--river-600);color:var(--sand-raised);}
+
+a{color:var(--amber-deep);text-decoration-thickness:1px;text-underline-offset:3px;}
+a:hover{color:var(--amber);}
+:focus-visible{outline:2px solid var(--amber-deep);outline-offset:3px;border-radius:2px;}
+
+.wrap{max-width:var(--wrap);margin-inline:auto;padding-inline:var(--gut);}
+
+/* ---------- grain ---------- */
+.grain{
+  position:fixed;inset:0;z-index:60;pointer-events:none;
+  opacity:.055;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- the riverline rule (THE primitive) ---------- */
+.riverline-rule{
+  display:block;width:100%;height:1px;background:var(--rule);
+  margin-bottom:1.4rem;transform-origin:left center;
+}
+.rule-light{background:var(--rule-dark);}
+
+/* ---------- header ---------- */
+.site-head{
+  position:absolute;top:0;left:0;right:0;z-index:50;
+  display:flex;align-items:center;gap:2.5rem;
+  padding:1.4rem var(--gut);
+  max-width:var(--wrap);margin-inline:auto;
+}
+.brand{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--ink);}
+.brand-mark{width:30px;height:30px;fill:var(--river-800);flex:none;}
+.brand-name{font-family:var(--disp);font-weight:600;font-size:1.25rem;letter-spacing:-.01em;white-space:nowrap;}
+.site-nav{display:flex;gap:1.6rem;margin-left:auto;}
+.site-nav a{
+  color:var(--ink);text-decoration:none;font-size:var(--t-sm);font-weight:500;
+  border-bottom:1px solid transparent;padding-bottom:2px;
+}
+.site-nav a:hover{border-bottom-color:var(--amber-deep);color:var(--amber-deep);}
+.head-call{flex:none;}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-block;font-family:var(--body);font-weight:600;font-size:var(--t-sm);
+  padding:.85rem 1.5rem;border-radius:3px;text-decoration:none;cursor:pointer;
+  border:1px solid transparent;transition:background-color .3s ease,color .3s ease,border-color .3s ease;
+  letter-spacing:.01em;
+}
+.btn-amber{background:var(--amber);color:var(--on-amber);}
+.btn-amber:hover{background:var(--amber-deep);color:var(--on-amber);}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--ink);}
+.btn-ghost:hover{background:var(--ink);color:var(--sand-raised);}
+.btn-ghost-dark{background:var(--river-800);color:var(--sand-raised);border:none;font-size:var(--t-base);padding:1rem 1.8rem;}
+.btn-ghost-dark:hover{background:var(--ink);}
+.btn-big{font-size:var(--t-base);padding:1.05rem 2rem;}
+
+/* ============================================================
+   HERO — loud
+   ============================================================ */
+.hero{
+  position:relative;min-height:100svh;
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+.hero-sky{
+  position:absolute;inset:0;z-index:-2;
+  background:linear-gradient(180deg, var(--sand-raised) 0%, var(--sand) 42%, #EBD9B4 68%, #E6CD9E 100%);
+}
+.hero-sun{
+  position:absolute;right:12%;bottom:28%;width:min(34vw,420px);aspect-ratio:1;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(232,180,98,.85) 0%, rgba(232,180,98,.35) 45%, rgba(232,180,98,0) 72%);
+}
+.hero-inner{
+  max-width:var(--wrap);margin-inline:auto;width:100%;
+  position:relative;z-index:2;
+  flex:1;display:flex;flex-direction:column;justify-content:center;
+  padding:7rem var(--gut) 3rem;
+}
+.hero-kicker{
+  font-size:var(--t-sm);font-weight:500;color:var(--mut);
+  max-width:34ch;letter-spacing:.02em;margin-bottom:2rem;
+}
+.hero-kicker .riverline-rule{width:4.5rem;margin-bottom:.8rem;}
+.hero-h1{
+  font-family:var(--disp);font-weight:560;
+  font-variation-settings:"opsz" 120;
+  font-size:clamp(2.75rem, 8vw, 6.6rem);
+  line-height:1.02;letter-spacing:-.025em;
+  max-width:11ch;
+  margin-bottom:2rem;
+}
+.hero-sub-wrap{
+  display:flex;flex-wrap:wrap;align-items:flex-start;gap:2rem 4rem;
+}
+.hero-sub{max-width:42ch;font-size:var(--t-md);line-height:1.45;color:var(--ink);}
+.hero-nolic{
+  color:var(--amber-deep);font-family:var(--disp);font-style:italic;
+}
+.hero-ctas{display:flex;gap:.9rem;flex-wrap:wrap;align-items:center;}
+.hero-proof{
+  position:absolute;left:0;right:0;bottom:1.7rem;z-index:2;
+  max-width:var(--wrap);margin-inline:auto;padding-inline:var(--gut);
+  font-size:var(--t-sm);color:var(--sand);letter-spacing:.02em;
+}
+.hero-proof em{font-family:var(--disp);font-style:italic;color:var(--sand-raised);}
+
+/* river scene — in flow below the content so they can never collide */
+.hero-river{position:relative;flex:none;height:clamp(13rem, 30vh, 20rem);z-index:1;pointer-events:none;}
+/* their real Noosa River boat photo sits as the actual water the SVG abstracts —
+   anchored low, treated warm, the drawn bands layer over its waterline */
+.hero-photo{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  object-position:center 38%;
+  filter:saturate(1.05) contrast(1.02) sepia(.06) brightness(1.0);
+  z-index:0;
+}
+.hero-river::before{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,
+    var(--sand) 0%, rgba(230,205,158,.55) 12%, rgba(230,205,158,0) 30%,
+    rgba(22,48,42,.10) 78%, rgba(15,33,28,.34) 100%);
+}
+.hero-river .river-svg,
+.hero-river .jetty,
+.hero-river .pelican-drift{z-index:2;}
+/* over the real photo the drawn bands become a translucent riverline veil —
+   the signature stays, the water beneath it is the actual Noosa River */
+.river-svg{position:absolute;inset:0;width:100%;height:100%;opacity:.46;mix-blend-mode:multiply;}
+.jetty{
+  position:absolute;right:max(2vw, 1rem);bottom:0;width:clamp(120px, 14vw, 200px);height:auto;opacity:.92;
+}
+.pelican-drift{
+  position:absolute;left:8%;bottom:52%;width:clamp(64px, 7vw, 110px);height:auto;
+}
+
+/* ============================================================
+   A DAY ON THE RIVER — quiet editorial, sells the experience
+   ============================================================ */
+.day{padding:clamp(5rem,11vw,9.5rem) 0 clamp(4rem,8vw,7rem);}
+.sec-open{max-width:56rem;margin-bottom:clamp(2.5rem,6vw,4.5rem);}
+.sec-h2{
+  font-family:var(--disp);font-weight:560;
+  font-size:clamp(1.9rem, 4.2vw, 3.4rem);
+  line-height:1.08;letter-spacing:-.02em;
+  margin-bottom:1.1rem;
+  text-wrap:balance;
+}
+.sec-lede{color:var(--mut);max-width:54ch;font-size:var(--t-base);}
+.sec-lede strong{color:var(--ink);}
+
+.day-list{
+  list-style:none;display:grid;grid-template-columns:repeat(3,1fr);
+  gap:0 clamp(2rem,5vw,4rem);
+}
+.day-item{padding:2.4rem 0 0;border-top:1px solid var(--rule);}
+.day-item h3{
+  font-family:var(--disp);font-weight:560;font-size:var(--t-md);
+  line-height:1.14;letter-spacing:-.015em;margin-bottom:.8rem;max-width:16ch;
+}
+.day-item > p{color:var(--ink);max-width:36ch;}
+.day-quote{
+  font-family:var(--disp);font-style:italic;font-size:var(--t-sm);
+  color:var(--river-600);margin-top:1.1rem;
+}
+.day-quote span{display:block;font-family:var(--body);font-style:normal;font-size:.78rem;color:var(--mut);margin-top:.3rem;}
+.day-foot{
+  margin-top:clamp(3rem,6vw,4.5rem);max-width:48ch;
+  font-family:var(--disp);font-style:italic;font-size:var(--t-md);
+  line-height:1.4;color:var(--river-800);
+}
+.day-foot .riverline-rule{width:4.5rem;margin-bottom:1.2rem;}
+.day-foot i{display:block;font-family:var(--body);font-style:normal;font-size:var(--t-sm);color:var(--mut);margin-top:.7rem;}
+
+/* ============================================================
+   FLEET LEDGER — loud, the centrepiece
+   ============================================================ */
+.fleet{padding:clamp(3rem,7vw,6rem) 0 clamp(5rem,10vw,8rem);background:var(--sand-raised);}
+
+/* group-size tiers — the spine of the fleet */
+.tier{margin-top:clamp(2.8rem,6vw,4.5rem);}
+.tier:first-of-type{margin-top:clamp(1.5rem,3vw,2.5rem);}
+.tier-head{
+  display:flex;align-items:baseline;gap:1.4rem;
+  padding-bottom:1.4rem;
+}
+.tier-n{
+  font-family:var(--disp);font-weight:560;font-variation-settings:"opsz" 100;
+  font-size:clamp(1.6rem,2.6vw,2.2rem);color:var(--river-400);
+  font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1;flex:none;
+}
+.tier-title{
+  font-family:var(--disp);font-weight:560;font-size:clamp(1.45rem,3vw,2.1rem);
+  line-height:1.1;letter-spacing:-.018em;color:var(--ink);
+}
+.tier-note{font-size:var(--t-sm);color:var(--mut);max-width:48ch;margin-top:.35rem;}
+
+.ledger{border-bottom:1px solid var(--rule);}
+.ledger-row{border-top:1px solid var(--rule);}
+
+/* no-licence badge — the objection-killer, inline on qualifying boats */
+.nolic-badge{
+  display:inline-block;font-family:var(--body);font-size:.62rem;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--amber-deep);border:1px solid var(--amber-deep);
+  border-radius:2px;padding:.12rem .42rem;margin-left:.55rem;vertical-align:middle;
+  white-space:nowrap;
+}
+.row-head{
+  display:grid;width:100%;
+  grid-template-columns:minmax(5.5rem,8rem) 1fr auto 3rem;
+  align-items:center;gap:1rem 2rem;
+  padding:1.6rem 0;
+  background:none;border:none;cursor:pointer;text-align:left;
+  font-family:var(--body);color:var(--ink);
+}
+.row-head{transition:background-color .35s ease;}
+.row-head:hover{background:linear-gradient(90deg, transparent, rgba(228,214,188,.55) 8%, rgba(228,214,188,.55) 92%, transparent);}
+.row-head:hover .boat-title{color:var(--amber-deep);}
+.row-seats{display:flex;flex-direction:column;line-height:1;}
+.seats-n{
+  font-family:var(--disp);font-weight:560;font-variation-settings:"opsz" 100;
+  font-size:clamp(2.1rem, 3.6vw, 3.2rem);letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums;
+}
+.seats-l{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin-top:.35rem;}
+.row-name{display:flex;flex-direction:column;gap:.25rem;min-width:0;}
+.boat-title{
+  font-family:var(--disp);font-weight:560;font-size:var(--t-md);
+  letter-spacing:-.01em;line-height:1.15;transition:color .3s ease;
+}
+.boat-tag{font-size:var(--t-sm);color:var(--mut);}
+.row-price{display:flex;flex-direction:column;text-align:right;line-height:1.3;}
+.price-n{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.price-l{font-size:.8rem;color:var(--mut);white-space:nowrap;}
+.row-toggle{
+  position:relative;width:2rem;height:2rem;justify-self:end;
+  border:1px solid var(--rule);border-radius:50%;
+  transition:background-color .3s ease,border-color .3s ease;
+}
+.row-toggle::before,.row-toggle::after{
+  content:"";position:absolute;top:50%;left:50%;background:var(--ink);
+  transition:transform .45s cubic-bezier(.22,1,.36,1),background-color .3s ease;
+}
+.row-toggle::before{width:12px;height:1.5px;transform:translate(-50%,-50%);}
+.row-toggle::after{width:1.5px;height:12px;transform:translate(-50%,-50%);}
+.row-head[aria-expanded="true"] .row-toggle{background:var(--river-800);border-color:var(--river-800);}
+.row-head[aria-expanded="true"] .row-toggle::before{background:var(--sand-raised);}
+.row-head[aria-expanded="true"] .row-toggle::after{transform:translate(-50%,-50%) rotate(90deg);background:var(--sand-raised);}
+
+.row-body{overflow:hidden;}
+.row-body-grid{
+  display:grid;grid-template-columns:minmax(0,3fr) minmax(0,5fr) minmax(0,4fr);
+  gap:2.5rem;padding:.6rem 0 3rem;align-items:start;
+}
+.boat-art{color:var(--river-600);padding-top:.5rem;}
+.boat-art svg{width:100%;max-width:280px;height:auto;display:block;}
+.boat-detail p{max-width:52ch;}
+.price-table{
+  width:100%;border-collapse:collapse;margin:1.2rem 0;
+  font-variant-numeric:tabular-nums;
+}
+.price-table td{
+  padding:.55rem 0;border-top:1px solid var(--rule);font-size:var(--t-sm);
+}
+.price-table td:last-child{text-align:right;font-weight:600;}
+.boat-quote{
+  font-family:var(--disp);font-style:italic;color:var(--river-600);
+  font-size:var(--t-sm);margin:1rem 0;
+}
+.row-call{font-weight:600;font-size:var(--t-sm);text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px;}
+.photo-slot{
+  position:relative;aspect-ratio:3/2;border-radius:4px;overflow:hidden;
+  background:var(--river-900);
+}
+/* the business's own photo, graded warm to sit in the river palette */
+.photo-slot img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
+  filter:saturate(1.04) contrast(1.02) brightness(.99) sepia(.05);
+}
+/* a whisper of tannin-green in the lower water — keeps the duotone signature
+   without hiding the real photo */
+.photo-slot::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,
+    rgba(31,64,56,0) 52%,
+    rgba(22,48,42,.16) 80%,
+    rgba(15,33,28,.30) 100%);
+  mix-blend-mode:multiply;
+}
+.photo-slot figcaption{
+  position:absolute;left:0;bottom:0;z-index:2;
+  font-size:.7rem;color:var(--sand-raised);line-height:1.4;
+  background:rgba(15,33,28,.62);padding:.42rem .6rem;border-top-right-radius:3px;
+  letter-spacing:.01em;
+}
+.row-flagship .boat-title::after{
+  content:"our biggest";
+  font-family:var(--body);font-size:.65rem;font-weight:600;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--amber-deep);
+  margin-left:.7rem;vertical-align:middle;
+}
+.ledger-foot{
+  margin-top:2rem;color:var(--mut);font-size:var(--t-base);max-width:60ch;
+}
+.ledger-foot em{font-family:var(--disp);color:var(--river-600);}
+
+/* ============================================================
+   DRIFT STRIP — transition band
+   ============================================================ */
+.drift{
+  background:var(--sand-raised);
+  border-top:1px solid var(--rule);
+  padding:1.9rem 0;overflow:hidden;
+}
+.drift-track{display:flex;width:max-content;will-change:transform;}
+.drift-set{display:flex;flex:none;align-items:baseline;}
+.drift-q{
+  font-family:var(--disp);font-style:italic;font-size:var(--t-md);
+  color:var(--river-800);white-space:nowrap;padding-right:4.5rem;
+}
+.drift-q i{
+  font-family:var(--body);font-style:normal;font-size:.8rem;color:var(--mut);
+  margin-left:.7rem;letter-spacing:.04em;
+}
+
+/* ============================================================
+   DO I NEED A LICENCE? — the #1 objection, on its own dark band
+   ============================================================ */
+.licence{background:var(--river-800);color:var(--sand);padding:clamp(4.5rem,10vw,8rem) 0;}
+.licence-grid{display:grid;grid-template-columns:5fr 7fr;gap:2.5rem 5rem;align-items:start;}
+.licence-q .riverline-rule{width:4.5rem;background:var(--river-400);}
+.licence-kicker{
+  font-size:.75rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--river-200);margin-bottom:1rem;
+}
+.licence-h2{
+  font-family:var(--disp);font-weight:560;
+  font-size:clamp(2rem,4.4vw,3.4rem);line-height:1.05;letter-spacing:-.02em;
+  color:var(--sand-raised);text-wrap:balance;
+}
+.licence-answer{
+  font-family:var(--disp);font-weight:560;
+  font-size:clamp(3.5rem,9vw,6.5rem);line-height:1;letter-spacing:-.04em;
+  color:var(--amber);margin-top:1rem;
+}
+.licence-lead{font-size:var(--t-md);line-height:1.5;color:var(--sand);max-width:48ch;}
+.licence-lead strong{color:var(--sand-raised);}
+.licence-quote{
+  font-family:var(--disp);font-style:italic;font-size:var(--t-base);
+  color:var(--river-200);max-width:46ch;margin-top:1.6rem;
+}
+.licence-quote span{display:block;font-family:var(--body);font-style:normal;font-size:var(--t-sm);color:var(--mut-dark);margin-top:.35rem;}
+.licence-call{display:inline-block;margin-top:2rem;color:var(--on-amber);border-bottom-color:var(--amber);}
+.licence-call:hover{color:var(--amber);}
+
+/* ============================================================
+   SINCE 1957 — loud dark band
+   ============================================================ */
+.story{
+  position:relative;background:var(--river-900);color:var(--sand);
+  padding:clamp(6rem,13vw,11rem) 0;overflow:hidden;
+}
+.story-year{
+  position:absolute;top:50%;right:-2vw;transform:translateY(-50%);
+  font-family:var(--disp);font-weight:560;font-variation-settings:"opsz" 144;
+  font-size:clamp(14rem, 32vw, 30rem);line-height:1;letter-spacing:-.04em;
+  color:var(--river-800);user-select:none;pointer-events:none;
+}
+.story-wrap{position:relative;display:grid;grid-template-columns:5fr 7fr;gap:3rem 5rem;}
+.story-lead .sec-h2{color:var(--sand-raised);}
+.story-copy{
+  font-family:var(--disp);font-style:italic;font-size:var(--t-md);
+  line-height:1.4;color:var(--river-200);max-width:34ch;margin-top:1.6rem;
+}
+.story-attr{font-size:var(--t-sm);color:var(--mut-dark);margin-top:.8rem;}
+/* heritage photo — their own boat on the river, 4:5, river-graded into the dark band */
+.story-photo{
+  position:relative;margin-top:2.4rem;border-radius:4px;overflow:hidden;
+  aspect-ratio:4/5;max-width:24rem;
+  box-shadow:0 1px 0 var(--rule-dark);
+}
+.story-photo img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  filter:saturate(.96) contrast(1.03) sepia(.08) brightness(.95);
+}
+.story-photo::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,
+    rgba(15,33,28,.12) 0%, rgba(15,33,28,0) 35%,
+    rgba(15,33,28,.28) 100%);
+  mix-blend-mode:multiply;
+}
+.story-photo figcaption{
+  position:absolute;left:0;bottom:0;z-index:2;
+  font-size:.68rem;color:var(--sand);line-height:1.4;letter-spacing:.02em;
+  background:rgba(15,33,28,.6);padding:.4rem .58rem;border-top-right-radius:3px;
+}
+.story-intro{
+  font-family:var(--disp);font-size:var(--t-md);line-height:1.42;
+  color:var(--sand-raised);max-width:46ch;margin-bottom:2.4rem;
+}
+.infra-list{list-style:none;margin-bottom:1rem;}
+.infra-list li{
+  display:grid;grid-template-columns:minmax(8rem,11rem) 1fr;gap:2rem;
+  padding:1.5rem 0;border-top:1px solid var(--rule-dark);
+}
+.infra-label{
+  font-family:var(--disp);font-weight:560;font-size:var(--t-base);
+  color:var(--sand-raised);letter-spacing:-.01em;line-height:1.2;
+}
+.infra-list p{color:var(--river-200);max-width:52ch;}
+.infra-list em{color:var(--sand-raised);font-family:var(--disp);font-style:italic;}
+.story-timeline{list-style:none;margin-top:2.6rem;}
+.story-timeline li{
+  display:grid;grid-template-columns:minmax(7rem,9rem) 1fr;gap:2rem;
+  padding:1.9rem 0;border-top:1px solid var(--rule-dark);
+}
+.tl-year{
+  font-family:var(--disp);font-weight:560;font-size:var(--t-lg);
+  letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums;
+  color:var(--sand-raised);
+}
+.story-timeline p{color:var(--river-200);max-width:52ch;}
+.story-timeline strong{color:var(--sand-raised);}
+.story-timeline em{color:var(--sand-raised);font-family:var(--disp);}
+
+/* ============================================================
+   PROOF — quiet
+   ============================================================ */
+.proof{padding:clamp(5rem,11vw,9rem) 0;}
+.proof .sec-open{max-width:44rem;}
+.proof-grid{
+  display:grid;grid-template-columns:repeat(12,1fr);gap:2.5rem var(--gut);
+}
+.pull{position:relative;padding-top:1.6rem;}
+.pull::before{content:"";position:absolute;top:0;left:0;width:3.5rem;height:1px;background:var(--rule);}
+.pull:nth-child(1){grid-column:1 / span 7;}
+.pull:nth-child(2){grid-column:6 / span 7;}
+.pull:nth-child(3){grid-column:2 / span 6;}
+.pull p{
+  font-family:var(--disp);font-weight:480;
+  font-size:clamp(1.25rem, 2.4vw, 1.85rem);line-height:1.32;letter-spacing:-.012em;
+  text-wrap:pretty;
+}
+.pull cite{
+  display:block;margin-top:1rem;font-style:normal;font-size:var(--t-sm);color:var(--mut);
+}
+
+/* ============================================================
+   FIND US
+   ============================================================ */
+.find{background:var(--sand-deep);padding:clamp(4.5rem,10vw,8rem) 0;}
+.find-grid{display:grid;grid-template-columns:5fr 7fr;gap:3.5rem 6rem;align-items:center;}
+.find-pelican{text-align:center;}
+.big-pelican{width:min(100%, 300px);height:auto;color:var(--river-800);}
+.find-quote{
+  font-family:var(--disp);font-style:italic;color:var(--river-800);
+  font-size:var(--t-base);margin-top:1rem;
+}
+.find-quote span{font-family:var(--body);font-style:normal;font-size:.8rem;color:var(--mut);display:block;margin-top:.3rem;}
+.find-ledger{list-style:none;margin-top:2rem;}
+.find-ledger li{
+  display:grid;grid-template-columns:minmax(6rem,8rem) 1fr;gap:1.5rem;
+  padding:1.15rem 0;border-top:1px solid var(--rule);
+}
+.find-ledger span{
+  font-size:.75rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);
+  padding-top:.3rem;
+}
+.find-ledger p{max-width:52ch;}
+
+/* ============================================================
+   ENQUIRE
+   ============================================================ */
+.enquire{padding:clamp(5rem,11vw,9rem) 0;}
+.enquire-grid{display:grid;grid-template-columns:6fr 6fr;gap:3rem 7rem;align-items:start;}
+.enquire-lead .sec-h2{font-size:clamp(2.2rem,5vw,4.2rem);}
+.enquire-lead > p{max-width:40ch;margin:1.2rem 0 1.8rem;color:var(--mut);}
+.enquire-proof{
+  margin-top:2.4rem;font-family:var(--disp);font-style:italic;
+  color:var(--river-600);max-width:40ch;
+}
+.enquire-proof span{font-family:var(--body);font-style:normal;font-size:var(--t-sm);color:var(--mut);display:block;margin-top:.4rem;}
+.enquire-form{display:flex;flex-direction:column;gap:1.1rem;
+  background:var(--sand-raised);border:1px solid var(--rule);border-radius:5px;
+  padding:clamp(1.5rem,3vw,2.2rem);}
+.form-head{
+  font-family:var(--disp);font-weight:560;font-size:var(--t-md);
+  letter-spacing:-.01em;color:var(--ink);margin-bottom:.3rem;
+}
+.ff{display:flex;flex-direction:column;gap:.35rem;}
+.ff-row{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;}
+.ff label{font-size:var(--t-sm);font-weight:600;}
+.ff input,.ff textarea{
+  font-family:var(--body);font-size:var(--t-base);color:var(--ink);
+  background:var(--sand-raised);border:1px solid var(--rule);border-radius:3px;
+  padding:.8rem .9rem;
+}
+.ff input:focus,.ff textarea:focus{outline:2px solid var(--amber-deep);outline-offset:1px;border-color:transparent;}
+.ff ::placeholder{color:var(--mut);opacity:.7;}
+.form-note{font-size:var(--t-sm);color:var(--amber-deep);}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-foot{background:var(--river-900);color:var(--river-200);padding:3.5rem 0 2rem;}
+.site-foot a{color:var(--sand);}
+.site-foot a:hover{color:var(--sand-raised);}
+.foot-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:2rem 4rem;
+  padding-bottom:2.5rem;border-bottom:1px solid var(--rule-dark);
+}
+.foot-brand{
+  font-family:var(--disp);font-weight:560;font-size:var(--t-md);color:var(--sand-raised);
+  margin-bottom:.6rem;
+}
+.foot-brand span{
+  font-style:italic;font-weight:400;font-size:var(--t-sm);color:var(--river-200);margin-left:.6rem;
+}
+.foot-meta{font-size:var(--t-sm);display:flex;flex-direction:column;gap:.5rem;justify-content:center;}
+.foot-disclosure{padding-top:1.6rem;}
+.foot-disclosure p{font-size:.8rem;color:var(--mut-dark);max-width:80ch;}
+.foot-disclosure strong{color:var(--sand);}
+
+/* ---------- sticky mobile call bar ---------- */
+.call-bar{
+  display:none;position:fixed;left:0;right:0;bottom:0;z-index:55;
+  background:var(--amber);color:var(--on-amber);text-align:center;
+  font-weight:600;text-decoration:none;padding:1rem;font-size:var(--t-base);
+  box-shadow:0 -2px 12px rgba(15,33,28,.18);
+}
+
+/* short laptop viewports — keep the whole scene in the first viewport */
+@media (min-width: 721px) and (max-height: 870px){
+  .hero-inner{padding-top:6rem;padding-bottom:2.2rem;}
+  .hero-h1{font-size:clamp(2.5rem, 7vw, 5.2rem);margin-bottom:1.6rem;}
+  .hero-kicker{margin-bottom:1.4rem;}
+  .hero-sub{font-size:1.2rem;}
+  .hero-river{height:clamp(10rem, 26vh, 15rem);}
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 980px){
+  .day-list{grid-template-columns:1fr;}
+  .day-item{padding:1.8rem 0 0;}
+  .day-item > p,.day-item h3{max-width:none;}
+  .licence-grid{grid-template-columns:1fr;gap:1.8rem;}
+  .infra-list li{grid-template-columns:minmax(7rem,9rem) 1fr;gap:1.2rem;}
+  .story-wrap{grid-template-columns:1fr;}
+  .story-year{top:auto;bottom:-4rem;right:-4vw;font-size:clamp(10rem,38vw,18rem);transform:none;}
+  .find-grid{grid-template-columns:1fr;}
+  .enquire-grid{grid-template-columns:1fr;gap:3.5rem;}
+  .row-body-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);}
+  .boat-art{grid-column:1 / -1;max-width:240px;}
+  .proof-grid .pull:nth-child(1){grid-column:1 / span 10;}
+  .proof-grid .pull:nth-child(2){grid-column:3 / span 10;}
+  .proof-grid .pull:nth-child(3){grid-column:1 / span 9;}
+}
+
+@media (max-width: 720px){
+  .site-head{gap:1rem;padding:1.1rem var(--gut);}
+  .site-nav{display:none;}
+  .head-call{margin-left:auto;padding:.7rem 1rem;}
+  .hero{min-height:92svh;}
+  .hero-inner{padding-top:6rem;padding-bottom:2rem;}
+  .hero-river{height:clamp(11rem, 24vh, 15rem);}
+  .hero-proof{bottom:4.4rem;font-size:.78rem;max-width:32ch;}
+  .hero-sun{right:-8%;bottom:26%;width:56vw;}
+  .hero-sub-wrap{gap:1.4rem;}
+  .hero-sub{font-size:1.15rem;}
+  .pelican-drift{bottom:58%;}
+
+  .row-head{grid-template-columns:4rem 1fr 2rem;grid-template-areas:"seats name toggle" "seats price toggle";}
+  .row-seats{grid-area:seats;}
+  .row-name{grid-area:name;}
+  .row-price{grid-area:price;text-align:left;margin-top:.3rem;flex-direction:row;gap:.6rem;align-items:baseline;}
+  .row-toggle{grid-area:toggle;}
+  .row-body-grid{grid-template-columns:1fr;gap:1.6rem;}
+  .photo-slot{max-width:420px;}
+
+  .story-timeline li{grid-template-columns:1fr;gap:.4rem;}
+  .infra-list li{grid-template-columns:1fr;gap:.4rem;}
+  .proof-grid{display:flex;flex-direction:column;gap:2.6rem;}
+  .ff-row{grid-template-columns:1fr;}
+  .foot-grid{grid-template-columns:1fr;}
+
+  .call-bar{display:block;}
+  body{padding-bottom:3.4rem;} /* room for call bar */
+  .site-foot{padding-bottom:3rem;}
+}
+
+/* ============================================================
+   MOTION SETUP (classes JS animates; visible-by-default fallback)
+   ============================================================ */
+.js .reveal{opacity:0;transform:translateY(28px);}
+.js .hero-kicker,.js .hero-sub,.js .hero-ctas,.js .hero-proof{opacity:0;transform:translateY(24px);}
+.js .riverline-rule{transform:scaleX(0);}
+.js .hero-h1 .sp-line{display:block;overflow:hidden;}
+
+@media (prefers-reduced-motion:reduce){
+  .js .reveal,.js .hero-kicker,.js .hero-sub,.js .hero-ctas,.js .hero-proof{opacity:1;transform:none;}
+  .js .riverline-rule{transform:scaleX(1);}
+  .drift-track{transform:none !important;}
+}
+
+/* ---------- multi-page: footer sitemap nav + active state ---------- */
+.foot-nav{display:flex;flex-wrap:wrap;gap:.4rem 1.4rem;margin-top:1.4rem;flex-basis:100%;}
+.foot-nav a{color:var(--sand-raised,#e8ddc9);text-decoration:none;font-size:var(--t-sm,.9rem);opacity:.8;transition:opacity .25s ease;}
+.foot-nav a:hover{opacity:1;text-decoration:underline;text-underline-offset:3px;}
+.site-nav a[aria-current="page"]{color:var(--amber,#c8702a);}
+.site-nav a[aria-current="page"]::after{content:"";display:block;height:2px;background:currentColor;margin-top:2px;}
+/* page hero (interior pages) */
+.page-hero{padding:clamp(5.5rem,10vw,8rem) 0 clamp(2rem,4vw,3rem);}
+.page-hero .wrap{max-width:var(--maxw,1180px);margin:0 auto;padding-inline:var(--gut,clamp(1.25rem,5vw,4rem));}
+.breadcrumb{font-size:var(--t-xs,.8rem);letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft,#5b6b62);margin-bottom:1rem;}
+.breadcrumb a{color:inherit;text-decoration:none;}

@@ -1,0 +1,321 @@
+/* ============================================================
+   Pelican Boat Hire — interior pages
+   story.html · on-the-river.html · activities.html
+   Loaded AFTER styles.css. Reuses the locked river-ledger system
+   (Fraunces + Familjen Grotesk, tannin-green/sand/amber, riverline rule).
+   Never edit styles.css — all new interior-page CSS lives here.
+   ============================================================ */
+
+/* ---------- interior page hero (sits under the absolute header) ---------- */
+.ipage-hero{
+  position:relative;
+  padding:clamp(7rem,12vw,10rem) 0 clamp(2.5rem,5vw,4rem);
+  background:linear-gradient(180deg, var(--sand-raised) 0%, var(--sand) 100%);
+  overflow:hidden;
+}
+.ipage-hero .wrap{position:relative;z-index:2;}
+.ipage-hero .breadcrumb{
+  font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--mut);margin-bottom:1.4rem;
+}
+.ipage-hero .breadcrumb a{color:inherit;text-decoration:none;border-bottom:1px solid transparent;}
+.ipage-hero .breadcrumb a:hover{border-bottom-color:var(--amber-deep);color:var(--amber-deep);}
+.ipage-hero .breadcrumb span{color:var(--ink);}
+.ipage-kicker{
+  font-size:var(--t-sm);font-weight:500;color:var(--mut);letter-spacing:.02em;
+  margin-bottom:1rem;display:flex;align-items:center;gap:.8rem;
+}
+.ipage-kicker .riverline-rule{width:3rem;margin:0;flex:none;}
+.ipage-h1{
+  font-family:var(--disp);font-weight:560;font-variation-settings:"opsz" 120;
+  font-size:clamp(2.5rem,6.5vw,5.4rem);line-height:1.02;letter-spacing:-.025em;
+  max-width:16ch;margin-bottom:1.6rem;text-wrap:balance;
+}
+.ipage-lede{
+  font-size:var(--t-md);line-height:1.45;color:var(--ink);max-width:48ch;
+}
+.ipage-lede em{font-family:var(--disp);font-style:italic;color:var(--amber-deep);}
+.ipage-proof{
+  margin-top:2rem;font-size:var(--t-sm);color:var(--mut);letter-spacing:.02em;
+}
+.ipage-proof strong{color:var(--river-800);}
+
+/* a wide image band that anchors the hero in the real place */
+.ipage-hero-fig{
+  position:relative;margin-top:clamp(2.5rem,5vw,4rem);
+  border-radius:5px;overflow:hidden;aspect-ratio:16/7;
+  box-shadow:0 1px 0 var(--rule);
+}
+@media (max-width:720px){.ipage-hero-fig{aspect-ratio:4/3;}}
+.ipage-hero-fig img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  filter:saturate(1.04) contrast(1.02) brightness(.99) sepia(.05);
+}
+.ipage-hero-fig::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,
+    rgba(31,64,56,0) 55%, rgba(22,48,42,.14) 82%, rgba(15,33,28,.32) 100%);
+  mix-blend-mode:multiply;
+}
+.ipage-hero-fig figcaption{
+  position:absolute;left:0;bottom:0;z-index:2;
+  font-size:.72rem;color:var(--sand-raised);line-height:1.4;
+  background:rgba(15,33,28,.62);padding:.45rem .65rem;border-top-right-radius:3px;
+  letter-spacing:.01em;
+}
+
+/* ---------- generic interior section openers ---------- */
+.isec{padding:clamp(4rem,9vw,7.5rem) 0;}
+.isec-alt{background:var(--sand-raised);}
+.isec-deep{background:var(--river-900);color:var(--sand);}
+.isec-deep .sec-h2{color:var(--sand-raised);}
+.isec-deep .sec-lede{color:var(--river-200);}
+.isec-deep .riverline-rule{background:var(--rule-dark);}
+.isec .sec-open{max-width:56rem;}
+
+/* ============================================================
+   STORY — heritage editorial
+   ============================================================ */
+/* the long-form heritage prose, two-column on wide screens */
+.heritage{display:grid;grid-template-columns:7fr 5fr;gap:clamp(2.5rem,5vw,5rem);align-items:start;}
+.heritage-body p{font-size:var(--t-base);max-width:60ch;margin-bottom:1.3rem;color:var(--ink);}
+.heritage-body p:first-of-type{
+  font-family:var(--disp);font-size:var(--t-md);line-height:1.42;color:var(--river-800);
+}
+.heritage-body .pull-q{
+  font-family:var(--disp);font-style:italic;font-size:var(--t-lg);line-height:1.3;
+  color:var(--river-600);border-left:2px solid var(--amber);
+  padding-left:1.4rem;margin:2rem 0;max-width:30ch;
+}
+.heritage-body .pull-q span{
+  display:block;font-family:var(--body);font-style:normal;font-size:var(--t-sm);
+  color:var(--mut);margin-top:.6rem;letter-spacing:.02em;
+}
+.heritage-fig{
+  position:relative;border-radius:5px;overflow:hidden;aspect-ratio:4/5;
+  position:sticky;top:2rem;box-shadow:0 1px 0 var(--rule);
+}
+.heritage-fig img{width:100%;height:100%;object-fit:cover;display:block;
+  filter:saturate(1.02) contrast(1.03) sepia(.06) brightness(.98);}
+.heritage-fig::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(15,33,28,.06) 0%,rgba(15,33,28,0) 40%,rgba(15,33,28,.26) 100%);
+  mix-blend-mode:multiply;
+}
+.heritage-fig figcaption{
+  position:absolute;left:0;bottom:0;z-index:2;font-size:.7rem;color:var(--sand-raised);
+  line-height:1.4;background:rgba(15,33,28,.62);padding:.45rem .65rem;border-top-right-radius:3px;
+}
+
+/* timeline on the dark band — reuse story-timeline tokens but for interior */
+.itimeline{list-style:none;margin-top:clamp(2rem,4vw,3rem);}
+.itimeline li{
+  display:grid;grid-template-columns:minmax(7rem,10rem) 1fr;gap:2.5rem;
+  padding:2rem 0;border-top:1px solid var(--rule-dark);
+}
+.itimeline .tl-year{
+  font-family:var(--disp);font-weight:560;font-size:var(--t-lg);letter-spacing:-.02em;
+  line-height:1;font-variant-numeric:tabular-nums;color:var(--sand-raised);
+}
+.itimeline h3{
+  font-family:var(--disp);font-weight:560;font-size:var(--t-md);color:var(--sand-raised);
+  margin-bottom:.5rem;letter-spacing:-.01em;
+}
+.itimeline p{color:var(--river-200);max-width:56ch;}
+.itimeline strong{color:var(--sand-raised);}
+.itimeline em{font-family:var(--disp);font-style:italic;color:var(--sand-raised);}
+
+/* awards strip */
+.awards{display:flex;flex-wrap:wrap;gap:1rem;margin-top:clamp(2rem,4vw,3rem);}
+.award-chip{
+  display:flex;flex-direction:column;gap:.2rem;
+  border:1px solid var(--rule-dark);border-radius:4px;
+  padding:1rem 1.3rem;min-width:13rem;background:rgba(15,33,28,.3);
+}
+.award-chip .aw-medal{
+  font-family:var(--disp);font-weight:560;font-size:var(--t-md);letter-spacing:-.01em;
+}
+.award-gold .aw-medal{color:#E0B23C;}
+.award-bronze .aw-medal{color:#C98A5E;}
+.award-chip .aw-label{font-size:var(--t-sm);color:var(--river-200);}
+
+/* the Big Pelican feature */
+.bigpel{display:grid;grid-template-columns:6fr 6fr;gap:clamp(2.5rem,5vw,5rem);align-items:center;}
+.bigpel-fig{position:relative;border-radius:5px;overflow:hidden;aspect-ratio:3/2;box-shadow:0 1px 0 var(--rule);}
+.bigpel-fig img{width:100%;height:100%;object-fit:cover;display:block;
+  filter:saturate(1.04) contrast(1.02) brightness(1) sepia(.05);}
+.bigpel-fig::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(15,33,28,0) 60%,rgba(15,33,28,.26) 100%);mix-blend-mode:multiply;
+}
+.bigpel-fig figcaption{
+  position:absolute;left:0;bottom:0;z-index:2;font-size:.7rem;color:var(--sand-raised);
+  line-height:1.4;background:rgba(15,33,28,.62);padding:.45rem .65rem;border-top-right-radius:3px;
+}
+.bigpel-detail .find-quote{margin-top:1.4rem;}
+
+/* ============================================================
+   ON THE RIVER — facility blocks
+   ============================================================ */
+.facility{
+  display:grid;grid-template-columns:6fr 6fr;gap:clamp(2rem,5vw,4.5rem);
+  align-items:center;
+  padding:clamp(3rem,6vw,5rem) 0;border-top:1px solid var(--rule);
+}
+.facility:first-of-type{border-top:none;padding-top:0;}
+.facility-rev .facility-fig{order:2;}
+.facility-fig{position:relative;border-radius:5px;overflow:hidden;aspect-ratio:3/2;box-shadow:0 1px 0 var(--rule);}
+.facility-fig img{width:100%;height:100%;object-fit:cover;display:block;
+  filter:saturate(1.04) contrast(1.02) brightness(.99) sepia(.05);}
+.facility-fig::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(31,64,56,0) 58%,rgba(22,48,42,.14) 84%,rgba(15,33,28,.30) 100%);mix-blend-mode:multiply;
+}
+.facility-fig figcaption{
+  position:absolute;left:0;bottom:0;z-index:2;font-size:.7rem;color:var(--sand-raised);
+  line-height:1.4;background:rgba(15,33,28,.62);padding:.45rem .65rem;border-top-right-radius:3px;
+}
+.facility-tag{
+  font-size:.74rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--amber-deep);margin-bottom:.9rem;display:flex;align-items:center;gap:.7rem;
+}
+.facility-tag .riverline-rule{width:2.5rem;margin:0;background:var(--amber);flex:none;}
+.facility h2{
+  font-family:var(--disp);font-weight:560;font-size:clamp(1.8rem,4vw,3rem);
+  line-height:1.08;letter-spacing:-.02em;margin-bottom:1rem;text-wrap:balance;
+}
+.facility p{color:var(--ink);max-width:50ch;margin-bottom:1rem;}
+.facility .only-badge{
+  display:inline-block;font-family:var(--disp);font-style:italic;color:var(--amber-deep);
+}
+.facility .row-call{margin-top:.4rem;}
+
+/* slipway / shop price ledger */
+.mini-ledger{
+  width:100%;border-collapse:collapse;margin:1.2rem 0 .4rem;
+  font-variant-numeric:tabular-nums;max-width:34rem;
+}
+.mini-ledger caption{
+  text-align:left;font-size:.74rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--mut);padding-bottom:.6rem;
+}
+.mini-ledger td{padding:.6rem 0;border-top:1px solid var(--rule);font-size:var(--t-sm);}
+.mini-ledger td:last-child{text-align:right;font-weight:600;white-space:nowrap;}
+.mini-note{font-size:var(--t-sm);color:var(--mut);max-width:50ch;margin-top:.6rem;}
+
+/* shop categories */
+.shop-cats{
+  list-style:none;display:flex;flex-wrap:wrap;gap:.6rem;margin:1.2rem 0;
+}
+.shop-cats li{
+  font-size:var(--t-sm);border:1px solid var(--rule);border-radius:2px;
+  padding:.4rem .8rem;color:var(--river-800);background:var(--sand);
+}
+
+/* the "we are the river" facility quick-index at top of On The River */
+.river-index{
+  list-style:none;display:grid;grid-template-columns:repeat(4,1fr);
+  gap:0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  margin-top:clamp(2rem,4vw,3rem);
+}
+.river-index li{padding:1.6rem 0;border-left:1px solid var(--rule);padding-left:1.4rem;}
+.river-index li:first-child{border-left:none;padding-left:0;}
+.river-index a{text-decoration:none;color:var(--ink);display:block;}
+.river-index a:hover .ri-name{color:var(--amber-deep);}
+.river-index .ri-name{
+  font-family:var(--disp);font-weight:560;font-size:var(--t-md);letter-spacing:-.01em;
+  line-height:1.1;transition:color .3s ease;display:block;margin-bottom:.35rem;
+}
+.river-index .ri-note{font-size:var(--t-sm);color:var(--mut);}
+
+/* ============================================================
+   ACTIVITIES — what to do
+   ============================================================ */
+.act-grid{
+  list-style:none;display:grid;grid-template-columns:repeat(2,1fr);
+  gap:clamp(1.6rem,3vw,2.4rem);
+}
+.act-card{
+  position:relative;border-radius:5px;overflow:hidden;
+  background:var(--river-900);min-height:clamp(20rem,34vw,26rem);
+  display:flex;flex-direction:column;justify-content:flex-end;
+  box-shadow:0 1px 0 var(--rule);
+}
+.act-card img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:0;
+  filter:saturate(1.05) contrast(1.02) brightness(.95) sepia(.05);
+}
+.act-card::after{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(15,33,28,0) 30%,rgba(15,33,28,.55) 72%,rgba(15,33,28,.86) 100%);
+}
+.act-card .act-body{position:relative;z-index:2;padding:clamp(1.6rem,3vw,2.4rem);color:var(--sand-raised);}
+.act-card h3{
+  font-family:var(--disp);font-weight:560;font-size:var(--t-lg);line-height:1.08;
+  letter-spacing:-.018em;margin-bottom:.6rem;
+}
+.act-card p{color:var(--sand);max-width:40ch;font-size:var(--t-base);}
+.act-card .act-q{
+  font-family:var(--disp);font-style:italic;font-size:var(--t-sm);color:var(--sand-raised);
+  margin-top:1rem;display:block;
+}
+.act-card .act-q i{font-family:var(--body);font-style:normal;font-size:.75rem;color:var(--river-200);display:block;margin-top:.3rem;}
+.act-wide{grid-column:1 / -1;}
+
+/* tie-to-boats callout */
+.tie{display:grid;grid-template-columns:7fr 5fr;gap:clamp(2rem,4vw,4rem);align-items:center;}
+.tie-detail h2{
+  font-family:var(--disp);font-weight:560;font-size:clamp(1.9rem,4.4vw,3.2rem);
+  line-height:1.06;letter-spacing:-.02em;margin-bottom:1rem;color:var(--sand-raised);text-wrap:balance;
+}
+.tie-detail p{color:var(--river-200);max-width:46ch;margin-bottom:1.4rem;}
+.tie-detail .btn{margin-right:.7rem;}
+.tie-list{list-style:none;}
+.tie-list li{
+  display:grid;grid-template-columns:auto 1fr;gap:1rem;align-items:baseline;
+  padding:1.1rem 0;border-top:1px solid var(--rule-dark);color:var(--river-200);
+}
+.tie-list .tie-k{
+  font-family:var(--disp);font-weight:560;color:var(--sand-raised);font-size:var(--t-base);
+  white-space:nowrap;
+}
+
+/* shared interior CTA band */
+.icta{padding:clamp(4.5rem,9vw,7.5rem) 0;background:var(--sand-deep);}
+.icta .wrap{max-width:60rem;text-align:center;}
+.icta .riverline-rule{width:4.5rem;margin-inline:auto;}
+.icta h2{
+  font-family:var(--disp);font-weight:560;font-size:clamp(2rem,5vw,3.6rem);
+  line-height:1.06;letter-spacing:-.02em;margin-bottom:1.1rem;text-wrap:balance;
+}
+.icta p{color:var(--mut);max-width:46ch;margin:0 auto 1.8rem;}
+.icta .btn{margin:.3rem;}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:980px){
+  .heritage{grid-template-columns:1fr;}
+  .heritage-fig{position:relative;top:0;max-width:30rem;aspect-ratio:4/5;}
+  .bigpel{grid-template-columns:1fr;}
+  .facility{grid-template-columns:1fr;gap:1.6rem;}
+  .facility-rev .facility-fig{order:0;}
+  .river-index{grid-template-columns:1fr 1fr;}
+  .river-index li:nth-child(3){border-left:none;padding-left:0;}
+  .river-index li{padding-left:1.4rem;}
+  .river-index li:nth-child(odd){border-left:none;padding-left:0;}
+  .tie{grid-template-columns:1fr;}
+}
+@media (max-width:720px){
+  .itimeline li{grid-template-columns:1fr;gap:.4rem;}
+  .award-chip{min-width:0;flex:1 1 100%;}
+  .act-grid{grid-template-columns:1fr;}
+  .river-index{grid-template-columns:1fr;}
+  .river-index li{border-left:none;padding-left:0;}
+}
+
+/* motion: interior reveals reuse the .reveal pattern from styles.css */
+.js .ipage-h1,.js .ipage-lede,.js .ipage-kicker,.js .ipage-proof{opacity:0;transform:translateY(22px);}
+@media (prefers-reduced-motion:reduce){
+  .js .ipage-h1,.js .ipage-lede,.js .ipage-kicker,.js .ipage-proof{opacity:1;transform:none;}
+}

@@ -1,0 +1,184 @@
+/* ============================================================
+   fleet.css — interior pages (boats / kayaks-sup / charters)
+   Extends styles.css (the locked system). Never edit styles.css.
+   Reuses tokens: --ink --river-* --sand* --amber* --disp --body --t-*
+   ============================================================ */
+
+/* ---------- page hero (interior) ---------- */
+.page-hero{position:relative;overflow:hidden;
+  padding:clamp(6rem,11vw,9rem) 0 clamp(2.5rem,5vw,4rem);
+  background:linear-gradient(180deg,var(--sand-raised) 0%,var(--sand) 55%,#EBD9B4 100%);}
+.page-hero .wrap{max-width:var(--wrap);position:relative;z-index:2;}
+.page-hero .breadcrumb{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;
+  font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--river-400);margin-bottom:1.4rem;}
+.page-hero .breadcrumb a{color:var(--river-600);text-decoration:none;}
+.page-hero .breadcrumb a:hover{color:var(--amber-deep);}
+.page-hero .breadcrumb span[aria-current]{color:var(--ink);}
+.ph-kicker{display:flex;align-items:center;gap:.9rem;font-size:var(--t-sm);font-weight:500;color:var(--river-600);margin-bottom:1rem;}
+.ph-kicker .riverline-rule{width:3.4rem;}
+.ph-h1{font-family:var(--disp);font-weight:560;line-height:1.02;letter-spacing:-.02em;
+  font-size:clamp(2.6rem,6.5vw,5rem);color:var(--ink);max-width:18ch;text-wrap:balance;}
+.ph-lede{margin-top:1.4rem;max-width:54ch;font-size:var(--t-md);line-height:1.45;color:var(--ink);}
+.ph-lede strong{color:var(--amber-deep);}
+.ph-ctas{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:2rem;}
+.ph-proof{margin-top:2.4rem;display:flex;flex-wrap:wrap;gap:.5rem 1.6rem;
+  font-size:var(--t-sm);color:var(--river-600);}
+.ph-proof strong{color:var(--ink);font-weight:600;}
+.ph-proof em{font-family:var(--disp);font-style:italic;color:var(--amber-deep);}
+
+/* faint riverline behind the interior hero */
+.ph-river{position:absolute;left:0;right:0;bottom:-2px;height:42%;z-index:1;opacity:.5;pointer-events:none;}
+.ph-river svg{width:100%;height:100%;display:block;}
+
+/* ---------- a band of context after the hero ---------- */
+.fleet-intro{background:var(--sand);padding:clamp(3rem,6vw,5rem) 0 clamp(1rem,2vw,2rem);}
+.intro-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(2rem,5vw,4.5rem);align-items:center;}
+.intro-copy .sec-h2{margin-bottom:1rem;}
+.intro-copy p{color:var(--mut);max-width:46ch;font-size:var(--t-base);}
+.intro-copy p + p{margin-top:1rem;}
+.intro-figure{position:relative;}
+.intro-figure img{width:100%;height:auto;border-radius:3px;display:block;
+  box-shadow:0 30px 60px -30px rgba(15,33,28,.5);}
+.intro-figure figcaption{margin-top:.7rem;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);}
+
+/* ---------- fleet cards (boats page) — richer than home ledger ---------- */
+.fleet-page{padding:clamp(2.5rem,6vw,5rem) 0 clamp(4rem,9vw,7rem);background:var(--sand-raised);}
+.fleet-page .tier{margin-top:clamp(3rem,6vw,5rem);}
+.fleet-page .tier:first-of-type{margin-top:clamp(1rem,2vw,2rem);}
+
+.boat-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.6rem;margin-top:2rem;}
+.boat-card{background:var(--sand);border:1px solid var(--rule);border-radius:4px;overflow:hidden;
+  display:flex;flex-direction:column;transition:transform .5s cubic-bezier(.16,1,.3,1),box-shadow .5s;}
+.boat-card:hover{transform:translateY(-4px);box-shadow:0 24px 48px -28px rgba(15,33,28,.45);}
+.boat-card.feature{grid-column:1/-1;}
+.bc-media{position:relative;aspect-ratio:3/2;overflow:hidden;background:var(--river-200);}
+.bc-media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.16,1,.3,1);}
+.boat-card:hover .bc-media img{transform:scale(1.04);}
+.bc-cap{position:absolute;left:.8rem;top:.8rem;display:flex;gap:.45rem;}
+.bc-seats{background:var(--ink);color:var(--sand-raised);font-family:var(--disp);font-weight:560;
+  font-size:.95rem;padding:.28rem .7rem;border-radius:999px;line-height:1;display:inline-flex;align-items:center;gap:.3rem;}
+.bc-seats small{font-family:var(--body);font-weight:500;font-size:.62rem;text-transform:uppercase;letter-spacing:.06em;opacity:.85;}
+.bc-nolic{background:var(--amber);color:var(--on-amber);font-family:var(--body);font-weight:600;
+  font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;padding:.34rem .6rem;border-radius:999px;align-self:center;}
+.bc-body{padding:1.3rem 1.4rem 1.5rem;display:flex;flex-direction:column;flex:1;}
+.bc-name{font-family:var(--disp);font-weight:560;font-size:var(--t-md);line-height:1.1;color:var(--ink);}
+.bc-sub{font-size:var(--t-sm);color:var(--mut);margin-top:.4rem;line-height:1.4;}
+.bc-price{margin-top:1.1rem;padding-top:1rem;border-top:1px solid var(--rule);
+  display:flex;align-items:baseline;justify-content:space-between;gap:1rem;}
+.bc-price .pn{font-family:var(--disp);font-weight:560;font-size:var(--t-md);color:var(--ink);}
+.bc-price .pl{font-size:.74rem;color:var(--mut);text-align:right;}
+.bc-foot{margin-top:auto;padding-top:1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.bc-call{font-weight:600;font-size:var(--t-sm);color:var(--amber-deep);text-decoration:none;
+  border-bottom:1px solid currentColor;padding-bottom:1px;}
+.bc-call:hover{color:var(--amber);}
+.bc-quote{font-family:var(--disp);font-style:italic;color:var(--river-600);font-size:var(--t-sm);
+  margin-top:1rem;line-height:1.4;}
+.bc-quote span{display:block;font-family:var(--body);font-style:normal;font-size:.72rem;color:var(--mut);margin-top:.3rem;}
+
+/* feature card (River Explorer) — horizontal split */
+.boat-card.feature{flex-direction:row;background:var(--river-900);color:var(--sand);border-color:var(--river-800);}
+.boat-card.feature .bc-media{flex:1 1 52%;aspect-ratio:auto;min-height:340px;}
+.boat-card.feature .bc-body{flex:1 1 48%;padding:clamp(1.6rem,3vw,2.6rem);justify-content:center;}
+.boat-card.feature .bc-name{color:var(--sand-raised);font-size:var(--t-lg);}
+.boat-card.feature .bc-sub{color:var(--river-200);}
+.boat-card.feature .bc-price{border-top-color:rgba(155,179,168,.3);}
+.boat-card.feature .bc-price .pn{color:var(--sand-raised);}
+.boat-card.feature .bc-price .pl{color:var(--river-200);}
+.boat-card.feature .bc-quote{color:var(--river-200);}
+.boat-card.feature .bc-quote span{color:var(--river-400);}
+.feature-grid{display:grid;grid-template-columns:repeat(3,auto);gap:.5rem 1.6rem;margin:1.2rem 0;
+  font-size:var(--t-sm);color:var(--sand);}
+.feature-grid li{display:flex;align-items:center;gap:.5rem;list-style:none;}
+.feature-grid li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--amber);flex:none;}
+.feature-licence{font-size:var(--t-sm);color:var(--river-200);margin-top:.4rem;}
+.feature-licence strong{color:var(--sand-raised);}
+
+/* ---------- inline licence reminder strip (reuse on boats) ---------- */
+.licence-strip{background:var(--river-800);color:var(--sand);padding:clamp(2.5rem,5vw,3.5rem) 0;}
+.licence-strip .wrap{display:flex;align-items:center;gap:1.2rem 2.4rem;flex-wrap:wrap;justify-content:space-between;}
+.licence-strip h2{font-family:var(--disp);font-weight:560;font-size:var(--t-lg);color:var(--sand-raised);line-height:1.1;max-width:20ch;}
+.licence-strip p{color:var(--river-200);max-width:42ch;font-size:var(--t-base);}
+.licence-strip p strong{color:var(--sand-raised);}
+.licence-strip .ls-q{font-family:var(--disp);font-style:italic;color:var(--sand);font-size:var(--t-base);margin-top:.6rem;}
+.licence-strip .ls-q span{display:block;font-family:var(--body);font-style:normal;font-size:.78rem;color:var(--river-200);margin-top:.3rem;}
+
+/* ---------- two-up explainer rows (kayaks / charters) ---------- */
+.split{padding:clamp(3rem,7vw,6rem) 0;}
+.split .wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4.5rem);align-items:center;}
+.split.alt .wrap{direction:rtl;}
+.split.alt .wrap > *{direction:ltr;}
+.split-figure img{width:100%;height:auto;border-radius:3px;display:block;box-shadow:0 30px 60px -32px rgba(15,33,28,.5);}
+.split-figure figcaption{margin-top:.7rem;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);}
+.split-copy .sec-h2{margin-bottom:1rem;}
+.split-copy p{color:var(--mut);max-width:48ch;font-size:var(--t-base);}
+.split-copy p + p{margin-top:1rem;}
+.split-copy .lead{color:var(--ink);font-size:var(--t-md);line-height:1.45;}
+
+/* price ledger (kayaks/sup) */
+.rate-table{width:100%;border-collapse:collapse;margin-top:1.6rem;max-width:30rem;}
+.rate-table caption{text-align:left;font-family:var(--disp);font-weight:560;font-size:var(--t-base);
+  color:var(--ink);margin-bottom:.6rem;}
+.rate-table th,.rate-table td{text-align:left;padding:.7rem 0;border-top:1px solid var(--rule);font-size:var(--t-sm);}
+.rate-table td:last-child{text-align:right;font-weight:600;font-family:var(--disp);font-size:var(--t-base);}
+.rate-table tr:last-child td{border-bottom:1px solid var(--rule);}
+
+/* ---------- experience tiles (kayaks self-power section) ---------- */
+.tiles{background:var(--sand);padding:clamp(3rem,7vw,5.5rem) 0;}
+.tile-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.4rem;margin-top:2rem;}
+.tile{background:var(--sand-raised);border:1px solid var(--rule);border-radius:4px;padding:1.6rem 1.5rem;}
+.tile h3{font-family:var(--disp);font-weight:560;font-size:var(--t-base);color:var(--ink);margin-bottom:.5rem;}
+.tile p{color:var(--mut);font-size:var(--t-sm);line-height:1.5;}
+
+/* ---------- charter feature blocks ---------- */
+.charter-hero-media{margin-top:clamp(2rem,4vw,3rem);position:relative;border-radius:4px;overflow:hidden;
+  box-shadow:0 40px 80px -40px rgba(15,33,28,.6);}
+.charter-hero-media img{width:100%;height:auto;display:block;}
+.charter-hero-media figcaption{position:absolute;left:0;right:0;bottom:0;
+  padding:1.4rem 1.5rem .9rem;color:var(--sand-raised);font-size:.78rem;letter-spacing:.06em;
+  background:linear-gradient(0deg,rgba(15,33,28,.7),transparent);}
+
+.charter-boat{padding:clamp(3rem,7vw,5.5rem) 0;}
+.charter-boat:nth-of-type(even){background:var(--sand);}
+.cb-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(2rem,5vw,4rem);align-items:center;}
+.charter-boat.flip .cb-grid{direction:rtl;}
+.charter-boat.flip .cb-grid > *{direction:ltr;}
+.cb-figure img{width:100%;height:auto;border-radius:3px;display:block;box-shadow:0 30px 60px -32px rgba(15,33,28,.5);}
+.cb-figure figcaption{margin-top:.7rem;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);}
+.cb-name{font-family:var(--disp);font-weight:560;font-size:clamp(1.8rem,3.5vw,2.6rem);line-height:1.04;color:var(--ink);}
+.cb-tag{display:inline-block;font-family:var(--body);font-size:.66rem;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--amber-deep);border:1px solid var(--amber-deep);
+  border-radius:999px;padding:.28rem .7rem;margin-bottom:1rem;}
+.cb-copy{color:var(--mut);max-width:48ch;font-size:var(--t-base);margin-top:1rem;}
+.cb-list{margin-top:1.4rem;display:flex;flex-direction:column;gap:.6rem;}
+.cb-list li{list-style:none;display:flex;gap:.7rem;align-items:flex-start;font-size:var(--t-sm);color:var(--ink);}
+.cb-list li::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--river-600);flex:none;margin-top:.5rem;}
+.cb-call{margin-top:1.8rem;}
+
+/* ---------- closing CTA band (reusable) ---------- */
+.cta-band{background:var(--river-900);color:var(--sand);padding:clamp(4rem,9vw,7rem) 0;text-align:center;}
+.cta-band .riverline-rule{width:4.5rem;margin:0 auto 1.3rem;background:var(--river-400);}
+.cta-band h2{font-family:var(--disp);font-weight:560;font-size:clamp(2.1rem,5vw,3.6rem);line-height:1.05;
+  color:var(--sand-raised);max-width:18ch;margin:0 auto;text-wrap:balance;}
+.cta-band p{color:var(--river-200);max-width:48ch;margin:1.2rem auto 0;font-size:var(--t-base);}
+.cta-band p a{color:var(--sand-raised);}
+.cta-band .ph-ctas{justify-content:center;margin-top:2.2rem;}
+.cta-band .ph-proof{justify-content:center;color:var(--river-200);}
+.cta-band .ph-proof strong{color:var(--sand-raised);}
+
+/* ---------- responsive ---------- */
+@media (max-width:980px){
+  .intro-grid,.split .wrap,.cb-grid{grid-template-columns:1fr;}
+  .split.alt .wrap,.charter-boat.flip .cb-grid{direction:ltr;}
+  .boat-card.feature{flex-direction:column;}
+  .boat-card.feature .bc-media{min-height:0;aspect-ratio:3/2;}
+  .feature-grid{grid-template-columns:repeat(2,auto);}
+  .intro-figure{order:-1;max-width:520px;}
+}
+@media (max-width:720px){
+  .boat-cards{grid-template-columns:1fr;}
+  .licence-strip .wrap{flex-direction:column;align-items:flex-start;}
+  .feature-grid{grid-template-columns:1fr;}
+}
+
+/* reveals fired by the per-page observer (self-contained, no main.js dependency) */
+.js .reveal.is-in{opacity:1;transform:none;}
