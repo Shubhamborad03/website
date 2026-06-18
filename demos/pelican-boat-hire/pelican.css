@@ -205,11 +205,18 @@ mark, .mk{ background:linear-gradient(transparent 58%, var(--yellow) 58%); color
 .hero-kicker b{ color:var(--yellow); font-weight:600; }
 .hero-h1{
  font-size:clamp(2.7rem,8vw,6rem);
- line-height:.96; letter-spacing:-.03em; color:#fff;
+ line-height:1.08; letter-spacing:-.015em; color:#fff;
  max-width:15ch;
  text-shadow:0 2px 30px rgba(0,0,0,.35);
 }
-.hero-h1 .y{ color:var(--yellow); }
+/* the yellow emphasis sits on its own line, give it air so the words breathe */
+.hero-h1 .y{
+ color:var(--yellow);
+ display:inline-block;
+ margin-top:.18em;
+ letter-spacing:.015em;
+ word-spacing:.12em;
+}
 .hero-sub{
  font-size:clamp(1.08rem,1.7vw,1.38rem);
  max-width:46ch; margin:1.4rem 0 0; color:rgba(255,255,255,.94);
@@ -234,7 +241,7 @@ mark, .mk{ background:linear-gradient(transparent 58%, var(--yellow) 58%); color
 @media (max-width:640px){
  .hero-media{ min-height:auto; }
  .hero-inner{ padding-top:6rem; }
- .hero-h1{ font-size:clamp(2.3rem,11vw,3.4rem); max-width:18ch; }
+ .hero-h1{ font-size:clamp(2.3rem,11vw,3.4rem); max-width:18ch; line-height:1.1; }
  .hero-kicker{ font-size:.7rem; }
 }
 

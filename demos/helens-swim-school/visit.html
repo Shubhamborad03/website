@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Visit &amp; Enrol, Helen's Swim School, 43 Thredbo Dr Worongary (Concept)</title>
-<meta name="description" content="Come and see the bush swim school at 43 Thredbo Dr, Worongary QLD 4213. Season dates, hours, phone 0408 074 690, the free first lesson enquiry, and the family portal for current families. Concept site by Wolf Partners.">
+<meta name="description" content="Come and see the bush swim school at 43 Thredbo Dr, Worongary QLD 4213. Season dates, hours, phone 0408 074 690, the free first lesson enquiry, a map, and the family portal for current families. Concept site by Wolf Partners.">
 <meta property="og:title" content="Visit &amp; Enrol, Helen's Swim School">
 <meta property="og:description" content="43 Thredbo Dr, Worongary. Book a free first lesson, see the bush saltwater pool, and find the family portal for current families.">
 <meta property="og:type" content="website">
@@ -17,7 +17,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Hanken+Grotesk:ital,wght@0,400..700;1,400..600&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="helens.css">
-<link rel="stylesheet" href="pages-visit.css">
 </head>
 <body>
 
@@ -29,6 +28,7 @@
   <span class="brand-name"><b>Helen's Swim School</b><span>The little swim school in the bush</span></span>
  </a>
  <nav class="site-nav" aria-label="Site">
+  <a href="index.html">Home</a>
   <a href="lessons-prices.html">Lessons &amp; Prices</a>
   <a href="our-school.html">Our School</a>
   <a href="our-teachers.html">Our Teachers</a>
@@ -42,16 +42,16 @@
 <main id="top">
 
  <!-- ============ PAGE HERO ============ -->
- <section class="page-hero visit-hero">
+ <section class="page-hero plain visit-hero" aria-label="Visit and enrol">
   <div class="wrap">
-   <nav class="crumb" aria-label="Breadcrumb">
-    <a href="index.html">Home</a>
-    <span aria-hidden="true">/</span>
-    <span aria-current="page">Visit &amp; Enrol</span>
-   </nav>
-   <p class="eyebrow">Visit &amp; enrol</p>
-   <h1 class="page-h1">Come and see the pool. Your first lesson is free.</h1>
-   <p class="page-lede">We are at 43 Thredbo Dr, Worongary, on four acres of quiet bushland. The best way to know if Helen's is right for your child is to come down and watch a lesson. Leave your details below, or call us straight on <a href="tel:0408074690">0408&nbsp;074&nbsp;690</a>.</p>
+   <ol class="crumb" aria-label="Breadcrumb">
+    <li><a href="index.html">Home</a></li>
+    <li class="sep" aria-hidden="true"></li>
+    <li aria-current="page">Visit &amp; Enrol</li>
+   </ol>
+   <p class="ph-kicker">Visit &amp; enrol</p>
+   <h1>Come and see the pool. Your first lesson is free.</h1>
+   <p class="ph-sub">We are at 43 Thredbo Dr, Worongary, on four acres of quiet bushland. The best way to know if Helen's is right for your child is to come down and watch a lesson. Leave your details below, or call us straight on <a href="tel:0408074690" style="color:#fff;font-weight:700">0408&nbsp;074&nbsp;690</a>.</p>
    <div class="page-hero-jump">
     <a href="#enrol">Book a free first lesson</a>
     <a href="#details">Where &amp; when</a>
@@ -86,7 +86,7 @@
     <div class="ff"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" placeholder="So we can reach you"></div>
     <div class="ff"><label for="f-msg">Anything we should know?</label><textarea id="f-msg" name="message" rows="3" placeholder="A little nervous of water? First time swimming? Tell us."></textarea></div>
     <button class="btn btn-pool" type="submit">Send my enquiry</button>
-    <p class="form-note" hidden>This is a concept demo, so nothing is booked yet. On the live site this enquiry would land straight in the Helen's Swim School inbox, and the team would call you back to set a time.</p>
+    <p class="form-note">This is a concept demo, so nothing is booked yet. On the live site this enquiry would land straight in the Helen's Swim School inbox. To reach the school now, call <a href="tel:0408074690" style="color:var(--pool-deep);font-weight:700">0408 074 690</a> or email <a href="mailto:office@helenswimschool.com.au" style="color:var(--pool-deep);font-weight:700">office@helenswimschool.com.au</a>.</p>
    </form>
   </div>
  </section>
@@ -107,21 +107,15 @@
    <div class="sec-head center">
     <p class="eyebrow">Find us</p>
     <h2 class="sec-h2">43 Thredbo Dr, Worongary QLD 4213</h2>
-    <p class="sec-lede">In the Gold Coast hinterland, a few minutes from Mudgeeraba and Nerang. The map below is indicative, tap through to Google Maps for live directions.</p>
+    <p class="sec-lede">In the Gold Coast hinterland, a few minutes from Mudgeeraba and Nerang. Tap the map for live directions in Google Maps.</p>
    </div>
    <div class="visit-map">
-    <a class="map-canvas" href="https://maps.google.com/?q=Helen's+Swim+School+43+Thredbo+Dr+Worongary" rel="noopener" target="_blank" aria-label="Open Helen's Swim School in Google Maps">
-     <span class="map-grid" aria-hidden="true"></span>
-     <span class="map-road map-road-1" aria-hidden="true"></span>
-     <span class="map-road map-road-2" aria-hidden="true"></span>
-     <span class="map-bush" aria-hidden="true"></span>
-     <span class="map-pin" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-     </span>
-     <span class="map-label">Helen's Swim School<small>43 Thredbo Dr, Worongary</small></span>
-     <span class="map-badge">Indicative map</span>
-     <span class="map-open">Open in Google Maps</span>
-    </a>
+    <div class="map-frame">
+     <iframe
+       title="Map showing Helen's Swim School at 43 Thredbo Dr, Worongary QLD 4213"
+       src="https://www.google.com/maps?q=43+Thredbo+Dr,+Worongary+QLD+4213&output=embed"
+       width="600" height="450" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
     <div class="visit-info">
      <div class="info-block">
       <h3>Getting here</h3>
@@ -133,7 +127,7 @@
       <ul class="info-list">
        <li><b>Term one</b><span>January to May</span></li>
        <li><b>Term two</b><span>August to mid December</span></li>
-       <li><b>Closed</b><span>Winter (June and July) and the Christmas break</span></li>
+       <li><b>Closed</b><span>Winter, June and July, and the Christmas break</span></li>
        <li><b>Public holidays</b><span>No charge for lessons that fall on one</span></li>
       </ul>
      </div>
@@ -186,17 +180,13 @@
   </nav>
  </div>
  <div class="wrap foot-disclosure">
-  <p>Concept by <strong>Wolf Partners</strong>, built from publicly available information. This is not the live site of Helen's Swim School. Facts, prices and the published numbers are taken from the school's own website. Photographs are Helen's Swim School's own. No customer reviews are shown because none have been independently verified.</p>
+  <p>Concept by <strong>Wolf Partners</strong>, built from publicly available information. Not the live site of Helen's Swim School. Facts, prices and the published numbers are taken from the school's own website. Photographs are Helen's Swim School's own. No customer reviews are shown because none have been independently verified.</p>
  </div>
 </footer>
 
 <!-- sticky mobile call bar -->
 <a class="call-bar" href="tel:0408074690">Book your free first lesson, 0408 074 690</a>
 
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.4/dist/lenis.min.js"></script>
 <script src="helens.js"></script>
 </body>
 </html>
