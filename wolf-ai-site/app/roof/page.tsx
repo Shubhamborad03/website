@@ -1,6 +1,5 @@
 import SmoothScroll from "@/components/SmoothScroll";
 import Nav from "@/components/Nav";
-import Hero from "@/components/roof/Hero";
 import SatelliteQuoteDemo from "@/components/roof/SatelliteQuoteDemo";
 import ConversationDemo from "@/components/roof/ConversationDemo";
 import LeadsPipeline from "@/components/roof/LeadsPipeline";
@@ -19,8 +18,7 @@ export default function RoofPage() {
   return (
     <SmoothScroll>
       <Nav />
-      <main className="relative">
-        <Hero />
+      <main className="relative pt-20">
         <SatelliteQuoteDemo />
         <ConversationDemo />
         <LeadsPipeline />

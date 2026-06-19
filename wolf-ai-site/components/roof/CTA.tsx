@@ -30,7 +30,7 @@ export default function CTA() {
           <h2 className="font-display text-[36px] sm:text-[52px] lg:text-[64px] leading-[1.0] tracking-[-0.03em] font-extrabold mt-10 sm:mt-12 max-w-2xl">
             AI automation
             <br />
-            <span className="text-graphite">built for QLD trades.</span>
+            <span className="text-graphite">built for trades.</span>
           </h2>
 
           <p className="text-[14px] sm:text-[16px] text-ink/55 mt-5 max-w-md leading-relaxed">
@@ -46,28 +46,6 @@ export default function CTA() {
             Contact us
             <span aria-hidden>&rarr;</span>
           </a>
-
-          {/* Contact card */}
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="mt-8 inline-flex flex-col items-center gap-1 px-6 py-4 rounded-2xl bg-white border border-ink/[0.08] shadow-[0_20px_40px_-12px_rgba(10,10,10,0.08)]"
-          >
-            <div className="text-[10px] uppercase tracking-wider text-gold-deep font-bold">
-              Your point of contact
-            </div>
-            <div className="font-display text-[18px] sm:text-[20px] font-extrabold tracking-tight text-ink mt-1">
-              Dave Heraud
-            </div>
-            <a
-              href="mailto:dave@wolfpartners.com.au"
-              className="text-[13px] sm:text-[14px] text-ink/65 hover:text-ink transition-colors tabular"
-            >
-              dave@wolfpartners.com.au
-            </a>
-          </motion.div>
         </motion.div>
       </div>
 
