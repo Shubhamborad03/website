@@ -1,0 +1,2900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Roof Flow Demo · Wolf AI</title>
+<link rel="icon" type="image/png" href="img/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Page chrome · warm cream */
+    --page-bg: #FAFAF7;
+    --page-surface: #FFFFFF;
+    --page-text: #18171A;
+    --page-text-muted: #6C6A70;
+    --page-border: rgba(24, 23, 26, 0.08);
+    --page-border-strong: rgba(24, 23, 26, 0.16);
+
+    /* Stage · warm dark theatrical */
+    --stage-bg: #1A1612;
+    --stage-bg-deep: #15110D;
+    --stage-surface: rgba(36, 30, 24, 0.78);
+    --stage-surface-elevated: rgba(48, 40, 32, 0.85);
+    --stage-text: #F4F0EA;
+    --stage-text-muted: rgba(244, 240, 234, 0.55);
+    --stage-text-quiet: rgba(244, 240, 234, 0.40);
+    --stage-border: rgba(244, 240, 234, 0.08);
+    --stage-border-strong: rgba(244, 240, 234, 0.14);
+
+    /* Single accent · gold from Wolf AI logo · used sparingly */
+    --accent: #C9A961;
+    --accent-soft: rgba(201, 169, 97, 0.18);
+    --accent-glow: rgba(201, 169, 97, 0.35);
+
+    /* Semantic · muted, not vibrant */
+    --ok: #6FD896;
+    --warn: #F5C97A;
+    --danger: #E89090;
+    --info: #9DC2F0;
+
+    /* Legacy aliases (kept so unedited rules still compile) */
+    --cream: #FAFAF7;
+    --cream-soft: #F2EFE8;
+    --cream-warm: #FFFFFF;
+    --ink: #18171A;
+    --ink-soft: #2A2729;
+    --gray: #6C6A70;
+    --gray-soft: #9C9AA0;
+    --gold: #C9A961;
+    --success: #4FAA6E;
+    --info-blue: #2563EB;
+    --imsg-blue: #007AFF;
+    --imsg-blue-light: #5AC8FA;
+    --imsg-grey: #E9E9EB;
+    --imsg-dark: #1C1C1E;
+    --line: var(--page-border);
+    --line-strong: var(--page-border-strong);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--page-bg);
+    color: var(--page-text);
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-feature-settings: 'ss01' on, 'cv11' on;
+    line-height: 1.5;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  body.locked { overflow: hidden; }
+
+  /* ===========================================
+     HEADER · minimal · brand + scenarios only
+     =========================================== */
+  .header-wrap {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 16px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+    flex: 1;
+  }
+  .brand-row {
+    display: flex; align-items: center; gap: 10px;
+    flex-shrink: 0;
+  }
+  .brand-row img { width: 22px; height: 22px; border-radius: 5px; object-fit: cover; }
+  .brand-row span {
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    color: var(--page-text);
+  }
+  .header-divider { display: none; }
+  .eyebrow { display: none; }
+  .header-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    color: var(--page-text-muted);
+    letter-spacing: -0.005em;
+    padding-left: 14px;
+    margin-left: 4px;
+    border-left: 1px solid var(--page-border);
+  }
+  .header-eyebrow .live-dot {
+    width: 6px; height: 6px;
+    border-radius: 999px;
+    background: var(--accent);
+    box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.18);
+    animation: pulse 1.6s infinite;
+  }
+  @media (max-width: 760px) {
+    .header-eyebrow { display: none; }
+  }
+  @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.7); } }
+
+  h1.demo-title { display: none; }
+  .lede { display: none; }
+
+  /* SCENARIO SWITCHER · slots into header right */
+  .scenario-row {
+    display: flex; align-items: center; gap: 0;
+    margin: 0;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
+  }
+  .scenario-label { display: none; }
+  @media (max-width: 760px) {
+    h1.demo-title { display: none; }
+    .header-divider { display: none; }
+  }
+  .scenario-pills {
+    display: inline-flex; gap: 4px;
+    padding: 3px;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .scenario-btn {
+    background: transparent; border: 0; cursor: pointer;
+    padding: 6px 12px;
+    font-family: 'Geist', -apple-system, sans-serif;
+    font-size: 11.5px; font-weight: 500;
+    color: var(--gray);
+    border-radius: 7px;
+    transition: all 0.2s;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .scenario-btn:hover { color: var(--ink); background: var(--cream-soft); }
+  .scenario-btn.active { background: var(--ink); color: white; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+  .scenario-btn .num { display: none; }
+
+  /* ===========================================
+     STICKY STAGE · theatrical dark canvas inside warm cream page
+     =========================================== */
+  .stage-container {
+    position: relative;
+    height: 100vh;
+    min-height: 640px;
+    background: var(--stage-bg);
+  }
+  .stage-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    min-height: 640px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    overflow: hidden;
+    /* Theatrical warm dark · atmospheric depth via layered gradients */
+    background:
+      radial-gradient(ellipse 70% 55% at 28% 45%, rgba(201, 169, 97, 0.045) 0%, transparent 65%),
+      radial-gradient(ellipse 100% 80% at 75% 50%, #221C17 0%, transparent 70%),
+      linear-gradient(180deg, #1A1612 0%, var(--stage-bg-deep) 100%);
+  }
+  .stage-sticky > * { position: relative; z-index: 1; }
+  .stage-inner {
+    max-width: none;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    display: grid;
+    grid-template-columns: minmax(420px, 1.05fr) minmax(0, 2fr);
+    gap: 0;
+    align-items: stretch;
+  }
+  @media (max-width: 1000px) {
+    .stage-inner { grid-template-columns: 1fr; max-width: 380px; height: auto; }
+    .ai-panel-wrap { display: none; }
+    .desktop-note { display: block !important; }
+    .stage-container { height: auto; min-height: 0; background: var(--cream); }
+    .stage-sticky { position: relative; height: auto; min-height: 0; padding: 24px 16px; background: var(--cream); }
+  }
+
+  /* ===========================================
+     iPHONE MOBILE UI · floats over dark stage
+     =========================================== */
+  .phone-frame {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    padding: 24px 20px 24px 40px;
+  }
+  .phone {
+    /* width follows height to maintain iPhone aspect ratio · stronger presence */
+    width: calc(min(760px, calc(100vh - 60px)) * 0.493);
+    height: min(760px, calc(100vh - 60px));
+    min-width: 330px;
+    min-height: 600px;
+    background: #1a1a1c;
+    border-radius: 52px;
+    padding: 7px;
+    position: relative;
+    box-shadow:
+      0 0 0 2px #2a2a2c,
+      0 0 0 3px #1a1a1c,
+      0 60px 120px -14px rgba(0,0,0,0.75),
+      0 28px 56px -22px rgba(0,0,0,0.6),
+      inset 0 0 2px rgba(255,255,255,0.08);
+  }
+  .phone-screen {
+    width: 100%;
+    height: 100%;
+    background: #F4F1EA;
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+  }
+  /* iOS Status Bar */
+  .ios-status {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 44px;
+    padding: 16px 30px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: -apple-system, 'SF Pro Text', 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #000;
+    z-index: 5;
+    pointer-events: none;
+  }
+  .ios-status .time { font-variant-numeric: tabular-nums; }
+  .ios-status .right { display: flex; align-items: center; gap: 5px; }
+  .ios-status .signal {
+    width: 18px; height: 11px;
+    display: inline-flex; align-items: flex-end; gap: 1.5px;
+  }
+  .ios-status .signal i {
+    display: block;
+    width: 3px;
+    background: #000;
+    border-radius: 1px;
+  }
+  .ios-status .signal i:nth-child(1) { height: 4px; }
+  .ios-status .signal i:nth-child(2) { height: 6px; }
+  .ios-status .signal i:nth-child(3) { height: 8px; }
+  .ios-status .signal i:nth-child(4) { height: 11px; }
+  .ios-status .wifi {
+    width: 16px; height: 11px;
+    background: radial-gradient(circle at 50% 100%, #000 0 2px, transparent 2px),
+                radial-gradient(circle at 50% 100%, transparent 4px, #000 4px 5px, transparent 5px),
+                radial-gradient(circle at 50% 100%, transparent 7px, #000 7px 8px, transparent 8px),
+                radial-gradient(circle at 50% 100%, transparent 10px, #000 10px 11px, transparent 11px);
+  }
+  .ios-status .battery {
+    width: 25px; height: 12px;
+    border: 1.2px solid #000;
+    border-radius: 3px;
+    position: relative;
+    padding: 1.5px;
+  }
+  .ios-status .battery::after {
+    content: '';
+    position: absolute;
+    right: -3px; top: 3px;
+    width: 1.5px; height: 5px;
+    background: #000;
+    border-radius: 1px;
+  }
+  .ios-status .battery .level {
+    height: 100%;
+    width: 78%;
+    background: #000;
+    border-radius: 1px;
+  }
+  /* Dynamic Island */
+  .dynamic-island {
+    position: absolute;
+    top: 11px; left: 50%;
+    transform: translateX(-50%);
+    width: 110px; height: 32px;
+    background: #000;
+    border-radius: 20px;
+    z-index: 8;
+  }
+  /* App header bar */
+  .imsg-app-header {
+    position: absolute;
+    top: 44px; left: 0; right: 0;
+    height: 86px;
+    background: rgba(244, 241, 234, 0.94);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 0.5px solid rgba(60, 60, 67, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 4;
+    padding-top: 4px;
+  }
+  .imsg-app-header .app-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: var(--ink) url('img/logo.png') center/110% no-repeat;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    margin-bottom: 4px;
+  }
+  .imsg-app-header .app-name {
+    font-family: -apple-system, 'SF Pro Text', 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: #3c3c43;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .imsg-app-header .app-name svg { width: 7px; height: 11px; }
+  /* Back button */
+  .imsg-back {
+    position: absolute;
+    left: 14px;
+    top: 58px;
+    color: var(--imsg-blue);
+    font-family: -apple-system, 'SF Pro Text', sans-serif;
+    font-size: 17px;
+    display: flex; align-items: center; gap: 4px;
+    font-weight: 400;
+    z-index: 5;
+  }
+  /* Camera/info on right */
+  .imsg-info {
+    position: absolute;
+    right: 14px; top: 60px;
+    z-index: 5;
+    display: flex; gap: 12px;
+  }
+  .imsg-info svg { width: 22px; height: 22px; fill: var(--imsg-blue); }
+
+  /* iMessage Thread Area */
+  .imsg-thread {
+    position: absolute;
+    top: 130px; bottom: 90px; left: 0; right: 0;
+    overflow-y: auto;
+    padding: 4px 12px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    scrollbar-width: none;
+  }
+  .imsg-thread::-webkit-scrollbar { display: none; }
+
+  .imsg-time-label {
+    text-align: center;
+    font-family: -apple-system, 'SF Pro Text', sans-serif;
+    font-size: 11px;
+    color: #8e8e93;
+    margin: 8px 0 6px;
+    font-weight: 600;
+  }
+  .imsg-time-label .day { color: #000; font-weight: 600; }
+
+  .imsg-bubble {
+    max-width: 78%;
+    padding: 8px 13px;
+    font-family: -apple-system, 'SF Pro Text', 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.28;
+    border-radius: 20px;
+    position: relative;
+    opacity: 0;
+    transform: scale(0.92) translateY(8px);
+    transform-origin: bottom;
+    transition: opacity 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+    word-wrap: break-word;
+    margin-top: 1px;
+  }
+  .imsg-bubble.show { opacity: 1; transform: scale(1) translateY(0); }
+  .imsg-bubble.received {
+    background: var(--imsg-grey);
+    color: #000;
+    align-self: flex-start;
+    border-bottom-left-radius: 6px;
+    transform-origin: bottom left;
+  }
+  .imsg-bubble.received::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: -6px;
+    width: 12px; height: 18px;
+    background: var(--imsg-grey);
+    border-bottom-right-radius: 14px;
+    z-index: -1;
+  }
+  .imsg-bubble.received::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: -10px;
+    width: 12px; height: 18px;
+    background: white;
+    border-bottom-right-radius: 18px;
+    z-index: -1;
+  }
+  .imsg-bubble.sent {
+    background: var(--imsg-blue);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 6px;
+    transform-origin: bottom right;
+  }
+  .imsg-bubble.sent::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: -6px;
+    width: 12px; height: 18px;
+    background: var(--imsg-blue);
+    border-bottom-left-radius: 14px;
+    z-index: -1;
+  }
+  .imsg-bubble.sent::before {
+    content: '';
+    position: absolute;
+    bottom: 0; right: -10px;
+    width: 12px; height: 18px;
+    background: white;
+    border-bottom-left-radius: 18px;
+    z-index: -1;
+  }
+
+  .imsg-receipt {
+    font-family: -apple-system, 'SF Pro Text', sans-serif;
+    font-size: 10.5px;
+    color: #8e8e93;
+    margin-top: -1px;
+    margin-right: 4px;
+    align-self: flex-end;
+    padding-right: 2px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .imsg-receipt.show { opacity: 1; }
+
+  /* Typing indicator */
+  .imsg-typing-bubble {
+    background: var(--imsg-grey);
+    border-radius: 20px;
+    border-bottom-left-radius: 6px;
+    padding: 13px 16px;
+    align-self: flex-start;
+    display: none;
+    gap: 4px;
+    position: relative;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.25s, transform 0.25s;
+    margin-top: 4px;
+  }
+  .imsg-typing-bubble.show { display: flex; opacity: 1; transform: scale(1); }
+  .imsg-typing-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: -6px;
+    width: 12px; height: 18px;
+    background: var(--imsg-grey);
+    border-bottom-right-radius: 14px;
+    z-index: -1;
+  }
+  .imsg-typing-bubble .td {
+    width: 8px; height: 8px;
+    background: #8e8e93;
+    border-radius: 999px;
+    animation: typeBounce 1.3s infinite ease-in-out;
+  }
+  .imsg-typing-bubble .td:nth-child(2) { animation-delay: 0.18s; }
+  .imsg-typing-bubble .td:nth-child(3) { animation-delay: 0.36s; }
+  @keyframes typeBounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.45; }
+    30% { transform: translateY(-5px); opacity: 1; }
+  }
+
+  /* Quote approval card in iMessage */
+  .imsg-approve-card {
+    background: white;
+    border-radius: 18px;
+    border: 1px solid rgba(0,0,0,0.08);
+    padding: 0;
+    align-self: flex-start;
+    width: 88%;
+    overflow: hidden;
+    opacity: 0;
+    transform: scale(0.92) translateY(8px);
+    transition: opacity 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    margin-top: 4px;
+  }
+  .imsg-approve-card.show { opacity: 1; transform: scale(1) translateY(0); }
+  .approve-thumb {
+    width: 100%;
+    height: 100px;
+    background-size: cover;
+    background-position: center;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  .approve-body { padding: 12px 14px 14px; }
+  .approve-title {
+    font-family: -apple-system, 'SF Pro Text', 'Inter', sans-serif;
+    font-size: 14px; font-weight: 600;
+    color: #000;
+    margin-bottom: 2px;
+  }
+  .approve-meta {
+    font-family: -apple-system, 'SF Pro Text', sans-serif;
+    font-size: 12.5px; color: #6e6e73;
+    margin-bottom: 12px;
+  }
+  .approve-meta .amount { color: var(--ink); font-weight: 600; }
+  .approve-actions { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 5px; margin-bottom: 6px; }
+  .approve-btn {
+    background: rgba(120, 120, 128, 0.12);
+    border: 0;
+    padding: 8px 4px;
+    border-radius: 8px;
+    font-family: -apple-system, 'SF Pro Text', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--imsg-blue);
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .approve-btn:active { transform: scale(0.96); }
+  .approve-btn.reject { color: var(--danger); }
+  .approve-send {
+    width: 100%;
+    background: var(--imsg-blue);
+    color: white;
+    border: 0;
+    padding: 10px;
+    border-radius: 10px;
+    font-family: -apple-system, 'SF Pro Text', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .approve-send.sent { background: var(--success); }
+  .approve-send:active { transform: scale(0.98); }
+  .approve-edit {
+    width: 100%;
+    margin-top: 6px;
+    background: transparent;
+    color: var(--imsg-blue);
+    border: 0;
+    padding: 9px 10px;
+    font-family: -apple-system, 'SF Pro Text', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+  }
+
+  /* Bottom input bar (decorative) */
+  .imsg-input-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 80px;
+    background: rgba(244, 241, 234, 0.94);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 0.5px solid rgba(60, 60, 67, 0.15);
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    gap: 8px;
+    z-index: 5;
+  }
+  .imsg-input-bar .plus {
+    width: 32px; height: 32px;
+    border-radius: 999px;
+    background: rgba(120, 120, 128, 0.16);
+    color: var(--imsg-blue);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 300;
+    flex-shrink: 0;
+  }
+  .imsg-input-bar .input {
+    flex: 1;
+    height: 36px;
+    background: white;
+    border: 0.5px solid rgba(60, 60, 67, 0.18);
+    border-radius: 18px;
+    padding: 0 14px;
+    display: flex; align-items: center;
+    font-family: -apple-system, 'SF Pro Text', sans-serif;
+    font-size: 14px;
+    color: #c7c7cc;
+  }
+  .imsg-input-bar .mic {
+    width: 32px; height: 32px;
+    border-radius: 999px;
+    background: rgba(120, 120, 128, 0.16);
+    color: var(--imsg-blue);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .home-indicator {
+    position: absolute;
+    bottom: 7px; left: 50%;
+    transform: translateX(-50%);
+    width: 134px; height: 5px;
+    background: #000;
+    border-radius: 999px;
+    z-index: 10;
+  }
+
+  /* ===========================================
+     RIGHT STAGE AREA · content floats over dark, no card chrome
+     =========================================== */
+  .ai-panel-wrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 32px 48px 32px 24px;
+  }
+  .ai-panel,
+  .dashboard {
+    position: absolute;
+    inset: 32px 48px 32px 24px;
+    background: transparent;
+    border: 0;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .ai-panel { opacity: 1; transform: translateY(0); }
+  .ai-panel.hide { opacity: 0; transform: translateY(-4px); pointer-events: none; }
+  /* AI header · removed — narration moved out of the stage frame */
+  .ai-header { display: none; }
+  .ai-header-left,
+  .ai-header-dot,
+  .ai-header-label,
+  .ai-step-counter { display: none; }
+
+  .ai-body {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* SCENE base */
+  .scene {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.55s cubic-bezier(0.28, 0.11, 0.32, 1);
+  }
+  .scene.active { opacity: 1; visibility: visible; }
+
+  /* Idle scene · branded product intro (the FIRST thing the user sees) */
+  .idle-stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 64px;
+    overflow: hidden;
+  }
+  .idle-glow {
+    position: absolute;
+    left: -10%; top: 50%;
+    width: 60%; height: 60%;
+    transform: translateY(-50%);
+    background: radial-gradient(circle at center, rgba(201, 169, 97, 0.14) 0%, transparent 65%);
+    filter: blur(20px);
+    pointer-events: none;
+  }
+  .idle-content {
+    position: relative;
+    max-width: 460px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    z-index: 2;
+  }
+  .idle-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 12.5px;
+    color: var(--stage-text-muted);
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    width: max-content;
+  }
+  .idle-eyebrow .dot {
+    width: 7px; height: 7px;
+    border-radius: 999px;
+    background: var(--accent);
+    box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.18);
+    animation: pulse 1.6s infinite;
+  }
+  .idle-headline {
+    font-size: clamp(36px, 4.4vw, 56px);
+    font-weight: 600;
+    letter-spacing: -0.032em;
+    line-height: 1.02;
+    color: var(--stage-text);
+  }
+  .idle-sub {
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--stage-text-muted);
+    max-width: 42ch;
+    letter-spacing: -0.005em;
+  }
+  @media (max-width: 900px) {
+    .idle-stage { padding: 0 28px; }
+  }
+
+  /* Image stage · subtle inner shadow integrates satellite with warm dark stage */
+  .img-stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    overflow: hidden;
+  }
+  .img-stage img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    filter: brightness(0.92) saturate(0.95);
+  }
+  .img-stage::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    box-shadow: inset 0 0 80px rgba(20, 16, 12, 0.55), inset 0 0 24px rgba(20, 16, 12, 0.35);
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(20, 16, 12, 0.15) 100%);
+  }
+  .img-stage svg.overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+  }
+
+  /* ===== Premium CAD scan overlay · cream + terracotta · architectural blueprint feel ===== */
+  .scan-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(91, 200, 212, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(91, 200, 212, 0.045) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .scan-grid.show { opacity: 1; }
+
+  .scan-line {
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, #5BC8D4 50%, transparent 100%);
+    box-shadow: 0 0 18px rgba(91, 200, 212, 0.65), 0 0 36px rgba(91, 200, 212, 0.3);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 3;
+  }
+  .scan-line.run { animation: scanSweep 2.4s cubic-bezier(0.4, 0, 0.6, 1) forwards; }
+  @keyframes scanSweep {
+    0% { opacity: 0; top: 0; }
+    8% { opacity: 1; }
+    92% { opacity: 1; }
+    100% { opacity: 0; top: 100%; }
+  }
+
+  /* Corner brackets · refined white framing the tile */
+  .scan-brackets {
+    position: absolute;
+    inset: 4%;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .scan-brackets.show { opacity: 0.85; }
+  .scan-brackets::before,
+  .scan-brackets::after,
+  .scan-brackets > i,
+  .scan-brackets > i:last-child {
+    content: '';
+    position: absolute;
+    width: 22px; height: 22px;
+    border-color: rgba(255, 255, 255, 0.92);
+    border-style: solid;
+    border-width: 0;
+    filter: drop-shadow(0 0 4px rgba(168, 81, 42, 0.5));
+  }
+  .scan-brackets::before { top: 0; left: 0; border-top-width: 1.5px; border-left-width: 1.5px; }
+  .scan-brackets::after  { top: 0; right: 0; border-top-width: 1.5px; border-right-width: 1.5px; }
+  .scan-brackets > i:first-child { bottom: 0; left: 0; border-bottom-width: 1.5px; border-left-width: 1.5px; }
+  .scan-brackets > i:last-child  { bottom: 0; right: 0; border-bottom-width: 1.5px; border-right-width: 1.5px; }
+
+  /* Roof edges · two-layer SVG <g> renders dark underlay + light topline
+     Each line is wrapped in <g class="roof-edge"> with two <line> children */
+  .roof-edge {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .roof-edge.draw {
+    opacity: 1;
+    animation: drawEdge 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  @keyframes drawEdge { to { stroke-dashoffset: 0; } }
+
+  .roof-edge .e-underlay {
+    fill: none;
+    stroke: rgba(8, 24, 30, 0.92);
+    stroke-width: 5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .roof-edge .e-topline {
+    fill: none;
+    stroke: #5BC8D4;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 4px rgba(91, 200, 212, 0.5));
+  }
+
+  /* Vertex markers · refined CAD point · cyan ring + white core */
+  .roof-vertex {
+    fill: rgba(248, 244, 235, 0.98);
+    stroke: #5BC8D4;
+    stroke-width: 1.8;
+    opacity: 0;
+    transform-origin: center;
+    transform-box: fill-box;
+    filter: drop-shadow(0 0 3px rgba(91, 200, 212, 0.6));
+  }
+  .roof-vertex.show { animation: vertexPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+  @keyframes vertexPop {
+    0% { opacity: 0; transform: scale(0.2); }
+    60% { opacity: 1; transform: scale(1.4); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  /* Edge length labels · small dark pills at line midpoint with measured metres */
+  .edge-label {
+    position: absolute;
+    background: rgba(20, 16, 12, 0.85);
+    backdrop-filter: blur(8px);
+    color: rgba(248, 244, 235, 0.95);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-family: 'Geist Mono', 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 0;
+    pointer-events: none;
+    border: 1px solid rgba(248, 244, 235, 0.1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.7);
+    transform-origin: center;
+    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    white-space: nowrap;
+    z-index: 4;
+    font-variant-numeric: tabular-nums;
+  }
+  .edge-label.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+  /* Old scan readout removed · replaced by Findings card */
+  .scan-readout { display: none; }
+
+  /* ===========================================
+     FINDINGS CARD · single source of truth · builds up as AI discovers
+     Lives at top-right of the stage, replaces all floating chips
+     =========================================== */
+  .findings {
+    position: absolute;
+    bottom: 24px; left: 24px;
+    width: 304px;
+    background: var(--stage-surface);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid var(--stage-border);
+    border-radius: 18px;
+    padding: 18px 20px 20px;
+    color: var(--stage-text);
+    z-index: 20;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s cubic-bezier(0.28, 0.11, 0.32, 1), transform 0.5s cubic-bezier(0.28, 0.11, 0.32, 1);
+    box-shadow: 0 32px 80px rgba(0,0,0,0.5), 0 12px 24px rgba(0,0,0,0.3);
+  }
+  .findings.show { opacity: 1; transform: translateY(0); }
+
+  .findings-head {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--stage-border);
+  }
+  .findings-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--stage-text);
+    letter-spacing: -0.005em;
+  }
+  .findings-source {
+    font-size: 11.5px;
+    color: var(--stage-text-quiet);
+    font-variant-numeric: tabular-nums;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .findings-source b { color: var(--accent); font-weight: 500; }
+
+  .findings-section {
+    margin-top: 16px;
+    opacity: 0;
+    transform: translateY(3px);
+    transition: opacity 0.4s cubic-bezier(0.32, 0.72, 0, 1), transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .findings-section.show { opacity: 1; transform: translateY(0); }
+  .findings-section:first-of-type { margin-top: 0; }
+  .findings-section + .findings-section {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--stage-border);
+  }
+  .findings-label {
+    font-size: 11.5px;
+    color: var(--stage-text-quiet);
+    margin-bottom: 10px;
+    font-weight: 400;
+  }
+
+  .finding-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 6px 0;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.35s cubic-bezier(0.32, 0.72, 0, 1), transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .finding-row.show { opacity: 1; transform: translateX(0); }
+  .finding-row .k {
+    font-size: 13px;
+    color: var(--stage-text-muted);
+    font-weight: 400;
+  }
+  .finding-row .v {
+    font-size: 14.5px;
+    color: var(--stage-text);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.005em;
+  }
+  .finding-row .v .unit {
+    font-size: 11.5px;
+    color: var(--stage-text-quiet);
+    margin-left: 3px;
+    font-weight: 400;
+  }
+
+  /* Damage rows in findings */
+  .finding-issue {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 8px 0;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.35s cubic-bezier(0.32, 0.72, 0, 1), transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .finding-issue.show { opacity: 1; transform: translateX(0); }
+  .finding-issue .dot {
+    width: 7px; height: 7px;
+    border-radius: 999px;
+    background: var(--accent);
+    flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.15);
+  }
+  .finding-issue .dot.warn { background: var(--warn); box-shadow: 0 0 0 3px rgba(245, 201, 122, 0.15); }
+  .finding-issue .dot.danger { background: var(--danger); box-shadow: 0 0 0 3px rgba(232, 144, 144, 0.15); }
+  .finding-issue .desc { font-size: 13.5px; color: var(--stage-text); flex: 1; font-weight: 400; }
+  .finding-issue .severity {
+    font-size: 12px;
+    color: var(--stage-text-quiet);
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+  }
+
+  /* Vertex live counter pinned to bottom-left of stage during scan */
+  .scan-progress-pill {
+    position: absolute;
+    top: 24px; right: 24px;
+    background: var(--stage-surface);
+    backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid var(--stage-border);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 12.5px;
+    color: var(--stage-text);
+    font-variant-numeric: tabular-nums;
+    z-index: 20;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.3s cubic-bezier(0.28, 0.11, 0.32, 1), transform 0.3s cubic-bezier(0.28, 0.11, 0.32, 1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+  }
+  .scan-progress-pill.show { opacity: 1; transform: translateY(0); }
+  .scan-progress-pill .pulse {
+    width: 7px; height: 7px;
+    background: #5BC8D4;
+    border-radius: 999px;
+    animation: pulse 1.4s infinite;
+    box-shadow: 0 0 8px rgba(91, 200, 212, 0.7);
+  }
+  .scan-progress-pill .timer {
+    color: var(--stage-text-muted);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    margin-left: 6px;
+    padding-left: 10px;
+    border-left: 1px solid var(--stage-border-strong);
+  }
+
+  /* Floating measurement chips removed — measurements now collect in Findings card */
+  .measure-chip { display: none !important; }
+
+  /* Damage markers · refined coral with concentric detection ripple */
+  .damage {
+    position: absolute;
+    pointer-events: none;
+    width: 0; height: 0;
+  }
+  .damage-ring {
+    position: absolute;
+    width: 26px; height: 26px;
+    left: -13px; top: -13px;
+    border: 1.8px solid #E8625C;
+    border-radius: 999px;
+    background: rgba(232, 98, 92, 0.14);
+    opacity: 0;
+    transform: scale(0.4);
+    transition: opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 0 14px rgba(232, 98, 92, 0.45), inset 0 0 8px rgba(232, 98, 92, 0.15);
+  }
+  .damage-ring::before,
+  .damage-ring::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 999px;
+    border: 1.2px solid #E8625C;
+    opacity: 0;
+  }
+  .damage.show .damage-ring {
+    opacity: 1; transform: scale(1);
+  }
+  .damage.show .damage-ring::before {
+    animation: ripple 2.2s ease-out infinite;
+  }
+  .damage.show .damage-ring::after {
+    animation: ripple 2.2s ease-out 0.7s infinite;
+  }
+  @keyframes ripple {
+    0% { opacity: 0.65; transform: scale(1); }
+    100% { opacity: 0; transform: scale(2.6); }
+  }
+  /* Crosshair inside ring */
+  .damage-ring > i {
+    position: absolute;
+    background: #E8625C;
+    box-shadow: 0 0 3px rgba(232, 98, 92, 0.8);
+  }
+  .damage-ring > i:nth-child(1) { left: 50%; top: 4px; bottom: 4px; width: 1px; transform: translateX(-50%); }
+  .damage-ring > i:nth-child(2) { top: 50%; left: 4px; right: 4px; height: 1px; transform: translateY(-50%); }
+  /* Damage labels removed from satellite — descriptions live in Findings card */
+  .damage-label { display: none !important; }
+  .damage.show .damage-label {
+    animation: labelAppear 0.35s 0.15s ease forwards;
+  }
+  @keyframes labelAppear {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Suburb scan markers · gold to fit dark stage */
+  .sub-marker {
+    position: absolute;
+    width: 18px; height: 18px;
+    border: 1.8px solid var(--gold);
+    background: rgba(201, 169, 97, 0.22);
+    border-radius: 999px;
+    opacity: 0;
+    transform: scale(0.3);
+    transition: opacity 0.3s, transform 0.3s;
+    box-shadow: 0 0 12px rgba(201, 169, 97, 0.4);
+  }
+  .sub-marker.show {
+    opacity: 1; transform: scale(1);
+    animation: subPulse 2.5s infinite;
+  }
+  @keyframes subPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(201, 169, 97, 0.55); }
+    50% { box-shadow: 0 0 0 10px rgba(201, 169, 97, 0); }
+  }
+  .sub-counter {
+    position: absolute;
+    bottom: 28px; left: 28px;
+    background: rgba(26, 22, 18, 0.82);
+    backdrop-filter: blur(20px) saturate(180%);
+    color: rgba(248, 244, 235, 0.94);
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-family: 'Geist', -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.4s, transform 0.4s;
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+  .sub-counter.show { opacity: 1; transform: translateY(0); }
+  .sub-counter strong { color: var(--gold); font-size: 15px; margin-right: 6px; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  /* Scene tag removed · narration moved to single bottom caption */
+  .scene-tag { display: none; }
+
+  /* QUOTE DOCUMENT scene · premium financial document on theatrical stage */
+  .quote-scene {
+    padding: 48px 60px;
+    overflow-y: auto;
+    background: transparent;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .quote-doc {
+    background: #FAFAF7;
+    color: #18171A;
+    border-radius: 14px;
+    padding: 36px 40px 32px;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.45), 0 16px 32px rgba(0,0,0,0.25);
+    max-width: 580px;
+    width: 100%;
+  }
+  .quote-row {
+    opacity: 0;
+    transform: translateY(3px);
+    transition: opacity 0.4s cubic-bezier(0.32, 0.72, 0, 1), transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+    position: relative;
+  }
+  .quote-row.show { opacity: 1; transform: translateY(0); }
+  /* Cursor shimmer removed · premium documents don't pretend to be typing */
+
+  .q-head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding-bottom: 18px; margin-bottom: 20px;
+    border-bottom: 1px solid rgba(24, 23, 26, 0.10);
+  }
+  .q-brand {
+    font-size: 12px;
+    color: rgba(24, 23, 26, 0.50);
+    margin-bottom: 6px;
+    font-weight: 400;
+  }
+  .q-title {
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: -0.022em;
+    line-height: 1.1;
+  }
+  .q-number {
+    font-size: 11px;
+    color: rgba(24, 23, 26, 0.45);
+    text-align: right;
+    font-weight: 400;
+  }
+  .q-number strong {
+    display: block;
+    color: rgba(24, 23, 26, 0.85);
+    font-size: 13px;
+    margin-top: 3px;
+    font-weight: 500;
+    font-family: 'Geist Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .q-customer { margin-bottom: 22px; }
+  .q-ll {
+    font-size: 11px;
+    color: rgba(24, 23, 26, 0.45);
+    margin-bottom: 4px;
+    font-weight: 400;
+  }
+  .q-name { font-size: 15px; font-weight: 500; letter-spacing: -0.005em; }
+  .q-addr { font-size: 13px; color: rgba(24, 23, 26, 0.55); margin-top: 2px; }
+
+  .q-scope-head {
+    font-size: 11px;
+    color: rgba(24, 23, 26, 0.45);
+    margin: 0 0 10px;
+    font-weight: 400;
+  }
+  .q-scope-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(24, 23, 26, 0.06);
+    font-size: 13.5px;
+  }
+  .q-scope-row .desc { color: rgba(24, 23, 26, 0.85); padding-right: 16px; font-weight: 400; }
+  .q-scope-row .price {
+    font-family: 'Geist Mono', monospace;
+    font-weight: 500;
+    color: rgba(24, 23, 26, 0.85);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.005em;
+  }
+
+  .q-total {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-top: 18px; margin-top: 10px;
+    border-top: 1px solid rgba(24, 23, 26, 0.18);
+  }
+  .q-total .label {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: rgba(24, 23, 26, 0.65);
+  }
+  .q-total .amount {
+    font-family: 'Geist', sans-serif;
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: -0.028em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .q-sent-badge {
+    margin-top: 20px;
+    padding: 11px 14px;
+    background: rgba(79, 170, 110, 0.10);
+    border: 1px solid rgba(79, 170, 110, 0.30);
+    border-radius: 8px;
+    text-align: center;
+    color: #2E7A4A;
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.35s cubic-bezier(0.32, 0.72, 0, 1), transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .q-sent-badge.show { opacity: 1; transform: translateY(0); }
+
+  /* CAPTION · single subtle line at bottom of stage · fades between steps */
+  .annotation-strip {
+    position: absolute;
+    bottom: 30px; left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0;
+    max-width: 540px;
+    text-align: center;
+    pointer-events: none;
+    z-index: 30;
+  }
+  .ann-step-num,
+  .ann-arrow { display: none; }
+  .ann-body {
+    flex: 1;
+    text-align: center;
+  }
+  .ann-headline {
+    font-size: 15.5px;
+    font-weight: 500;
+    letter-spacing: -0.012em;
+    color: var(--stage-text);
+    transition: opacity 0.28s cubic-bezier(0.28, 0.11, 0.32, 1);
+  }
+  .ann-detail { display: none; }
+
+  /* Progress bar removed · chrome stripped from theatrical demo */
+  .stage-progress { display: none; }
+
+  /* Stage controls (replay + status) */
+  .stage-controls {
+    position: absolute;
+    bottom: 20px; right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 50;
+  }
+  .replay-btn {
+    position: absolute;
+    bottom: 24px; right: 24px;
+    z-index: 50;
+    background: var(--stage-surface);
+    color: var(--stage-text);
+    border: 1px solid var(--stage-border);
+    backdrop-filter: blur(24px) saturate(180%);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-family: 'Geist', -apple-system, sans-serif;
+    font-size: 12.5px; letter-spacing: -0.005em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.3s cubic-bezier(0.32, 0.72, 0, 1), background 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+    opacity: 0;
+    pointer-events: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .replay-btn:hover { background: var(--stage-surface-elevated); transform: translateY(-1px); }
+  .replay-btn.show { opacity: 1; pointer-events: auto; }
+  .replay-btn:hover { transform: translateY(-1px); }
+
+  .desktop-note {
+    display: none;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin: 20px auto;
+    color: var(--accent);
+    font-size: 13px;
+    text-align: center;
+    font-weight: 500;
+    max-width: 400px;
+  }
+
+  /* ===========================================
+     DASHBOARD · premium dark take-over · hero stat over admin tabs
+     =========================================== */
+  .dashboard {
+    opacity: 0;
+    transform: translateY(6px);
+    pointer-events: none;
+    z-index: 2;
+    padding: 44px 48px 40px;
+    color: var(--stage-text);
+    overflow-y: auto;
+  }
+  .dashboard.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .dash-head {
+    padding: 0 0 32px;
+    border-bottom: 1px solid var(--stage-border);
+    display: flex; justify-content: space-between; align-items: flex-start;
+    flex-wrap: wrap; gap: 20px;
+    flex-shrink: 0;
+    background: transparent;
+  }
+  .dash-head h2 {
+    font-size: 12.5px;
+    font-weight: 400;
+    color: var(--stage-text-quiet);
+    letter-spacing: 0;
+    margin-bottom: 12px;
+  }
+  .dash-head .hero-stat {
+    font-size: 64px;
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    color: var(--stage-text);
+    line-height: 0.95;
+    margin-bottom: 14px;
+    font-variant-numeric: tabular-nums;
+  }
+  .dash-head .hero-stat .pipeline { color: var(--accent); font-weight: 600; }
+  .dash-head .sub {
+    color: var(--stage-text-muted);
+    font-size: 13.5px;
+    margin-top: 0;
+    line-height: 1.55;
+    max-width: 56ch;
+  }
+  .live-pill {
+    background: transparent;
+    color: var(--stage-text-muted);
+    padding: 0;
+    border-radius: 0;
+    font-family: 'Geist', -apple-system, sans-serif;
+    font-size: 12px; letter-spacing: 0;
+    text-transform: none;
+    display: inline-flex; align-items: center; gap: 8px;
+    font-weight: 400;
+  }
+  .live-pill::before {
+    content: ''; width: 7px; height: 7px;
+    background: var(--accent);
+    border-radius: 999px;
+    animation: pulse 1.4s infinite;
+    box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.18);
+  }
+
+  /* Tabs · refined text-link style, gold underline on active */
+  .dash-tabs {
+    display: flex;
+    gap: 32px;
+    background: transparent;
+    border-bottom: 1px solid var(--stage-border);
+    margin-top: 28px;
+    padding-bottom: 0;
+    flex-shrink: 0;
+  }
+  .dash-tab {
+    background: transparent;
+    border: 0;
+    border-bottom: 1.5px solid transparent;
+    padding: 14px 0;
+    margin-bottom: -1px;
+    text-align: left;
+    cursor: pointer;
+    transition: color 0.2s cubic-bezier(0.32, 0.72, 0, 1), border-color 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+    color: var(--stage-text-muted);
+    display: flex; align-items: baseline; gap: 8px;
+  }
+  .dash-tab:hover { color: var(--stage-text); }
+  .dash-tab.active { color: var(--stage-text); border-bottom-color: var(--accent); }
+  .dash-tab .t-label {
+    font-family: 'Geist', -apple-system, sans-serif;
+    font-size: 13.5px;
+    letter-spacing: -0.005em;
+    text-transform: none;
+    font-weight: 500;
+    margin-bottom: 0;
+    color: inherit;
+  }
+  .dash-tab .t-num {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--stage-text-quiet);
+    font-variant-numeric: tabular-nums;
+  }
+  .dash-tab.active .t-num { color: var(--accent); }
+  .dash-tab .t-delta { display: none; }
+
+  .dash-body {
+    padding: 22px 0 0;
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+  .dash-body::-webkit-scrollbar { width: 6px; }
+  .dash-body::-webkit-scrollbar-thumb { background: var(--stage-border-strong); border-radius: 3px; }
+
+  .filter-row {
+    display: flex; gap: 6px; flex-wrap: wrap;
+    margin-bottom: 14px;
+    align-items: center;
+  }
+  .filter-row .lbl { display: none; }
+  .chip {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.10);
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-family: 'Geist', -apple-system, sans-serif;
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .chip:hover { border-color: rgba(255,255,255,0.3); color: white; }
+  .chip.active { background: rgba(255,255,255,0.08); color: white; border-color: rgba(255,255,255,0.18); }
+
+  /* Table · row-style with dot badges · semantic tokens throughout */
+  .dash-table { width: 100%; border-collapse: collapse; }
+  .dash-table thead { display: none; }
+  .dash-table td {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--stage-border);
+    font-size: 13.5px;
+    vertical-align: middle;
+    color: var(--stage-text-muted);
+    transition: color 0.15s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .dash-table tr:last-child td { border-bottom: 0; }
+  .dash-table tr:hover td { color: var(--stage-text); }
+  .row-addr { font-weight: 500; color: var(--stage-text); letter-spacing: -0.005em; }
+  .row-addr .meta { display: block; font-size: 11.5px; color: var(--stage-text-quiet); margin-top: 2px; font-weight: 400; }
+  .row-thumb {
+    width: 44px; height: 32px;
+    background-size: cover; background-position: center;
+    border-radius: 6px;
+    border: 1px solid var(--stage-border);
+    margin-right: 14px;
+  }
+  .row-amount {
+    font-weight: 500;
+    text-align: right;
+    color: var(--stage-text);
+    font-variant-numeric: tabular-nums;
+    font-family: 'Geist Mono', monospace;
+    letter-spacing: -0.005em;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 3px 0;
+    font-size: 12.5px;
+    color: var(--stage-text-muted);
+    font-weight: 400;
+    background: transparent;
+    border-radius: 0;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 999px;
+    background: var(--stage-text-quiet);
+    flex-shrink: 0;
+  }
+  .badge.warn::before { background: var(--danger); }
+  .badge.ok::before { background: var(--ok); }
+  .badge.info::before { background: var(--info); }
+  .badge.accent::before { background: var(--accent); }
+  .badge.neutral::before { background: var(--stage-text-quiet); }
+  .score {
+    font-weight: 500; font-size: 11.5px;
+    padding: 2px 8px; border-radius: 4px;
+    display: inline-block; min-width: 28px; text-align: center;
+    border: 1px solid var(--stage-border);
+    color: var(--stage-text-muted);
+    background: transparent;
+    font-family: 'Geist Mono', monospace;
+  }
+  .score.a { color: var(--ok); border-color: rgba(111, 216, 150, 0.3); }
+  .score.b { color: var(--info); border-color: rgba(157, 194, 240, 0.3); }
+  .score.c { color: var(--warn); border-color: rgba(245, 201, 122, 0.3); }
+  .score.d { color: var(--danger); border-color: rgba(232, 144, 144, 0.3); }
+
+  /* 5-point condition rating · industry convention (Cape Analytics style) */
+  .cond-pill {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 2px 9px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    border: 1px solid var(--stage-border);
+    background: transparent;
+    color: var(--stage-text);
+  }
+  .cond-pill::before {
+    content: ''; width: 6px; height: 6px;
+    border-radius: 999px;
+    background: var(--stage-text-muted);
+  }
+  .cond-pill.cond-excellent::before { background: var(--ok); box-shadow: 0 0 0 2px rgba(111, 216, 150, 0.18); }
+  .cond-pill.cond-good::before { background: #B9E3CC; }
+  .cond-pill.cond-moderate::before { background: var(--warn); box-shadow: 0 0 0 2px rgba(245, 201, 122, 0.18); }
+  .cond-pill.cond-poor::before { background: #E89A6E; box-shadow: 0 0 0 2px rgba(232, 154, 110, 0.18); }
+  .cond-pill.cond-severe::before { background: var(--danger); box-shadow: 0 0 0 2px rgba(232, 144, 144, 0.18); }
+
+  .row-date { color: var(--stage-text-quiet); font-variant-numeric: tabular-nums; font-size: 12.5px; }
+  .row-muted { color: var(--stage-text-quiet); font-weight: 400; }
+
+  /* End-of-demo CTA */
+  .dash-cta {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--stage-border);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.5s 0.4s cubic-bezier(0.28, 0.11, 0.32, 1), transform 0.5s 0.4s cubic-bezier(0.28, 0.11, 0.32, 1);
+  }
+  .dashboard.show .dash-cta { opacity: 1; transform: translateY(0); }
+  .dash-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    background: var(--accent);
+    color: #1A1612;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: -0.005em;
+    transition: transform 0.2s cubic-bezier(0.28, 0.11, 0.32, 1), background 0.2s cubic-bezier(0.28, 0.11, 0.32, 1);
+  }
+  .dash-cta-btn:hover { background: #D5B66B; transform: translateY(-1px); }
+  .dash-cta-btn .arrow { font-weight: 500; transition: transform 0.2s cubic-bezier(0.28, 0.11, 0.32, 1); }
+  .dash-cta-btn:hover .arrow { transform: translateX(3px); }
+  .dash-cta-sub { color: var(--stage-text-quiet); font-size: 13px; }
+
+</style>
+</head>
+<body>
+
+<!-- HEADER · slim row · brand · eyebrow · scenario pills -->
+<div class="header-wrap">
+  <div class="header-left">
+    <div class="brand-row">
+      <img src="img/logo.png" alt="Wolf AI">
+      <span>Wolf AI</span>
+    </div>
+    <div class="header-eyebrow"><span class="live-dot"></span>Live demo · roof quote in under a minute</div>
+  </div>
+
+  <div class="scenario-row">
+    <div class="scenario-pills">
+      <button class="scenario-btn active" data-scenario="a">
+        <span>Customer-initiated</span>
+      </button>
+      <button class="scenario-btn" data-scenario="b">
+        <span>Suburb-wide scan</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- STICKY STAGE -->
+<div class="stage-container">
+  <div class="stage-sticky">
+    <div class="stage-inner">
+
+      <!-- LEFT: iPhone with iMessage (scaled to fit viewport) -->
+      <div class="phone-frame">
+      <div class="phone">
+        <div class="dynamic-island"></div>
+        <div class="phone-screen">
+          <div class="ios-status">
+            <span class="time" id="ios-time">9:42</span>
+            <div class="right">
+              <span class="signal"><i></i><i></i><i></i><i></i></span>
+              <span class="wifi"></span>
+              <span class="battery"><span class="level"></span></span>
+            </div>
+          </div>
+          <div class="imsg-app-header">
+            <div class="app-icon"></div>
+            <div class="app-name">
+              Wolf AI Agent
+              <svg viewBox="0 0 6 10" fill="none" stroke="#3c3c43" stroke-width="1.5"><path d="M1 1 L5 5 L1 9"/></svg>
+            </div>
+          </div>
+          <div class="imsg-back">
+            <svg viewBox="0 0 14 22" fill="none" stroke="currentColor" stroke-width="2.5" style="width:11px;height:18px"><path d="M12 1 L2 11 L12 21"/></svg>
+          </div>
+          <div class="imsg-info">
+            <svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="6.5" r="0.8" fill="currentColor"/><path d="M10 9 L10 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+
+          <div class="imsg-thread" id="thread">
+            <!-- messages injected by JS -->
+          </div>
+
+          <div class="imsg-input-bar">
+            <div class="plus">+</div>
+            <div class="input">iMessage</div>
+            <div class="mic">🎤</div>
+          </div>
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+      </div><!-- /.phone-frame -->
+
+      <!-- RIGHT: AI Panel -->
+      <div class="ai-panel-wrap">
+        <div class="ai-panel">
+          <div class="stage-progress" id="progress"></div>
+          <div class="ai-header">
+            <div class="ai-header-left">
+              <div class="ai-header-dot"></div>
+              <div class="ai-header-label" id="ai-label">Wolf AI · Standby</div>
+            </div>
+            <div class="ai-step-counter"><span class="current" id="step-num">0</span> / <span id="step-total">10</span></div>
+          </div>
+
+          <div class="ai-body">
+
+            <!-- SCENE: Idle · branded product intro (replaces "Animation starting in moments" void) -->
+            <div class="scene active" id="scene-idle">
+              <div class="idle-stage">
+                <div class="idle-glow"></div>
+                <div class="idle-content">
+                  <div class="idle-eyebrow"><span class="dot"></span>Live demo</div>
+                  <div class="idle-headline">The roofing agent<br/>that quotes&nbsp;itself.</div>
+                  <div class="idle-sub">An address comes in. AI measures the roof from satellite, drafts the quote, lands it on the roofer's phone — under a minute, end&nbsp;to&nbsp;end.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SCENE: Suburb pan (locating in Scenario A) -->
+            <div class="scene" id="scene-suburb-pan">
+              <div class="scene-tag" id="tag-suburb-pan"><span class="step">Step 02</span>Locating address</div>
+              <div class="img-stage">
+                <img src="img/suburb-aerial.png" alt="Suburb aerial">
+                <div class="measure-chip show" style="bottom: 18px; right: 18px;"><span class="k">Target:</span>47 Hastings Drive, Tewantin</div>
+              </div>
+            </div>
+
+            <!-- SCENE: Single house -->
+            <div class="scene" id="scene-house">
+              <div class="scene-tag" id="tag-house"><span class="step">Step 03</span>Satellite tile loaded</div>
+              <div class="img-stage">
+                <img src="img/before-1.png" alt="Roof satellite view">
+
+                <!-- CAD overlay: grid + corner brackets + sweep line -->
+                <div class="scan-grid" id="scan-grid"></div>
+                <div class="scan-brackets" id="scan-brackets"><i></i><i></i></div>
+                <div class="scan-line" id="scan-line"></div>
+
+                <!-- FINDINGS · single side card builds as AI scans -->
+                <div class="findings" id="findings">
+                  <div class="findings-head">
+                    <div class="findings-title">47 Hastings Drive · Tewantin</div>
+                    <div class="findings-source"><b>Nearmap</b> · 7.5cm/px</div>
+                  </div>
+
+                  <div class="findings-section" id="fs-measure">
+                    <div class="findings-label">Measurements</div>
+                    <div class="finding-row" id="fr-area"><span class="k">Roof area</span><span class="v">285<span class="unit"> m²</span></span></div>
+                    <div class="finding-row" id="fr-pitch"><span class="k">Pitch</span><span class="v">24<span class="unit">°</span></span></div>
+                    <div class="finding-row" id="fr-facets"><span class="k">Facets</span><span class="v">16</span></div>
+                    <div class="finding-row" id="fr-material"><span class="k">Material</span><span class="v">Colorbond</span></div>
+                  </div>
+
+                  <div class="findings-section" id="fs-issues">
+                    <div class="findings-label">Damage detected</div>
+                    <div class="finding-issue" id="fi-1"><span class="dot danger"></span><span class="desc">Heavy moss · NE slope</span><span class="severity">72%</span></div>
+                    <div class="finding-issue" id="fi-2"><span class="dot warn"></span><span class="desc">Algae buildup · centre</span><span class="severity">38%</span></div>
+                    <div class="finding-issue" id="fi-3"><span class="dot warn"></span><span class="desc">Coating loss</span><span class="severity">24%</span></div>
+                    <div class="finding-issue" id="fi-4"><span class="dot"></span><span class="desc">Surface wear · south</span><span class="severity">12%</span></div>
+                    <div class="finding-issue" id="fi-5"><span class="dot"></span><span class="desc">Oxidation patches</span><span class="severity">8%</span></div>
+                  </div>
+                </div>
+
+                <!-- Top-right scan progress pill with live timer -->
+                <div class="scan-progress-pill" id="scan-progress">
+                  <span class="pulse"></span>
+                  <span id="scan-progress-text">Scanning</span>
+                  <span class="timer" id="scan-timer">0.0s</span>
+                </div>
+
+                <svg class="overlay" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" id="house-svg">
+                  <!-- PRECISION roof trace · 38 dual-stroke edges (underlay + topline for visibility) -->
+                  <g id="roof-edge-group"></g>
+                  <!-- Vertex markers · pop at each detected corner -->
+                  <g id="vertex-group">
+                    <circle class="roof-vertex" cx="404" cy="55" r="6" />
+                    <circle class="roof-vertex" cx="513" cy="36" r="6" />
+                    <circle class="roof-vertex" cx="1181" cy="39" r="6" />
+                    <circle class="roof-vertex" cx="385" cy="298" r="6" />
+                    <circle class="roof-vertex" cx="705" cy="227" r="6" />
+                    <circle class="roof-vertex" cx="872" cy="230" r="6" />
+                    <circle class="roof-vertex" cx="1246" cy="229" r="6" />
+                    <circle class="roof-vertex" cx="455" cy="488" r="6" />
+                    <circle class="roof-vertex" cx="547" cy="421" r="6" />
+                    <circle class="roof-vertex" cx="681" cy="421" r="6" />
+                    <circle class="roof-vertex" cx="756" cy="482" r="6" />
+                    <circle class="roof-vertex" cx="1089" cy="459" r="6" />
+                    <circle class="roof-vertex" cx="1196" cy="456" r="6" />
+                    <circle class="roof-vertex" cx="664" cy="584" r="6" />
+                    <circle class="roof-vertex" cx="871" cy="584" r="6" />
+                    <circle class="roof-vertex" cx="982" cy="559" r="6" />
+                    <circle class="roof-vertex" cx="1215" cy="557" r="6" />
+                    <circle class="roof-vertex" cx="473" cy="673" r="6" />
+                    <circle class="roof-vertex" cx="754" cy="501" r="6" />
+                    <circle class="roof-vertex" cx="1134" cy="715" r="6" />
+                    <circle class="roof-vertex" cx="1195" cy="710" r="6" />
+                    <circle class="roof-vertex" cx="563" cy="674" r="6" />
+                    <circle class="roof-vertex" cx="707" cy="711" r="6" />
+                    <circle class="roof-vertex" cx="876" cy="722" r="6" />
+                    <circle class="roof-vertex" cx="1012" cy="713" r="6" />
+                    <circle class="roof-vertex" cx="892" cy="774" r="6" />
+                    <circle class="roof-vertex" cx="1020" cy="767" r="6" />
+                    <circle class="roof-vertex" cx="1130" cy="789" r="6" />
+                    <circle class="roof-vertex" cx="563" cy="853" r="6" />
+                    <circle class="roof-vertex" cx="865" cy="855" r="6" />
+                  </g>
+                </svg>
+
+                <!-- Measurement chips · positioned on the traced roof -->
+                <div class="measure-chip" id="m-area" style="top: 38%; left: 44%;"><span class="k">Area</span>285 m²</div>
+                <div class="measure-chip" id="m-pitch" style="top: 60%; right: 30%;"><span class="k">Pitch</span>24°</div>
+                <div class="measure-chip" id="m-facets" style="bottom: 22%; left: 34%;"><span class="k">Facets</span>16</div>
+                <div class="measure-chip" id="m-material" style="top: 28%; right: 12%;"><span class="k">Material</span>Colorbond</div>
+
+                <!-- Damage markers · placed on real mossy/algae patches in the source image -->
+                <div class="damage" id="dm-1" style="top: 22%; left: 38%;">
+                  <div class="damage-ring"><i></i><i></i></div>
+                  <div class="damage-label" style="top: -22px; left: 16px;">Heavy moss · NE slope</div>
+                </div>
+                <div class="damage" id="dm-2" style="top: 32%; left: 60%;">
+                  <div class="damage-ring"><i></i><i></i></div>
+                  <div class="damage-label" style="top: -22px; left: 16px;">Algae buildup</div>
+                </div>
+                <div class="damage" id="dm-3" style="top: 52%; left: 50%;">
+                  <div class="damage-ring"><i></i><i></i></div>
+                  <div class="damage-label" style="top: -22px; left: 16px;">Coating loss</div>
+                </div>
+                <div class="damage" id="dm-4" style="top: 78%; left: 42%;">
+                  <div class="damage-ring"><i></i><i></i></div>
+                  <div class="damage-label" style="top: 16px; left: 16px;">Surface wear</div>
+                </div>
+                <div class="damage" id="dm-5" style="top: 30%; left: 76%;">
+                  <div class="damage-ring"><i></i><i></i></div>
+                  <div class="damage-label" style="top: -22px; left: 16px;">Oxidation</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SCENE: Suburb scan with markers (Scenario B) -->
+            <div class="scene" id="scene-suburb-scan">
+              <div class="scene-tag"><span class="step">Step 02</span>Overnight scan · 24,000 properties</div>
+              <div class="img-stage">
+                <img src="img/suburb-aerial.png" alt="Suburb scan">
+                <div class="sub-marker" id="sm-1" style="top: 22%; left: 8%;"></div>
+                <div class="sub-marker" id="sm-2" style="top: 18%; left: 18%;"></div>
+                <div class="sub-marker" id="sm-3" style="top: 24%; left: 30%;"></div>
+                <div class="sub-marker" id="sm-4" style="top: 15%; left: 42%;"></div>
+                <div class="sub-marker" id="sm-5" style="top: 28%; left: 50%;"></div>
+                <div class="sub-marker" id="sm-6" style="top: 22%; left: 58%;"></div>
+                <div class="sub-marker" id="sm-7" style="top: 20%; left: 68%;"></div>
+                <div class="sub-marker" id="sm-8" style="top: 38%; left: 12%;"></div>
+                <div class="sub-marker" id="sm-9" style="top: 42%; left: 24%;"></div>
+                <div class="sub-marker" id="sm-10" style="top: 48%; left: 35%;"></div>
+                <div class="sub-marker" id="sm-11" style="top: 44%; left: 47%;"></div>
+                <div class="sub-marker" id="sm-12" style="top: 50%; left: 58%;"></div>
+                <div class="sub-marker" id="sm-13" style="top: 65%; left: 18%;"></div>
+                <div class="sub-marker" id="sm-14" style="top: 70%; left: 30%;"></div>
+                <div class="sub-marker" id="sm-15" style="top: 60%; left: 44%;"></div>
+                <div class="sub-marker" id="sm-16" style="top: 75%; left: 55%;"></div>
+                <div class="sub-marker" id="sm-17" style="top: 80%; left: 38%;"></div>
+                <div class="sub-marker" id="sm-18" style="top: 32%; left: 78%;"></div>
+                <div class="sub-marker" id="sm-19" style="top: 50%; left: 75%;"></div>
+                <div class="sub-marker" id="sm-20" style="top: 68%; left: 70%;"></div>
+                <div class="sub-marker" id="sm-21" style="top: 38%; left: 65%;"></div>
+                <div class="sub-marker" id="sm-22" style="top: 55%; left: 28%;"></div>
+                <div class="sub-marker" id="sm-23" style="top: 18%; left: 80%;"></div>
+                <div class="sub-counter" id="sub-counter"><strong>23</strong> properties flagged · ranked by likelihood</div>
+              </div>
+            </div>
+
+            <!-- SCENE: Quote document -->
+            <div class="scene" id="scene-quote">
+              <div class="scene-tag"><span class="step">Step 07</span>Drafting quote · AI generation</div>
+              <div class="quote-scene">
+                <div class="quote-doc">
+                  <div class="quote-row" id="q-row-1">
+                    <div class="q-head">
+                      <div>
+                        <div class="q-brand">Wolf AI · Restoration quote</div>
+                        <div class="q-title">Roof Restoration</div>
+                      </div>
+                      <div class="q-number">Quote No.<strong>#NL-2026-0847</strong></div>
+                    </div>
+                  </div>
+                  <div class="quote-row" id="q-row-2">
+                    <div class="q-customer">
+                      <div class="q-ll">Prepared for</div>
+                      <div class="q-name">M. Wilson</div>
+                      <div class="q-addr">47 Hastings Drive, Tewantin QLD 4565</div>
+                    </div>
+                  </div>
+                  <div class="quote-row" id="q-row-3">
+                    <div class="q-scope-head">Scope of works</div>
+                    <div class="q-scope-row">
+                      <span class="desc">High-pressure clean · 285 m² Colorbond roof</span>
+                      <span class="price">$1,420</span>
+                    </div>
+                  </div>
+                  <div class="quote-row" id="q-row-4">
+                    <div class="q-scope-row">
+                      <span class="desc">Moss + algae treatment · biocide application</span>
+                      <span class="price">$860</span>
+                    </div>
+                  </div>
+                  <div class="quote-row" id="q-row-5">
+                    <div class="q-scope-row">
+                      <span class="desc">Replace 6 corroded ridge caps + flashing</span>
+                      <span class="price">$1,180</span>
+                    </div>
+                  </div>
+                  <div class="quote-row" id="q-row-6">
+                    <div class="q-scope-row">
+                      <span class="desc">2-coat protective membrane coating</span>
+                      <span class="price">$3,640</span>
+                    </div>
+                  </div>
+                  <div class="quote-row" id="q-row-7">
+                    <div class="q-scope-row">
+                      <span class="desc">Gutter cleaning + leaf guard adjustment</span>
+                      <span class="price">$420</span>
+                    </div>
+                  </div>
+                  <div class="quote-row" id="q-row-8">
+                    <div class="q-total">
+                      <span class="label">Total · incl. GST</span>
+                      <span class="amount" id="q-total-amount">$0</span>
+                    </div>
+                  </div>
+                  <div class="q-sent-badge" id="q-sent">✓ Quote sent to M. Wilson · 9:43 AM</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Replay button (appears at end) -->
+        <button class="replay-btn" id="replay-btn">↻ Replay</button>
+
+        <!-- DASHBOARD · premium dark take-over · hero stat over admin tabs -->
+        <div class="dashboard" id="dashboard">
+          <div class="dash-head">
+            <div>
+              <h2>Pipeline · 30 days</h2>
+              <div class="hero-stat"><span class="pipeline" id="hero-pipeline">$1.42M</span></div>
+              <div class="sub">187 quotes sent · 18 jobs closed · 62 conversations open</div>
+            </div>
+            <div class="live-pill">Live</div>
+          </div>
+
+          <div class="dash-tabs" id="dash-tabs">
+            <button class="dash-tab active" data-tab="scans">
+              <span class="t-label">Scans</span>
+              <span class="t-num" data-target="2147">0</span>
+            </button>
+            <button class="dash-tab" data-tab="sent">
+              <span class="t-label">Sent</span>
+              <span class="t-num" data-target="187">0</span>
+            </button>
+            <button class="dash-tab" data-tab="responded">
+              <span class="t-label">Responded</span>
+              <span class="t-num" data-target="62">0</span>
+            </button>
+            <button class="dash-tab" data-tab="closed">
+              <span class="t-label">Closed</span>
+              <span class="t-num" data-target="18">0</span>
+            </button>
+            <button class="dash-tab" data-tab="pending">
+              <span class="t-label">Pending</span>
+              <span class="t-num" data-target="44">0</span>
+            </button>
+          </div>
+
+          <div class="dash-body" id="dash-body"></div>
+
+          <!-- End-of-demo CTA · soft button -->
+          <div class="dash-cta" id="dash-cta">
+            <a href="#" class="dash-cta-btn">See your area<span class="arrow">→</span></a>
+            <span class="dash-cta-sub">Or watch again</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Annotation strip below the stage (within sticky · fits viewport) -->
+    <div class="annotation-strip">
+      <div class="ann-step-num" id="ann-num">·</div>
+      <div class="ann-body">
+        <div class="ann-headline" id="ann-headline">Starting in a moment...</div>
+        <div class="ann-detail" id="ann-detail">Customer-initiated flow plays automatically · scroll locked until animation completes.</div>
+      </div>
+      <div class="ann-arrow" id="ann-arrow">Auto · play</div>
+    </div>
+  </div>
+
+  <div class="desktop-note">Best viewed on desktop · the AI panel doesn't fit on phone screens</div>
+</div>
+
+<script>
+/* ============================================================
+   ROOF FLOW · PREMIUM AUTOPLAY DEMO
+   ============================================================ */
+(function() {
+  const $ = s => document.querySelector(s);
+  const $$ = s => Array.from(document.querySelectorAll(s));
+
+  // Lock phone clock to a believable demo time (mid-morning · tradie-on-the-job)
+  $('#ios-time').textContent = '9:42';
+
+  const thread = $('#thread');
+  const aiLabel = $('#ai-label');
+  const stepNum = $('#step-num');
+  const stepTotal = $('#step-total');
+  const progress = $('#progress');
+  const annNum = $('#ann-num');
+  const annHeadline = $('#ann-headline');
+  const annDetail = $('#ann-detail');
+  const annArrow = $('#ann-arrow');
+  const dashboard = $('#dashboard');
+  const dashBody = $('#dash-body');
+  const replayBtn = $('#replay-btn');
+
+  // Dummy realistic Noosa data · with 5-point condition rating + estimated job value
+  const noosaData = {
+    scans: [
+      { addr: '47 Hastings Drive', sub: 'Tewantin', img: 'before-1.png', status: 'Heavy moss · restoration', badge: 'warn', cond: 'Poor', condClass: 'poor', value: 8420, date: '24 May' },
+      { addr: '12 Outlook Drive', sub: 'Tewantin', img: 'before-2.png', status: 'Water staining', badge: 'warn', cond: 'Moderate', condClass: 'moderate', value: 4280, date: '24 May' },
+      { addr: '8 Freeman Court', sub: 'Tewantin', img: 'before-3.png', status: 'Rust + patches · re-roof', badge: 'warn', cond: 'Severe', condClass: 'severe', value: 14600, date: '24 May' },
+      { addr: '23 Park Road', sub: 'Noosa Heads', img: 'after-2.png', status: 'Recently restored', badge: 'ok', cond: 'Excellent', condClass: 'excellent', value: 0, date: '23 May' },
+      { addr: '5 Garnet Street', sub: 'Cooroy', img: 'before-1.png', status: 'Algae + coating wear', badge: 'warn', cond: 'Poor', condClass: 'poor', value: 6890, date: '23 May' },
+      { addr: '88 Sunset Boulevard', sub: 'Sunshine Beach', img: 'after-1.png', status: 'Good condition', badge: 'ok', cond: 'Good', condClass: 'good', value: 0, date: '23 May' },
+      { addr: '14 Ferguson Street', sub: 'Tewantin', img: 'before-2.png', status: 'Moss · south slope', badge: 'warn', cond: 'Moderate', condClass: 'moderate', value: 3640, date: '22 May' },
+      { addr: '6 Roy Henzell Place', sub: 'Noosaville', img: 'before-3.png', status: 'Major rust · re-roof', badge: 'warn', cond: 'Severe', condClass: 'severe', value: 22400, date: '22 May' },
+      { addr: '32 Mary River Road', sub: 'Cooroy', img: 'after-3.png', status: 'Excellent condition', badge: 'ok', cond: 'Excellent', condClass: 'excellent', value: 0, date: '22 May' },
+      { addr: '19 Gibson Road', sub: 'Noosaville', img: 'before-1.png', status: 'Surface degradation', badge: 'warn', cond: 'Poor', condClass: 'poor', value: 5980, date: '21 May' },
+      { addr: '76 Beach Road', sub: 'Sunshine Beach', img: 'before-2.png', status: 'Salt corrosion', badge: 'warn', cond: 'Moderate', condClass: 'moderate', value: 7240, date: '21 May' },
+      { addr: '101 Outlook Drive', sub: 'Tewantin', img: 'after-2.png', status: 'Recent re-roof', badge: 'ok', cond: 'Excellent', condClass: 'excellent', value: 0, date: '21 May' },
+    ],
+    sent: [
+      { addr: '47 Hastings Drive', sub: 'Tewantin · M. Wilson', amount: 8420, badge: 'info', status: 'Delivered', date: '24 May 9:43 AM' },
+      { addr: '12 Outlook Drive', sub: 'Tewantin · S. Patel', amount: 4280, badge: 'info', status: 'Delivered', date: '24 May 8:12 AM' },
+      { addr: '8 Freeman Court', sub: 'Tewantin · D. Mackenzie', amount: 14600, badge: 'info', status: 'Delivered', date: '23 May 4:18 PM' },
+      { addr: '5 Garnet Street', sub: 'Cooroy · J. Tran', amount: 6890, badge: 'info', status: 'Delivered', date: '23 May 2:34 PM' },
+      { addr: '14 Ferguson Street', sub: 'Tewantin · R. Kahn', amount: 3640, badge: 'info', status: 'Delivered', date: '22 May 11:05 AM' },
+      { addr: '6 Roy Henzell Place', sub: 'Noosaville · A. Bourke', amount: 22400, badge: 'info', status: 'Delivered', date: '22 May 10:22 AM' },
+      { addr: '19 Gibson Road', sub: 'Noosaville · L. Mason', amount: 5980, badge: 'info', status: 'Delivered', date: '21 May 3:47 PM' },
+      { addr: '76 Beach Road', sub: 'Sunshine Beach · K. Nair', amount: 7240, badge: 'info', status: 'Delivered', date: '21 May 1:11 PM' },
+    ],
+    responded: [
+      { addr: '47 Hastings Drive', sub: 'Tewantin · M. Wilson', amount: 8420, badge: 'accent', status: 'Interested', date: '24 May 10:02 AM' },
+      { addr: '8 Freeman Court', sub: 'Tewantin · D. Mackenzie', amount: 14600, badge: 'accent', status: 'Scheduling visit', date: '23 May 6:30 PM' },
+      { addr: '5 Garnet Street', sub: 'Cooroy · J. Tran', amount: 6890, badge: 'accent', status: 'Wants to negotiate', date: '23 May 5:18 PM' },
+      { addr: '6 Roy Henzell Place', sub: 'Noosaville · A. Bourke', amount: 22400, badge: 'accent', status: 'Site visit booked', date: '22 May 4:55 PM' },
+      { addr: '19 Gibson Road', sub: 'Noosaville · L. Mason', amount: 5980, badge: 'accent', status: 'Asked about timing', date: '22 May 9:14 AM' },
+      { addr: '14 Ferguson Street', sub: 'Tewantin · R. Kahn', amount: 3640, badge: 'accent', status: 'Approved', date: '22 May 8:02 AM' },
+    ],
+    closed: [
+      { addr: '14 Ferguson Street', sub: 'Tewantin · R. Kahn', amount: 3640, badge: 'ok', status: 'Job complete · paid', date: '23 May' },
+      { addr: '101 Park Crescent', sub: 'Tewantin · B. Hughes', amount: 9220, badge: 'ok', status: 'Booked · 2 Jun start', date: '22 May' },
+      { addr: '42 Mary River Road', sub: 'Cooroy · S. Wenden', amount: 12840, badge: 'ok', status: 'Deposit paid', date: '22 May' },
+      { addr: '8 Eumarella Street', sub: 'Noosa Heads · T. Cox', amount: 18900, badge: 'ok', status: 'Job complete', date: '20 May' },
+      { addr: '17 Sunshine Beach Rd', sub: 'Sunshine Beach · M. Rai', amount: 7680, badge: 'ok', status: 'Booked · 28 May', date: '19 May' },
+    ],
+    pending: [
+      { addr: '93 Outlook Drive', sub: 'Tewantin', status: 'Imagery 4 days old · refresh due', badge: 'neutral', date: 'Next batch' },
+      { addr: '7 Fittell Court', sub: 'Tewantin', status: 'Awaiting Nearmap refresh', badge: 'neutral', date: 'Next batch' },
+      { addr: '11 Richardson Court', sub: 'Tewantin', status: 'Listing photo refresh needed', badge: 'neutral', date: 'Next batch' },
+      { addr: '34 Cooroy-Belli Creek Rd', sub: 'Cooroy', status: 'Queued', badge: 'neutral', date: 'Tomorrow' },
+      { addr: '56 Noosa Drive', sub: 'Noosa Heads', status: 'Queued', badge: 'neutral', date: 'Tomorrow' },
+      { addr: '21 David Low Way', sub: 'Peregian Beach', status: 'Queued', badge: 'neutral', date: 'Tomorrow' },
+    ]
+  };
+
+  function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+  function setAILabel(text) { aiLabel.textContent = text; }
+  function setProgress(p) { progress.style.width = p + '%'; }
+  function setStep(n, total) {
+    stepNum.textContent = n;
+    stepTotal.textContent = total;
+  }
+  function setAnnotation(num, headline, detail, arrow) {
+    if (annNum) annNum.textContent = num;
+    if (annDetail) annDetail.textContent = detail;
+    if (annArrow) annArrow.textContent = arrow || '';
+    if (!annHeadline) return;
+    // smooth caption fade
+    annHeadline.style.opacity = '0';
+    setTimeout(() => {
+      annHeadline.textContent = headline;
+      annHeadline.style.opacity = '1';
+    }, 200);
+  }
+  function clearThread() { thread.innerHTML = ''; }
+
+  function addMsg(text, type) {
+    return new Promise(resolve => {
+      const b = document.createElement('div');
+      b.className = `imsg-bubble ${type}`;
+      b.textContent = text;
+      thread.appendChild(b);
+      thread.scrollTop = thread.scrollHeight;
+      setTimeout(() => {
+        b.classList.add('show');
+        // add receipt for sent
+        if (type === 'sent') {
+          setTimeout(() => {
+            const r = document.createElement('div');
+            r.className = 'imsg-receipt show';
+            r.textContent = 'Delivered';
+            thread.appendChild(r);
+            thread.scrollTop = thread.scrollHeight;
+          }, 350);
+        }
+        resolve(b);
+      }, 50);
+    });
+  }
+
+  function addTyping() {
+    const t = document.createElement('div');
+    t.className = 'imsg-typing-bubble show';
+    t.innerHTML = '<div class="td"></div><div class="td"></div><div class="td"></div>';
+    thread.appendChild(t);
+    thread.scrollTop = thread.scrollHeight;
+    return t;
+  }
+
+  function addApproval(amount, addr, thumbImg) {
+    const card = document.createElement('div');
+    card.className = 'imsg-approve-card';
+    card.innerHTML = `
+      <div class="approve-thumb" style="background-image:url('img/${thumbImg}');"></div>
+      <div class="approve-body">
+        <div class="approve-title">Quote ready</div>
+        <div class="approve-meta">${addr} · <span class="amount">$${amount.toLocaleString()}</span></div>
+        <button class="approve-send">Send to customer</button>
+        <button class="approve-edit">Edit before sending</button>
+      </div>
+    `;
+    thread.appendChild(card);
+    thread.scrollTop = thread.scrollHeight;
+    setTimeout(() => card.classList.add('show'), 50);
+    return card;
+  }
+
+  function showScene(id) {
+    $$('.scene').forEach(s => s.classList.remove('active'));
+    const s = document.getElementById('scene-' + id);
+    if (s) s.classList.add('active');
+    // show scene-tag inside if exists
+    const tag = s ? s.querySelector('.scene-tag') : null;
+    if (tag) setTimeout(() => tag.classList.add('show'), 200);
+  }
+
+  function reveal(ids, gap = 180) {
+    return new Promise(resolve => {
+      let done = 0;
+      ids.forEach((id, i) => setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('show');
+        if (++done === ids.length) resolve();
+      }, i * gap));
+    });
+  }
+
+  // Build dual-stroke roof edges from coordinate list
+  // Scale: image is 1600x900 of a real ~17m-wide residential house. Roof area ~285m².
+  // House spans roughly x:380-1247 (~867px) → 14.5m wide. PX_PER_M ≈ 60.
+  const PX_PER_M = 60;
+  const ROOF_CENTROID = { x: 815, y: 450 };
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+
+  const ROOF_EDGE_COORDS = [
+    [513,36,1177,36], [404,55,508,37], [385,298,402,59], [1245,230,1181,39],
+    [1247,228,705,227], [1215,373,1246,229], [1196,462,1208,377],
+    [1196,456,1215,557], [1195,710,1215,561], [1130,789,1134,709],
+    [1063,800,1129,790], [896,791,1007,809], [876,722,1012,713],
+    [892,774,893,722], [1020,767,1021,714], [872,230,871,842],
+    [865,855,564,851], [563,853,564,674], [556,842,598,799],
+    [609,789,705,799], [708,800,802,791], [707,711,705,798],
+    [474,670,1197,710], [455,494,473,673], [455,488,482,357],
+    [455,493,871,488], [1195,462,547,421], [490,368,534,417],
+    [623,422,685,422], [664,584,871,584], [563,674,754,501],
+    [705,230,540,419], [683,421,873,231], [681,421,756,482],
+    [1089,459,875,231], [982,559,1086,458], [1011,592,1134,715],
+    [530,61,704,224]
+  ];
+
+  const edgeGroup = document.getElementById('roof-edge-group');
+  const imgStage = document.querySelector('#scene-house .img-stage');
+  const roofEdges = [];
+  const edgeLabels = [];   // DOM elements for length pills
+
+  ROOF_EDGE_COORDS.forEach(([x1, y1, x2, y2], i) => {
+    // Build <g class="roof-edge"> with underlay + topline children
+    const g = document.createElementNS(SVG_NS, 'g');
+    g.classList.add('roof-edge');
+    g.dataset.idx = i;
+
+    const under = document.createElementNS(SVG_NS, 'line');
+    under.setAttribute('x1', x1); under.setAttribute('y1', y1);
+    under.setAttribute('x2', x2); under.setAttribute('y2', y2);
+    under.classList.add('e-underlay');
+
+    const top = document.createElementNS(SVG_NS, 'line');
+    top.setAttribute('x1', x1); top.setAttribute('y1', y1);
+    top.setAttribute('x2', x2); top.setAttribute('y2', y2);
+    top.classList.add('e-topline');
+
+    g.appendChild(under);
+    g.appendChild(top);
+    edgeGroup.appendChild(g);
+
+    // Compute length + metadata for ordering and labels
+    const dx = x2 - x1, dy = y2 - y1;
+    const lenPx = Math.sqrt(dx*dx + dy*dy);
+    const lenM = lenPx / PX_PER_M;
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    const cdx = mx - ROOF_CENTROID.x, cdy = my - ROOF_CENTROID.y;
+    const distFromCentroid = Math.sqrt(cdx*cdx + cdy*cdy);
+    let angle = Math.atan2(cdx, -cdy) * 180 / Math.PI;
+    if (angle < 0) angle += 360;
+
+    g.dataset.lenPx = lenPx;
+    g.dataset.lenM = lenM.toFixed(1);
+    g.dataset.angle = angle;
+    g.dataset.perimeter = distFromCentroid > 220 ? '1' : '0';
+
+    // Apply stroke-dasharray to both underlay and topline so they reveal together
+    [under, top].forEach(line => {
+      line.style.strokeDasharray = lenPx;
+      line.style.strokeDashoffset = lenPx;
+    });
+
+    const edgeObj = { g, under, top, lenPx, lenM, mx, my, x1, y1, x2, y2, label: null };
+    roofEdges.push(edgeObj);
+
+    // Length label · only on prominent edges (>= 180px = ~4.7m) so the roof doesn't feel cluttered
+    if (lenPx >= 180) {
+      const label = document.createElement('div');
+      label.className = 'edge-label';
+      label.textContent = `${lenM.toFixed(1)} m`;
+      label.style.left = (mx / 1600 * 100) + '%';
+      label.style.top = (my / 900 * 100) + '%';
+      imgStage.appendChild(label);
+      edgeObj.label = label;
+      edgeLabels.push(label);
+    }
+  });
+
+  // Build the clockwise sweep order: perimeter first by angle, then ridges by angle
+  const sortedEdges = roofEdges.slice().sort((a, b) => {
+    const pa = parseInt(a.g.dataset.perimeter || '0', 10);
+    const pb = parseInt(b.g.dataset.perimeter || '0', 10);
+    if (pa !== pb) return pb - pa;
+    return parseFloat(a.g.dataset.angle || 0) - parseFloat(b.g.dataset.angle || 0);
+  });
+  const TOTAL_VERTS = $$('.roof-vertex').length;
+
+  function resetScene() {
+    $$('.damage.show, .roof-vertex.show, .quote-row.show, .quote-row.building, .q-sent-badge.show, .sub-marker.show, .sub-counter.show, .scan-grid.show, .scan-brackets.show, .scan-line.run, .roof-edge.draw, .findings.show, .findings-section.show, .finding-row.show, .finding-issue.show, .scan-progress-pill.show, .edge-label.show').forEach(e => {
+      e.classList.remove('show');
+      e.classList.remove('building');
+      e.classList.remove('run');
+      e.classList.remove('draw');
+    });
+    // Reset both stroke layers per edge
+    roofEdges.forEach(({ under, top, lenPx }) => {
+      under.style.strokeDashoffset = lenPx;
+      under.style.transition = '';
+      top.style.strokeDashoffset = lenPx;
+      top.style.transition = '';
+    });
+    const r = $('#r-verts'); if (r) r.textContent = `0 / ${TOTAL_VERTS}`;
+  }
+
+  // Three-phase trace · perimeter first, then ridges, then vertices+labels with pause beats
+  // Returns total duration in ms so caller can chain pause beats correctly
+  async function animateRoofOutlinePhased() {
+    // Phase 1 — perimeter edges (outer boundary), staggered tightly
+    const perimeter = sortedEdges.filter(e => e.g.dataset.perimeter === '1');
+    const ridges = sortedEdges.filter(e => e.g.dataset.perimeter === '0');
+
+    function startEdge(edge) {
+      const { g, under, top, lenPx } = edge;
+      g.classList.remove('draw');
+      under.style.strokeDashoffset = lenPx;
+      top.style.strokeDashoffset = lenPx;
+      void g.getBoundingClientRect();
+      g.classList.add('draw');
+      requestAnimationFrame(() => {
+        [under, top].forEach(line => {
+          line.style.transition = 'stroke-dashoffset 0.5s cubic-bezier(0.28, 0.11, 0.32, 1)';
+          line.style.strokeDashoffset = '0';
+        });
+      });
+    }
+
+    // Phase 1: perimeter (clockwise sweep)
+    perimeter.forEach((e, i) => setTimeout(() => startEdge(e), i * 60));
+    await delay(perimeter.length * 60 + 500);
+
+    // Pause beat
+    await delay(420);
+
+    // Phase 2: internal ridges
+    ridges.forEach((e, i) => setTimeout(() => startEdge(e), i * 45));
+    await delay(ridges.length * 45 + 500);
+
+    // Pause beat
+    await delay(420);
+
+    // Phase 3: vertices + length labels (clustered burst)
+    popVertices();
+    sortedEdges.forEach((edge, i) => {
+      if (edge.label) setTimeout(() => edge.label.classList.add('show'), i * 18);
+    });
+    await delay(sortedEdges.length * 18 + 250);
+  }
+
+  // Live scan timer · ticks during the scan phase
+  let scanTimerId = null;
+  function startScanTimer() {
+    const el = $('#scan-timer');
+    if (!el) return;
+    const start = performance.now();
+    scanTimerId = setInterval(() => {
+      const t = (performance.now() - start) / 1000;
+      el.textContent = t.toFixed(1) + 's';
+    }, 60);
+  }
+  function stopScanTimer(finalText) {
+    if (scanTimerId) { clearInterval(scanTimerId); scanTimerId = null; }
+    const el = $('#scan-timer');
+    if (el && finalText) el.textContent = finalText;
+  }
+
+  function runScanLine() {
+    const s = $('#scan-line');
+    if (s) {
+      s.classList.remove('run');
+      void s.getBoundingClientRect();
+      s.classList.add('run');
+    }
+  }
+
+  function showScanOverlay() {
+    $('#scan-grid')?.classList.add('show');
+    $('#scan-brackets')?.classList.add('show');
+    $('#scan-progress')?.classList.add('show');
+  }
+
+  function showFindings() {
+    $('#findings')?.classList.add('show');
+  }
+  function revealFindingSection(id, rowIds, gap = 220) {
+    const sec = document.getElementById(id);
+    if (sec) sec.classList.add('show');
+    return new Promise(resolve => {
+      let done = 0;
+      rowIds.forEach((rid, i) => setTimeout(() => {
+        const el = document.getElementById(rid);
+        if (el) el.classList.add('show');
+        if (++done === rowIds.length) resolve();
+      }, 300 + i * gap));
+    });
+  }
+
+  function countVertices(target = TOTAL_VERTS, dur = 2400) {
+    const el = $('#r-verts');
+    if (!el) return;
+    const start = performance.now();
+    function tick(t) {
+      const p = Math.min((t - start) / dur, 1);
+      const n = Math.round(target * p);
+      el.textContent = `${n} / ${target}`;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function popVertices() {
+    const verts = $$('.roof-vertex');
+    verts.forEach((v, i) => setTimeout(() => v.classList.add('show'), i * 50));
+  }
+
+  // setConfidence + leadChips removed — info now lives in findings card
+
+  // Counter animation for dashboard
+  function counter(el, target, dur = 1300) {
+    const start = performance.now();
+    function tick(t) {
+      const p = Math.min((t - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased).toLocaleString();
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // Render dashboard tab
+  function renderTab(tab) {
+    const data = noosaData[tab];
+    if (!data || data.length === 0) {
+      dashBody.innerHTML = '<div style="text-align:center; padding:60px; color:var(--gray); font-size:13px;">Nothing here yet.</div>';
+      return;
+    }
+    let filters = '';
+    if (tab === 'scans') {
+      filters = `
+        <div class="filter-row">
+          <span class="lbl">Filter:</span>
+          <span class="chip active">All Noosa</span>
+          <span class="chip">Tewantin</span>
+          <span class="chip">Noosa Heads</span>
+          <span class="chip">Cooroy</span>
+          <span class="chip">Sunshine Beach</span>
+          <span class="chip">Worth quoting</span>
+        </div>`;
+    } else if (tab === 'sent' || tab === 'responded') {
+      filters = `
+        <div class="filter-row">
+          <span class="lbl">Filter:</span>
+          <span class="chip active">This month</span>
+          <span class="chip">This week</span>
+          <span class="chip">Today</span>
+        </div>`;
+    }
+
+    let head, rows;
+    if (tab === 'scans') {
+      head = '<th></th><th>Address</th><th>Condition</th><th>Est. value</th><th>Date</th>';
+      rows = data.map(d => `<tr>
+        <td><div class="row-thumb" style="background-image:url('img/${d.img}');"></div></td>
+        <td class="row-addr">${d.addr}<span class="meta">${d.sub}</span></td>
+        <td><span class="cond-pill cond-${d.condClass}">${d.cond}</span></td>
+        <td class="row-amount">${d.value > 0 ? '$' + d.value.toLocaleString() : '<span class="row-muted">—</span>'}</td>
+        <td class="row-date">${d.date}</td>
+      </tr>`).join('');
+    } else if (tab === 'pending') {
+      head = '<th>Address</th><th>Status</th><th>Scheduled</th>';
+      rows = data.map(d => `<tr>
+        <td class="row-addr">${d.addr}<span class="meta">${d.sub}</span></td>
+        <td><span class="badge ${d.badge}">${d.status}</span></td>
+        <td class="row-date">${d.date}</td>
+      </tr>`).join('');
+    } else {
+      head = '<th>Address</th><th>Status</th><th>Amount</th><th>When</th>';
+      rows = data.map(d => `<tr>
+        <td class="row-addr">${d.addr}<span class="meta">${d.sub}</span></td>
+        <td><span class="badge ${d.badge}">${d.status}</span></td>
+        <td class="row-amount">$${d.amount.toLocaleString()}</td>
+        <td class="row-date">${d.date}</td>
+      </tr>`).join('');
+    }
+
+    dashBody.innerHTML = `${filters}<table class="dash-table"><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table>`;
+  }
+
+  // Tab clicks
+  $$('.dash-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      $$('.dash-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderTab(btn.dataset.tab);
+    });
+  });
+
+  const aiPanel = $('.ai-panel');
+
+  function revealDashboard() {
+    aiPanel.classList.add('hide');
+    dashboard.classList.add('show');
+    $$('.t-num').forEach(el => counter(el, parseInt(el.dataset.target, 10)));
+    renderTab('scans');
+    setTimeout(() => {
+      document.body.classList.remove('locked');
+      replayBtn.classList.add('show');
+    }, 600);
+  }
+
+  function hideDashboard() {
+    dashboard.classList.remove('show');
+    aiPanel.classList.remove('hide');
+  }
+
+  function lockScroll() {
+    document.body.classList.add('locked');
+    replayBtn.classList.remove('show');
+  }
+
+  // ============================================================
+  // SCENARIO A — Customer-initiated
+  // ============================================================
+  let animationRunning = false;
+
+  async function playA() {
+    if (animationRunning) return;
+    animationRunning = true;
+    lockScroll();
+    hideDashboard();
+    clearThread();
+    resetScene();
+    showScene('idle');
+    setProgress(0);
+    setStep(0, 10);
+
+    // Step 1 — Lead arrives
+    setStep(1, 10);
+    setAILabel('Wolf AI · Receiving');
+    setAnnotation('1', 'New lead.', 'Mick texts an address from his phone', 'Mobile → Agent');
+    await delay(600);
+    await addMsg("Got a new lead from Outlook Dr. Can you check 47 Hastings Drive, Tewantin?", 'sent');
+    setProgress(10);
+    await delay(2200);
+
+    // Step 2 — Address found, satellite pulled
+    setStep(2, 10);
+    setAILabel('Wolf AI · Locating');
+    setAnnotation('2', 'Address found.', 'Pulling 7.5cm/pixel Nearmap tile', 'Address → Satellite');
+    const t1 = addTyping();
+    await delay(1200);
+    t1.remove();
+    await addMsg("On it. Pulling satellite now...", 'received');
+    showScene('suburb-pan');
+    setProgress(20);
+    await delay(2200);
+
+    // Step 3 — Satellite tile loaded
+    setStep(3, 10);
+    setAILabel('Wolf AI · Tile loaded');
+    setAnnotation('3', '47 Hastings Drive.', 'Tewantin · loaded at 7.5cm/px', 'Image ready');
+    showScene('house');
+    await delay(400);
+    showScanOverlay();
+    setProgress(30);
+    await delay(1200);
+
+    // Step 4 — Tracing the roof · three-phase sweep
+    setStep(4, 10);
+    setAILabel('Wolf AI · Tracing roof');
+    setAnnotation('4', 'Tracing the roof.', 'Vision AI walks the perimeter and locks every corner', 'Vision AI');
+    startScanTimer();
+    runScanLine();
+    await animateRoofOutlinePhased();
+    setProgress(58);
+
+    // Step 5 — Measurements appear in the findings card (slides up from bottom)
+    setStep(5, 10);
+    setAILabel('Wolf AI · Measuring');
+    setAnnotation('5', 'Measurements ready.', 'Area · pitch · facets · waste factor', 'Measurement');
+    showFindings();
+    await revealFindingSection('fs-measure', ['fr-area','fr-pitch','fr-facets','fr-material'], 180);
+    setProgress(64);
+    await delay(600);
+
+    // Step 6 — Damage detection · markers on satellite + rows in findings card
+    setStep(6, 10);
+    setAILabel('Wolf AI · Damage analysis');
+    setAnnotation('6', 'Damage detected.', 'Two vision models agree before a marker drops', 'Damage');
+    stopScanTimer('6.4s');
+    const t2 = addTyping();
+    await delay(1100);
+    t2.remove();
+    await addMsg("Damage found. Heavy moss · 72% surface. Restoration recommended.", 'received');
+    setProgress(72);
+    // Pair damage markers with findings rows so they appear in sync
+    const dmgPairs = [['dm-1','fi-1'], ['dm-2','fi-2'], ['dm-3','fi-3'], ['dm-4','fi-4'], ['dm-5','fi-5']];
+    const issuesSec = $('#fs-issues');
+    if (issuesSec) issuesSec.classList.add('show');
+    for (const [dm, fi] of dmgPairs) {
+      document.getElementById(dm)?.classList.add('show');
+      document.getElementById(fi)?.classList.add('show');
+      await delay(220);
+    }
+    setProgress(78);
+    await delay(1400);
+
+    // Step 7 - quote drafts
+    setStep(7, 10);
+    setAILabel('Wolf AI · Drafting quote');
+    setAnnotation('7', 'Drafting your quote.', 'Built from your pricing + past quotes', 'Generating');
+    showScene('quote');
+
+    // Reveal header rows immediately so quote never looks blank
+    const totalAmtA = $('#q-total-amount');
+    if (totalAmtA) totalAmtA.textContent = '$0';
+    ['q-row-1', 'q-row-2'].forEach(id => document.getElementById(id)?.classList.add('show'));
+    setProgress(78);
+    await delay(500);
+
+    // Then stagger the scope rows
+    for (let i = 3; i <= 7; i++) {
+      const row = document.getElementById('q-row-' + i);
+      if (row) row.classList.add('show');
+      await delay(120);
+      setProgress(78 + (i - 2) * 1.2);
+    }
+    // Total row reveals + count-up triggers
+    const totalRow = document.getElementById('q-row-8');
+    if (totalRow) totalRow.classList.add('show');
+    await delay(120);
+    // WOW moment: total count-up from $0 → $8,420
+    if (totalAmtA) {
+      const startT = performance.now(); const target = 8420; const dur = 1400;
+      function tickT(t) {
+        const p = Math.min((t - startT) / dur, 1);
+        const eased = 1 - Math.pow(1 - p, 3); // ease-out cubic
+        totalAmtA.textContent = '$' + Math.round(target * eased).toLocaleString();
+        if (p < 1) requestAnimationFrame(tickT);
+      }
+      requestAnimationFrame(tickT);
+    }
+    setAnnotation('7', 'Quote ready.', '$8,420 · ready for Mick to approve', 'Generated');
+    await delay(1500);
+
+    // Step 8 - approval card on mobile
+    setStep(8, 10);
+    setAILabel('Wolf AI · Awaiting approval');
+    setAnnotation('8', "Approval lands on Mick's phone.", 'One tap to send · one tap to edit', 'Mobile decision');
+    await delay(500);
+    addApproval(8420, '47 Hastings Drive', 'before-1.png');
+    setProgress(93);
+    await delay(2400);
+
+    // Step 9 - send
+    setStep(9, 10);
+    setAILabel('Wolf AI · Sending');
+    setAnnotation('9', 'One tap. Sent.', 'Branded PDF · SMS + email · booking link inside', 'Sending');
+    const sendBtn = thread.querySelector('.approve-send');
+    if (sendBtn) {
+      sendBtn.classList.add('sent');
+      sendBtn.textContent = '✓ Sending...';
+    }
+    await delay(900);
+    document.getElementById('q-sent').classList.add('show');
+    await addMsg("Quote sent ✓ Customer receives PDF in 30 seconds.", 'received');
+    setProgress(100);
+    await delay(1200);
+
+    // Step 10 - dashboard
+    setStep(10, 10);
+    setAILabel('Wolf AI · Live dashboard');
+    setAnnotation('10', 'Live across your service area.', '187 quotes sent · $1.42M pipeline', 'Interactive');
+    revealDashboard();
+    animationRunning = false;
+  }
+
+  // ============================================================
+  // SCENARIO B — Suburb-wide scan
+  // ============================================================
+  async function playB() {
+    if (animationRunning) return;
+    animationRunning = true;
+    lockScroll();
+    hideDashboard();
+    clearThread();
+    resetScene();
+    showScene('idle');
+    setProgress(0);
+    setStep(0, 10);
+
+    // Step 1
+    setStep(1, 10);
+    setAILabel('Wolf AI · Overnight scan');
+    setAnnotation('1', 'Scanned overnight.', '24,000 properties across Tewantin while Mick slept', 'Proactive');
+    await delay(600);
+    const t0 = addTyping();
+    await delay(1200);
+    t0.remove();
+    await addMsg("Overnight scan of Tewantin complete. 23 properties flagged.", 'received');
+    setProgress(10);
+    await delay(1300);
+
+    // Step 2 - suburb view
+    setStep(2, 10);
+    setAILabel('Wolf AI · Mapping suburb');
+    setAnnotation('2', 'Tewantin loaded.', 'High-res aerial · every roof checked', 'Map view');
+    showScene('suburb-scan');
+    setProgress(20);
+    await delay(1300);
+
+    // Step 3 - markers pulse on
+    setStep(3, 10);
+    setAILabel('Wolf AI · Flagging');
+    setAnnotation('3', '23 candidates flagged.', 'Ranked by likelihood · filtered for recent restorations', 'Filtering');
+    const markers = Array.from({length: 23}, (_, i) => 'sm-' + (i+1));
+    await reveal(markers, 80);
+    document.getElementById('sub-counter').classList.add('show');
+    setProgress(35);
+    await delay(2500);
+
+    // Step 4 - roofer asks for top 5
+    setStep(4, 10);
+    setAILabel('Wolf AI · Receiving');
+    setAnnotation('4', 'Mick asks for the best ones.', 'Top 5 ranked candidates · prioritise his morning', 'Mobile → Agent');
+    await addMsg("Show me the top 5", 'sent');
+    setProgress(42);
+    await delay(1100);
+
+    // Step 5 - AI responds with top result
+    setStep(5, 10);
+    setAILabel('Wolf AI · Top result');
+    setAnnotation('5', 'Top candidate.', '47 Hastings Drive · likely $8k+ restoration', 'Ranked');
+    const t1 = addTyping();
+    await delay(1000);
+    t1.remove();
+    await addMsg("Top: 47 Hastings Drive · heavy moss, restoration likely worth $8k+", 'received');
+    setProgress(52);
+    await delay(1300);
+
+    // Step 6 - zoom into house (same precision flow as A from here)
+    setStep(6, 10);
+    setAILabel('Wolf AI · Zooming in');
+    setAnnotation('6', 'Precision scan.', 'Trace · measure · detect · quote', 'Single property');
+    showScene('house');
+    await delay(300);
+    showScanOverlay();
+    startScanTimer();
+    runScanLine();
+    await animateRoofOutlinePhased();
+    setProgress(64);
+    showFindings();
+    await revealFindingSection('fs-measure', ['fr-area','fr-pitch','fr-facets','fr-material'], 160);
+    stopScanTimer('6.4s');
+    const issuesSec2 = $('#fs-issues');
+    if (issuesSec2) issuesSec2.classList.add('show');
+    const dmgPairsB = [['dm-1','fi-1'], ['dm-2','fi-2'], ['dm-3','fi-3'], ['dm-4','fi-4'], ['dm-5','fi-5']];
+    for (const [dm, fi] of dmgPairsB) {
+      document.getElementById(dm)?.classList.add('show');
+      document.getElementById(fi)?.classList.add('show');
+      await delay(180);
+    }
+    setProgress(78);
+    await delay(1200);
+
+    // Step 7 - quote builds
+    setStep(7, 10);
+    setAILabel('Wolf AI · Drafting quote');
+    setAnnotation('7', 'Drafting your quote.', 'Same template · same prices · seconds', 'Generating');
+    showScene('quote');
+    const totalAmtB = $('#q-total-amount');
+    if (totalAmtB) totalAmtB.textContent = '$0';
+    ['q-row-1', 'q-row-2'].forEach(id => document.getElementById(id)?.classList.add('show'));
+    await delay(450);
+    for (let i = 3; i <= 7; i++) {
+      const row = document.getElementById('q-row-' + i);
+      if (row) row.classList.add('show');
+      await delay(110);
+      setProgress(74 + i * 1.4);
+    }
+    const totalRowB = document.getElementById('q-row-8');
+    if (totalRowB) totalRowB.classList.add('show');
+    await delay(110);
+    if (totalAmtB) {
+      const sB = performance.now(); const target = 8420; const dur = 1400;
+      function tickB(t) {
+        const p = Math.min((t - sB) / dur, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        totalAmtB.textContent = '$' + Math.round(target * eased).toLocaleString();
+        if (p < 1) requestAnimationFrame(tickB);
+      }
+      requestAnimationFrame(tickB);
+    }
+    setAnnotation('7', 'Quote ready.', '$8,420 · ready to send', 'Generated');
+    await delay(1500);
+
+    // Step 8 - approval
+    setStep(8, 10);
+    setAILabel('Wolf AI · Awaiting approval');
+    setAnnotation('8', "Approval on Mick's phone.", 'Review and decide in seconds', 'Decision');
+    await delay(500);
+    addApproval(8420, '47 Hastings Drive', 'before-1.png');
+    setProgress(94);
+    await delay(2400);
+
+    // Step 9 - send
+    setStep(9, 10);
+    setAILabel('Wolf AI · Sending');
+    setAnnotation('9', 'One tap. Sent.', 'Loops to the next 22 candidates automatically', 'Auto-loop');
+    const sendBtn = thread.querySelector('.approve-send');
+    if (sendBtn) {
+      sendBtn.classList.add('sent');
+      sendBtn.textContent = '✓ Sending...';
+    }
+    await delay(800);
+    document.getElementById('q-sent').classList.add('show');
+    await addMsg("Quote sent ✓ Onto the next 22 candidates.", 'received');
+    setProgress(100);
+    await delay(1200);
+
+    // Step 10 - dashboard
+    setStep(10, 10);
+    setAILabel('Wolf AI · Live dashboard');
+    setAnnotation('10', 'Live across your service area.', '23 scanned overnight · 187 quotes this month', 'Interactive');
+    revealDashboard();
+    animationRunning = false;
+  }
+
+  // Scenario button wiring
+  let currentScenario = 'a';
+  $$('.scenario-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (animationRunning) return;
+      $$('.scenario-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentScenario = btn.dataset.scenario;
+      if (currentScenario === 'a') playA(); else playB();
+    });
+  });
+
+  replayBtn.addEventListener('click', () => {
+    if (animationRunning) return;
+    if (currentScenario === 'a') playA(); else playB();
+  });
+
+  // Lock scroll handler
+  function preventScroll(e) {
+    if (!document.body.classList.contains('locked')) return;
+    const th = document.getElementById('thread');
+    if (th && e.target && th.contains(e.target)) return;
+    e.preventDefault();
+  }
+  window.addEventListener('wheel', preventScroll, { passive: false });
+  window.addEventListener('touchmove', preventScroll, { passive: false });
+
+  // Auto-scroll so the stage is centered in viewport on page open
+  function centerStageInView() {
+    const stage = document.querySelector('.stage-container');
+    if (!stage) return;
+    // scroll to just past the header so the sticky stage fills the viewport
+    const headerEl = document.querySelector('.header-wrap');
+    const headerH = headerEl ? headerEl.getBoundingClientRect().height : 0;
+    // small delay so layout settles, then jump
+    window.scrollTo({ top: headerH, behavior: 'instant' in document.documentElement.style ? 'instant' : 'auto' });
+  }
+
+  // Start scenario A on page load
+  function start() {
+    centerStageInView();
+    setTimeout(() => playA(), 600);
+  }
+  if (document.readyState === 'complete') start();
+  else window.addEventListener('load', start);
+
+  // Re-center if window resizes before animation locks scroll
+  window.addEventListener('resize', () => {
+    if (!document.body.classList.contains('locked') && !animationRunning) {
+      centerStageInView();
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TSBA · Honest Breakdown · Wolf AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F4F1EA;
+    --cream-soft: #ECE7DA;
+    --cream-warm: #F8F5EE;
+    --dark: #0E0E0F;
+    --dark-soft: #1A1A1B;
+    --gray: #6B6B6B;
+    --gray-soft: #8A8A8A;
+    --accent: #A8512A;
+    --accent-soft: rgba(168, 81, 42, 0.08);
+    --accent-strong: rgba(168, 81, 42, 0.16);
+    --green: #4A7C53;
+    --green-soft: rgba(74, 124, 83, 0.10);
+    --line: rgba(14, 14, 15, 0.10);
+    --line-strong: rgba(14, 14, 15, 0.18);
+    --light-muted: rgba(244, 241, 234, 0.65);
+    --light-quiet: rgba(244, 241, 234, 0.14);
+    --shadow-sm: 0 1px 2px rgba(14, 14, 15, 0.04);
+    --shadow: 0 2px 8px rgba(14, 14, 15, 0.05), 0 1px 2px rgba(14, 14, 15, 0.04);
+    --shadow-lg: 0 8px 24px rgba(14, 14, 15, 0.08), 0 2px 6px rgba(14, 14, 15, 0.06);
+    --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'ss01', 'cv11';
+  }
+  ::selection { background: var(--accent); color: var(--cream); }
+  .container { max-width: 1000px; margin: 0 auto; padding: 0 28px; }
+  @media (max-width: 640px) { .container { padding: 0 20px; } }
+
+  /* NAV */
+  nav.top {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(244, 241, 234, 0.86);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav.top .inner { height: 52px; display: flex; align-items: center; justify-content: space-between; }
+  .brand { display: flex; align-items: center; gap: 9px; font-weight: 600; font-size: 14px; letter-spacing: -0.01em; color: var(--dark); text-decoration: none; }
+  .brand-mark { width: 20px; height: 20px; background: var(--dark); color: var(--cream); display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; border-radius: 5px; }
+  .nav-links { display: flex; align-items: center; gap: 22px; }
+  .nav-link { color: var(--gray); text-decoration: none; font-size: 13px; font-weight: 500; transition: color 0.2s var(--ease); }
+  .nav-link:hover { color: var(--dark); }
+  @media (max-width: 640px) { .nav-link.hide-mobile { display: none; } }
+
+  .eyebrow { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray); display: inline-flex; align-items: center; gap: 8px; }
+  .eyebrow::before { content: ''; width: 5px; height: 5px; background: var(--accent); border-radius: 999px; }
+  h1, h2, h3, h4 { letter-spacing: -0.025em; font-weight: 600; }
+
+  /* HERO */
+  .hero { padding: 56px 0 44px; background: var(--cream); border-bottom: 1px solid var(--line); }
+  .hero .eyebrow { margin-bottom: 18px; }
+  .hero h1 { font-size: clamp(28px, 4.4vw, 42px); line-height: 1.06; letter-spacing: -0.03em; font-weight: 600; margin-bottom: 14px; max-width: 28ch; }
+  .hero h1 em { font-style: normal; font-weight: 500; color: var(--gray); }
+  .hero .sub { font-size: 16px; line-height: 1.5; color: var(--dark); max-width: 60ch; }
+
+  section { padding: 44px 0; }
+  section + section { border-top: 1px solid var(--line); }
+  section.alt { background: var(--cream-soft); }
+  section.dark-section { background: var(--dark); color: var(--cream); }
+  section.dark-section .eyebrow { color: var(--light-muted); }
+  section.dark-section .eyebrow::before { background: var(--accent); }
+  section.dark-section h2.section-title em { color: var(--light-muted); }
+  section.dark-section + section, section + section.dark-section { border-top: 0; }
+
+  section .eyebrow { margin-bottom: 12px; }
+  h2.section-title { font-size: clamp(22px, 2.7vw, 28px); line-height: 1.18; letter-spacing: -0.025em; font-weight: 600; margin-bottom: 18px; max-width: 32ch; }
+  h2.section-title em { font-style: normal; font-weight: 500; color: var(--gray); }
+
+  /* AGENT CARDS (long form) */
+  .agent {
+    background: var(--cream-warm);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    padding: 26px 28px;
+    margin-bottom: 14px;
+  }
+  .agent:last-child { margin-bottom: 0; }
+  .agent-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .agent-num {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .agent h3 {
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .agent-block {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+  }
+  .agent-block:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
+  .agent-block-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gray);
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .agent-block ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .agent-block li {
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--dark);
+    padding-left: 16px;
+    position: relative;
+    margin-bottom: 6px;
+  }
+  .agent-block li::before {
+    content: '·';
+    position: absolute; left: 4px; top: -2px;
+    color: var(--accent); font-weight: 700; font-size: 16px;
+  }
+  .agent-block li:last-child { margin-bottom: 0; }
+  .agent-block li strong { font-weight: 600; }
+  .agent-block.value {
+    background: rgba(168, 81, 42, 0.06);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-top: 14px;
+    border-top: 0;
+  }
+  .agent-block.value .agent-block-label { color: var(--accent); }
+
+  /* COST SECTION */
+  .cost-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 8px;
+  }
+  @media (max-width: 720px) { .cost-grid { grid-template-columns: 1fr; } }
+  .cost-card {
+    background: var(--cream);
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    padding: 24px 26px;
+  }
+  .cost-card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.018em;
+    margin-bottom: 14px;
+  }
+  .cost-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+  .cost-line:last-of-type { border-bottom: 0; }
+  .cost-line span:first-child { color: var(--gray); padding-right: 12px; }
+  .cost-line span:last-child { font-family: 'Geist Mono', monospace; font-weight: 500; color: var(--dark); white-space: nowrap; }
+  .cost-total {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 2px solid var(--dark);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .cost-total span:last-child { font-family: 'Geist Mono', monospace; }
+  .cost-margin {
+    margin-top: 14px;
+    padding: 12px 16px;
+    background: var(--accent-soft);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--dark);
+    line-height: 1.5;
+  }
+  .cost-margin strong { color: var(--accent); font-weight: 600; }
+
+  /* TIER OPTIONS */
+  .tiers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 8px;
+  }
+  @media (max-width: 820px) { .tiers { grid-template-columns: 1fr; } }
+  .tier {
+    background: var(--cream);
+    border: 1px solid var(--line-strong);
+    border-radius: 14px;
+    padding: 24px 24px 26px;
+    transition: border-color 0.2s var(--ease), transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  }
+  .tier:hover { border-color: var(--dark); transform: translateY(-1px); box-shadow: var(--shadow); }
+  .tier.recommended {
+    background: var(--cream-warm);
+    border-color: var(--accent);
+    border-width: 2px;
+    position: relative;
+  }
+  .tier.recommended::before {
+    content: 'RECOMMENDED';
+    position: absolute;
+    top: -10px; left: 18px;
+    background: var(--accent);
+    color: var(--cream);
+    font-family: 'Geist Mono', monospace;
+    font-size: 9px; letter-spacing: 0.14em;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .tier-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px; letter-spacing: 0.14em;
+    color: var(--accent); font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .tier h3 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  .tier-price {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.022em;
+    line-height: 1.05;
+    color: var(--dark);
+  }
+  .tier-price small {
+    display: block;
+    font-size: 12px;
+    color: var(--gray);
+    font-weight: 500;
+    margin-top: 3px;
+    letter-spacing: 0;
+  }
+  .tier-monthly {
+    font-size: 14px;
+    color: var(--gray);
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--line);
+  }
+  .tier-monthly strong { color: var(--dark); font-weight: 600; font-family: 'Geist Mono', monospace; }
+  .tier-what {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--gray);
+    line-height: 1.5;
+  }
+  .tier-what strong { color: var(--dark); font-weight: 600; display: block; margin-bottom: 6px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; font-family: 'Geist Mono', monospace; color: var(--accent); }
+  .tier-what ul { list-style: none; padding: 0; margin: 0; }
+  .tier-what li {
+    padding-left: 12px; position: relative; margin-bottom: 5px; font-size: 13px;
+  }
+  .tier-what li::before {
+    content: '·'; position: absolute; left: 2px; top: -3px;
+    color: var(--accent); font-weight: 700; font-size: 15px;
+  }
+  .tier-tradeoff {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--line-strong);
+    font-size: 12px;
+    color: var(--gray);
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  /* VALUE TABLE */
+  .value-table {
+    border: 1px solid var(--line-strong);
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--cream);
+    margin-top: 8px;
+    box-shadow: var(--shadow-sm);
+  }
+  .value-table table { width: 100%; border-collapse: collapse; background: var(--cream); }
+  .value-table th, .value-table td {
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+    vertical-align: middle;
+  }
+  .value-table th {
+    background: var(--cream-soft);
+    font-family: 'Geist Mono', monospace;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+  .value-table tbody td { color: var(--dark); }
+  .value-table tbody td:nth-child(1) { font-weight: 500; color: var(--dark); }
+  .value-table tbody td:nth-child(2) { color: var(--gray); }
+  .value-table tbody td:nth-child(3) { font-weight: 600; color: var(--accent); font-family: 'Geist Mono', monospace; }
+  .value-table tr.total { background: var(--dark); }
+  .value-table tr.total td { color: var(--cream); font-weight: 600; font-size: 15px; border-bottom: 0; }
+  .value-table tr.total td:nth-child(1) { color: var(--cream); }
+  .value-table tr.total td:nth-child(2) { color: var(--light-muted); }
+  .value-table tr.total td:nth-child(3) { color: var(--cream); }
+  .value-table tr:last-child td { border-bottom: 0; }
+  @media (max-width: 700px) {
+    .value-table table, .value-table thead, .value-table tbody, .value-table tr, .value-table th, .value-table td { display: block; }
+    .value-table thead { display: none; }
+    .value-table tr { border-bottom: 1px solid var(--line-strong); padding: 10px 4px; }
+    .value-table td { padding: 3px 18px; border-bottom: 0; }
+  }
+
+  /* PROSE */
+  .prose p { font-size: 15px; line-height: 1.6; color: var(--dark); margin-bottom: 12px; max-width: 70ch; }
+  .prose p:last-child { margin-bottom: 0; }
+  section.dark-section .prose p { color: var(--light-muted); }
+  section.dark-section .prose strong { color: var(--cream); }
+
+  /* CTA */
+  .cta { padding: 48px 0 56px; background: var(--cream-warm); border-top: 1px solid var(--line); }
+  .cta h2 { font-size: clamp(20px, 2.4vw, 26px); letter-spacing: -0.025em; margin-bottom: 8px; max-width: 28ch; }
+  .cta p { color: var(--gray); font-size: 15px; max-width: 56ch; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 40px; padding: 0 20px; border-radius: 999px; font-family: inherit; font-size: 14px; font-weight: 500; letter-spacing: -0.005em; text-decoration: none; border: 1px solid transparent; cursor: pointer; transition: opacity 0.2s var(--ease), background-color 0.2s var(--ease), transform 0.15s var(--ease); margin-top: 14px; }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: var(--dark); color: var(--cream); }
+  .btn-primary:hover { opacity: 0.92; }
+  .btn .arrow { transition: transform 0.2s var(--ease); }
+  .btn:hover .arrow { transform: translateX(2px); }
+
+  footer.foot { padding: 22px 0 36px; color: var(--gray); font-size: 12px; }
+  footer.foot .container { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="container inner">
+    <a href="#" class="brand"><span class="brand-mark">W</span> Wolf AI</a>
+    <div class="nav-links">
+      <a href="#agents" class="nav-link hide-mobile">The agents</a>
+      <a href="#cost" class="nav-link hide-mobile">The honest cost</a>
+      <a href="#tiers" class="nav-link hide-mobile">Tiers</a>
+      <a href="#value" class="nav-link">The maths</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow">TSBA · Honest Breakdown</div>
+    <h1>Every agent. <em>What it does, what TSBA feels, what it costs to deliver.</em></h1>
+    <p class="sub">No marketing gloss. Plain English on how each automation works, the actual time and money it saves TSBA, what Wolf AI pays to run it, and the three real tier options for buying.</p>
+  </div>
+</section>
+
+<!-- AGENTS -->
+<section id="agents">
+  <div class="container">
+    <div class="eyebrow">The four agents</div>
+    <h2 class="section-title">How each one actually works, <em>in the simplest terms possible.</em></h2>
+
+    <!-- AGENT 1 -->
+    <div class="agent">
+      <div class="agent-head">
+        <span class="agent-num">AGENT 01</span>
+        <h3>DNSP Submission Agent</h3>
+      </div>
+
+      <div class="agent-block">
+        <div class="agent-block-label">How it works</div>
+        <ul>
+          <li>When a customer's deposit clears, the system grabs their address and works out which grid operator covers them (Energex, Ergon, Ausgrid, Endeavour, and so on)</li>
+          <li>It pulls the system details already in the job record (panels, inverter, system size, connection point)</li>
+          <li>Fills in that specific DNSP's pre-approval form</li>
+          <li>Submits the same day</li>
+          <li>Watches the portal and flags when the approval comes back, including any conditions imposed</li>
+        </ul>
+      </div>
+
+      <div class="agent-block">
+        <div class="agent-block-label">What TSBA feels</div>
+        <ul>
+          <li>Submissions today take someone 30 to 60 minutes per job. At 20 to 30 installs a month that's 10 to 30 hours of admin gone</li>
+          <li>Submissions today probably happen end-of-week in a batch. Now they happen same-day, which means approvals come back about a week earlier, install happens earlier, cash flow improves by roughly a week per deal</li>
+        </ul>
+      </div>
+
+      <div class="agent-block value">
+        <div class="agent-block-label">Real monthly value</div>
+        <ul>
+          <li><strong>15 to 25 hours of admin time back</strong> · worth $750 to $1,250 at loaded cost</li>
+          <li><strong>A week earlier on install for 25 deals</strong> · better cash flow + happier customers</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- AGENT 2 -->
+    <div class="agent">
+      <div class="agent-head">
+        <span class="agent-num">AGENT 02</span>
+        <h3>Warranty Manager</h3>
+      </div>
+
+      <div class="agent-block">
+        <div class="agent-block-label">How it works</div>
+        <ul>
+          <li>At install, the crew scans every panel, inverter, and battery serial number into the system on their phone</li>
+          <li>Warranty windows are tracked automatically per component</li>
+          <li>When a customer reports an issue, the agent gathers the system's diagnostic data from the monitoring portal and files the claim with the right manufacturer (Sungrow, Fronius, Tesla, Goodwe, etc)</li>
+          <li>Follows up at week 2 and week 4 if no reply</li>
+          <li>Sends the customer a status update at each step so they aren't left wondering</li>
+        </ul>
+      </div>
+
+      <div class="agent-block">
+        <div class="agent-block-label">What TSBA feels</div>
+        <ul>
+          <li>Warranty claims today probably take 3 to 4 weeks of dragged-out emails. With the agent chasing, that drops to 1 to 2 weeks</li>
+          <li>The customer is updated automatically, so the rep doesn't get the angry "what's happening" call on day 14</li>
+          <li>Reviews stay positive because the experience is smooth</li>
+        </ul>
+      </div>
+
+      <div class="agent-block value">
+        <div class="agent-block-label">Real monthly value</div>
+        <ul>
+          <li><strong>10 to 30 hours of admin time back</strong> · worth $500 to $1,500 loaded</li>
+          <li><strong>Fewer bad reviews</strong> · better reputation, more referrals (compounding effect)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- AGENT 3 -->
+    <div class="agent">
+      <div class="agent-head">
+        <span class="agent-num">AGENT 03</span>
+        <h3>Inbox &amp; Document Sorting</h3>
+      </div>
+
+      <div class="agent-block">
+        <div class="agent-block-label">How it works</div>
+        <ul>
+          <li>Every email landing in the main TSBA inbox is read by the agent</li>
+          <li>It works out what the email is about (supplier invoice, manufacturer reply, customer question, DNSP notice, council letter) and routes it to the right job folder</li>
+          <li>Attachments saved automatically</li>
+          <li>For routine emails (acknowledgements, status updates), it drafts a reply in the team's voice so they just tap send</li>
+        </ul>
+      </div>
+
+      <div class="agent-block">
+        <div class="agent-block-label">What TSBA feels</div>
+        <ul>
+          <li>The first 90 minutes of every morning currently spent triaging email becomes useful time</li>
+          <li>Nothing gets missed · the council notice that's currently buried for a week, the supplier invoice that goes overdue</li>
+          <li>The team always knows what's in their inbox at a glance</li>
+        </ul>
+      </div>
+
+      <div class="agent-block value">
+        <div class="agent-block-label">Real monthly value</div>
+        <ul>
+          <li><strong>30 to 50 hours of admin time back across the team</strong> · worth $1,500 to $2,500</li>
+          <li><strong>Things stop falling through cracks</strong> · harder to put a number on, but real</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- AGENT 4 -->
+    <div class="agent">
+      <div class="agent-head">
+        <span class="agent-num">AGENT 04</span>
+        <h3>Voice + SMS Front Door</h3>
+      </div>
+
+      <div class="agent-block">
+        <div class="agent-block-label">How it works</div>
+        <ul>
+          <li>An AI voice agent answers the TSBA business number 24/7</li>
+          <li>It speaks in your reps' style, asks the qualifying questions (single or three-phase, roof type, daytime power use, budget range, battery interest)</li>
+          <li>Books the consult straight into the right rep's calendar</li>
+          <li>For web form leads and Meta ad leads, an instant SMS goes out within 60 seconds with a personal booking link</li>
+        </ul>
+      </div>
+
+      <div class="agent-block">
+        <div class="agent-block-label">What TSBA feels</div>
+        <ul>
+          <li>The lead at 8pm Tuesday gets called back at 8:01pm, not 10am Wednesday</li>
+          <li>The lead from a Sunday ad gets a personal SMS in 60 seconds, not Monday morning</li>
+          <li>The team stops missing calls during installs or while on consult</li>
+          <li>Customer experience becomes "wow, these guys are fast" instead of "no one called me back"</li>
+        </ul>
+      </div>
+
+      <div class="agent-block value">
+        <div class="agent-block-label">Real monthly value · the big one</div>
+        <ul>
+          <li>Industry research: <strong>50%+ of solar leads contact 2 to 3 installers, and the first to respond wins the deal more often than not</strong></li>
+          <li>A busy shop loses 8 to 15 leads per month to slow response</li>
+          <li>At $2,200 margin per deal that's <strong>$17,600 to $33,000 of recovered margin every month</strong></li>
+          <li>Even if half holds up in reality, that's $8,800 to $16,500/month TSBA isn't currently getting</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- HONEST COST -->
+<section id="cost" class="alt">
+  <div class="container">
+    <div class="eyebrow">Internal · Dave only</div>
+    <h2 class="section-title">Real cost to build and run this. <em>What it actually costs Wolf AI, not what we charge.</em></h2>
+    <div class="prose" style="margin-bottom: 22px;">
+      <p>This section is the truth so you know your room to negotiate. Real labour cost to build. Real ongoing infrastructure cost to run. Do not share this view with TSBA.</p>
+    </div>
+
+    <div class="cost-grid">
+
+      <!-- Build cost -->
+      <div class="cost-card">
+        <h3>Real cost to build (one-time)</h3>
+        <div class="cost-line"><span>Engineering · 80-100 hours at $50-80/hr loaded</span><span>$4,000-8,000</span></div>
+        <div class="cost-line"><span>Twilio number activation, portal account setup, domain config</span><span>$50</span></div>
+        <div class="cost-total"><span>Real build cost</span><span>$4,050-8,050</span></div>
+        <div class="cost-margin">
+          Charging <strong>$9,500</strong> · margin on the build is <strong>$1,450 to $5,450</strong>.<br />
+          DNSP and warranty portal automation is reusable across all solar clients · the first one absorbs the heavier engineering, every client after is faster.
+        </div>
+      </div>
+
+      <!-- Monthly cost -->
+      <div class="cost-card">
+        <h3>Real cost to run (every month)</h3>
+        <div class="cost-line"><span>LLM API calls (inbox sort, voice, drafts, vision)</span><span>$30-100</span></div>
+        <div class="cost-line"><span>Twilio AU (phone number + voice mins + SMS)</span><span>$40-80</span></div>
+        <div class="cost-line"><span>VPS share (1 box / 15 clients)</span><span>$1-2</span></div>
+        <div class="cost-line"><span>Monitoring + email infrastructure share</span><span>$2</span></div>
+        <div class="cost-line"><span>Portal maintenance · when manufacturers change UIs</span><span>$25-75</span></div>
+        <div class="cost-line"><span>Wolf AI ops time · 2-4 hrs/mo at $50-80/hr</span><span>$100-320</span></div>
+        <div class="cost-total"><span>Real monthly cost</span><span>$200-580</span></div>
+        <div class="cost-margin">
+          Charging <strong>$1,200/mo</strong> · margin is <strong>$620 to $1,000/mo</strong> (52-83%).<br />
+          That is the real number. Honest software-services margin, not the inflated 15-35% framing in the client-facing version.
+        </div>
+      </div>
+
+    </div>
+
+    <div class="prose" style="margin-top: 22px;">
+      <p><strong>Year-one truth for TSBA at recommended tier:</strong> we collect $23,900 ($9,500 + $14,400). Our real cost is roughly $6,500-$15,000 (build + 12 months running). Net to Wolf AI is <strong>$9,000-$17,500 per year per client</strong>. At 10 clients on this exact build, that's $90k-$175k of net contribution before any new agent revenue.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TIER OPTIONS -->
+<section id="tiers">
+  <div class="container">
+    <div class="eyebrow">Where the cost-cuts come from</div>
+    <h2 class="section-title">Three real tier options. <em>Same agents, different level of human hand-holding.</em></h2>
+    <div class="prose" style="margin-bottom: 24px;">
+      <p>The four agents are the same in every tier. What changes is how much of the system runs autonomously (our Hermes agent self-monitoring + self-recovering) versus how much human supervision Wolf AI provides on top.</p>
+      <p>The lean tier saves money by leaning harder on autonomous Hermes. The recommended tier gives you full Wolf AI ops cover. The starter tier strips back to the two highest-ROI agents only for shops that want to test before committing.</p>
+    </div>
+
+    <div class="tiers">
+
+      <!-- Starter -->
+      <div class="tier">
+        <div class="tier-label">STARTER · TEST THE WATERS</div>
+        <h3>Front Door + Inbox only</h3>
+        <div class="tier-price">$5,500<small>one-time setup</small></div>
+        <div class="tier-monthly">then <strong>$699</strong> / month all-in</div>
+        <div class="tier-what">
+          <strong>What you get</strong>
+          <ul>
+            <li>Voice + SMS Front Door (Agent 04)</li>
+            <li>Inbox &amp; Document Sorting (Agent 03)</li>
+            <li>Standard Wolf AI ops support</li>
+          </ul>
+        </div>
+        <div class="tier-tradeoff">No DNSP submission or warranty automation in this tier. Best for shops that want the lead-recovery win first, then expand.</div>
+      </div>
+
+      <!-- Recommended -->
+      <div class="tier recommended">
+        <div class="tier-label">FULL FOUR · RECOMMENDED</div>
+        <h3>Complete starting build</h3>
+        <div class="tier-price">$9,500<small>one-time setup</small></div>
+        <div class="tier-monthly">then <strong>$1,200</strong> / month all-in</div>
+        <div class="tier-what">
+          <strong>What you get</strong>
+          <ul>
+            <li>All four agents live</li>
+            <li>Wolf AI ops team monitoring + tuning</li>
+            <li>Edge cases handled by humans, not left to fail</li>
+            <li>Manufacturer/DNSP portal changes absorbed by us</li>
+          </ul>
+        </div>
+        <div class="tier-tradeoff">The right tier for TSBA at current scale. Full safety net included.</div>
+      </div>
+
+      <!-- Lean -->
+      <div class="tier">
+        <div class="tier-label">LEAN · MORE AUTONOMOUS</div>
+        <h3>Hermes runs more, humans run less</h3>
+        <div class="tier-price">$11,500<small>one-time setup (higher build)</small></div>
+        <div class="tier-monthly">then <strong>$899</strong> / month all-in</div>
+        <div class="tier-what">
+          <strong>What you get</strong>
+          <ul>
+            <li>All four agents live</li>
+            <li>Self-monitoring Hermes layer built in (extra engineering up-front)</li>
+            <li>Cheaper monthly because agent supervises itself</li>
+            <li>Lighter Wolf AI ops touch · escalations only</li>
+          </ul>
+        </div>
+        <div class="tier-tradeoff">Higher upfront in exchange for $300/mo saved long-term. Slightly more edge-case risk than Recommended tier.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- VALUE MATHS -->
+<section id="value" class="dark-section">
+  <div class="container">
+    <div class="eyebrow">The bottom-line maths</div>
+    <h2 class="section-title">Why TSBA pays for this. <em>Because the maths is obvious.</em></h2>
+    <div class="prose" style="margin-bottom: 22px;">
+      <p>Recommended tier ($9,500 + $1,200/mo) over 12 months = <strong>$23,900 total first year</strong>. Here is what TSBA gets back.</p>
+    </div>
+
+    <div class="value-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Line</th>
+            <th>Assumption</th>
+            <th>Twelve-month impact</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>After-hours leads recovered</td>
+            <td>8-12/mo × $2,200 margin (conservative)</td>
+            <td>$211k - $317k</td>
+          </tr>
+          <tr>
+            <td>Sales-rep hours back to selling</td>
+            <td>3 reps × 2 hrs/day × 20 days/mo</td>
+            <td>~1,440 hrs/yr</td>
+          </tr>
+          <tr>
+            <td>Admin hours back across team</td>
+            <td>55-105 hrs/mo across DNSP + warranty + inbox</td>
+            <td>660 - 1,260 hrs/yr</td>
+          </tr>
+          <tr>
+            <td>Cash flow acceleration</td>
+            <td>~1 week earlier on 25 installs/mo</td>
+            <td>Real working-capital improvement</td>
+          </tr>
+          <tr>
+            <td>Cost of Wolf AI</td>
+            <td>$9,500 setup + $1,200/mo × 12</td>
+            <td>$23,900</td>
+          </tr>
+          <tr class="total">
+            <td>Recover one extra deal per month</td>
+            <td>12 × $2,200 margin</td>
+            <td>$26,400 / year</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose" style="margin-top: 22px;">
+      <p>One extra deal per month covers the year. The realistic recovery is five to twelve deals per month from after-hours alone, before any of the other gains. That is six-figure margin against a $24k total investment.</p>
+      <p><strong>The honest answer to "why pay this":</strong> because at one recovered deal per month the maths works, and the realistic number is closer to twelve. The risk of not doing it is that a competitor down the road implements the same thing and wins every lead by response speed for the next five years.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="container">
+    <div class="eyebrow">Next step</div>
+    <h2>One working session locks the scope.</h2>
+    <p>Two hours with your sales lead and ops lead. We confirm which tier fits, map the four agents to your exact tools, and agree the start date. Live in approximately three weeks from kickoff.</p>
+    <a href="mailto:dave@wolfpartners.com.au" class="btn btn-primary">Book the working session <span class="arrow">→</span></a>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="container">
+    <div>© Wolf AI · For TSBA</div>
+    <div>Honest breakdown · v1</div>
+  </div>
+</footer>
+
+</body>
+</html>

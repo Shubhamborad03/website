@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Google Maps API Setup · Wolf AI</title>
+<link rel="icon" type="image/png" href="/logo.png">
+<link rel="apple-touch-icon" href="/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F4F1EA;
+    --cream-soft: #ECE7DA;
+    --cream-warm: #F8F5EE;
+    --dark: #0E0E0F;
+    --gray: #6B6B6B;
+    --gray-soft: #8A8A8A;
+    --accent: #A8512A;
+    --accent-soft: rgba(168, 81, 42, 0.08);
+    --accent-strong: rgba(168, 81, 42, 0.18);
+    --line: rgba(14, 14, 15, 0.10);
+    --line-strong: rgba(14, 14, 15, 0.18);
+    --shadow-sm: 0 1px 2px rgba(14, 14, 15, 0.04);
+    --shadow: 0 2px 8px rgba(14, 14, 15, 0.05), 0 1px 2px rgba(14, 14, 15, 0.04);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--accent); color: var(--cream); }
+
+  .container { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+  @media (max-width: 600px) { .container { padding: 0 18px; } }
+
+  /* HEADER */
+  .header {
+    padding: 48px 0 40px;
+    border-bottom: 1px solid var(--line);
+  }
+  .brand {
+    display: inline-flex; align-items: center; gap: 9px;
+    margin-bottom: 24px;
+    font-size: 14px; font-weight: 600;
+    color: var(--dark); text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+  .brand img { width: 22px; height: 22px; border-radius: 5px; }
+  .eyebrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .eyebrow::before {
+    content: ''; width: 5px; height: 5px;
+    background: var(--accent); border-radius: 999px;
+  }
+  h1 {
+    font-size: clamp(26px, 4vw, 36px);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin-bottom: 10px;
+    max-width: 24ch;
+  }
+  .lede {
+    color: var(--gray);
+    font-size: 16px;
+    max-width: 56ch;
+    line-height: 1.5;
+  }
+
+  /* PART SECTION */
+  .part { padding: 44px 0; border-bottom: 1px solid var(--line); }
+  .part:last-of-type { border-bottom: 0; }
+  .part-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 16px; margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .part-num {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent);
+  }
+  .part-time {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px; font-weight: 500;
+    color: var(--gray);
+    background: var(--cream-soft);
+    padding: 5px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+  }
+  .part h2 {
+    font-size: clamp(20px, 2.5vw, 26px);
+    font-weight: 600;
+    letter-spacing: -0.022em;
+    margin-bottom: 6px;
+  }
+  .part .sub {
+    color: var(--gray);
+    font-size: 14px;
+    margin-bottom: 22px;
+  }
+
+  /* STEPS */
+  .step {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 14px;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+  }
+  .step:first-of-type { border-top: 0; padding-top: 4px; }
+  .step:last-of-type { padding-bottom: 4px; }
+  .step-num {
+    font-family: 'Geist Mono', monospace;
+    font-size: 13px; font-weight: 600;
+    color: var(--cream);
+    background: var(--dark);
+    width: 28px; height: 28px;
+    border-radius: 999px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-body { padding-top: 2px; }
+  .step-title {
+    font-size: 15px; font-weight: 600;
+    letter-spacing: -0.015em;
+    margin-bottom: 4px;
+    line-height: 1.4;
+  }
+  .step-desc {
+    font-size: 14px; line-height: 1.55;
+    color: var(--gray);
+  }
+  .step-desc a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-soft); transition: border-color 0.2s ease; }
+  .step-desc a:hover { border-color: var(--accent); }
+  .step-desc code,
+  .step-desc kbd {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12.5px;
+    background: var(--cream-soft);
+    padding: 2px 7px;
+    border-radius: 5px;
+    color: var(--dark);
+    border: 1px solid var(--line);
+    white-space: nowrap;
+  }
+  .step-desc .arrow {
+    color: var(--accent); font-weight: 600;
+    margin: 0 2px;
+  }
+
+  /* SUB-LIST inside a step */
+  .step-list {
+    margin-top: 10px;
+    background: var(--cream-warm);
+    border-left: 2px solid var(--accent);
+    border-radius: 6px;
+    padding: 10px 16px;
+  }
+  .step-list-row {
+    display: flex; gap: 10px;
+    padding: 5px 0;
+    font-size: 13.5px;
+    color: var(--dark);
+    line-height: 1.5;
+  }
+  .step-list-row::before {
+    content: '•';
+    color: var(--accent);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* CHECKMARK done banner */
+  .done {
+    margin-top: 22px;
+    padding: 14px 18px;
+    background: var(--cream-warm);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 14px;
+    color: var(--dark);
+  }
+  .done-tick {
+    width: 22px; height: 22px;
+    background: var(--accent); color: var(--cream);
+    border-radius: 999px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .done-tick svg { width: 12px; height: 12px; stroke-width: 3; }
+
+  /* TIP / ALT BOX */
+  .tip {
+    margin-top: 28px;
+    padding: 22px 24px;
+    background: var(--dark);
+    color: var(--cream);
+    border-radius: 12px;
+  }
+  .tip-eyebrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(244, 241, 234, 0.55);
+    margin-bottom: 10px;
+  }
+  .tip h3 {
+    font-size: 17px; font-weight: 600;
+    letter-spacing: -0.018em;
+    margin-bottom: 10px;
+  }
+  .tip p {
+    font-size: 14px;
+    color: rgba(244, 241, 234, 0.78);
+    line-height: 1.55;
+    margin-bottom: 12px;
+  }
+  .tip p:last-child { margin-bottom: 0; }
+  .tip ul { list-style: none; padding: 0; margin: 6px 0 0; }
+  .tip li {
+    font-size: 13.5px;
+    color: rgba(244, 241, 234, 0.78);
+    padding-left: 16px; position: relative;
+    margin-bottom: 4px;
+    line-height: 1.55;
+  }
+  .tip li::before {
+    content: '•';
+    position: absolute; left: 4px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 28px 0 40px;
+    text-align: center;
+    color: var(--gray);
+    font-size: 12px;
+  }
+
+  @media print {
+    body { background: white; }
+    .header, .part { break-inside: avoid; }
+    .tip { background: var(--cream-warm); color: var(--dark); border: 1px solid var(--line); }
+    .tip p, .tip li { color: var(--dark); }
+    .tip-eyebrow { color: var(--gray); }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container">
+    <a href="/" class="brand">
+      <img src="/logo.png" alt="Wolf AI">
+      Wolf AI
+    </a>
+    <div class="eyebrow">Setup guide · Google Maps API</div>
+    <h1>Set up Google Maps API for Wolf AI.</h1>
+    <p class="lede">A 15-minute walkthrough. Your friend creates the project once, adds Shubham as a developer, and the team is ready to build. Free $200/month credit covers normal usage.</p>
+  </div>
+</header>
+
+<!-- PART 1 -->
+<section class="part">
+  <div class="container">
+    <div class="part-head">
+      <span class="part-num">Part 01</span>
+      <span class="part-time">~10 min · one-time</span>
+    </div>
+    <h2>Your friend's setup</h2>
+    <p class="sub">Done once on their Google account. Their credit card stays on the billing account.</p>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Sign in to Google Cloud Console</div>
+        <div class="step-desc">Open <a href="https://console.cloud.google.com" target="_blank" rel="noreferrer">console.cloud.google.com</a> and sign in with the Google account that will own the project.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Create a new project</div>
+        <div class="step-desc">Top of the screen, click the <kbd>project dropdown</kbd> <span class="arrow">→</span> <kbd>New Project</kbd> <span class="arrow">→</span> name it <kbd>Wolf AI Maps</kbd> <span class="arrow">→</span> <kbd>Create</kbd>.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Switch to the new project</div>
+        <div class="step-desc">Wait 30 seconds for it to spin up. Then make sure the project dropdown at the top shows <kbd>Wolf AI Maps</kbd>.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Add billing</div>
+        <div class="step-desc">Open the hamburger menu <kbd>☰</kbd> <span class="arrow">→</span> <kbd>Billing</kbd> <span class="arrow">→</span> <kbd>Link a billing account</kbd>. Add a credit card. Google gives a <strong>$200/month free Maps credit</strong> forever, so normal usage won't be charged.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-title">Enable the Maps APIs</div>
+        <div class="step-desc">Left menu <span class="arrow">→</span> <kbd>APIs &amp; Services</kbd> <span class="arrow">→</span> <kbd>Library</kbd>. Search for each of these and tap <kbd>Enable</kbd>:</div>
+        <div class="step-list">
+          <div class="step-list-row"><strong>Maps Static API</strong> — satellite tiles for roof scans</div>
+          <div class="step-list-row"><strong>Geocoding API</strong> — turns addresses into coordinates</div>
+          <div class="step-list-row"><strong>Maps JavaScript API</strong> — interactive maps (optional, useful later)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <div class="step-title">Create the API key</div>
+        <div class="step-desc">Left menu <span class="arrow">→</span> <kbd>APIs &amp; Services</kbd> <span class="arrow">→</span> <kbd>Credentials</kbd> <span class="arrow">→</span> <kbd>+ Create Credentials</kbd> at the top <span class="arrow">→</span> <kbd>API key</kbd>. A box pops up with the key. Copy it somewhere safe.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">7</div>
+      <div class="step-body">
+        <div class="step-title">Restrict the key (recommended)</div>
+        <div class="step-desc">On the same Credentials page, click the key name to edit it.</div>
+        <div class="step-list">
+          <div class="step-list-row">Under <strong>API restrictions</strong> <span class="arrow">→</span> select <kbd>Restrict key</kbd> <span class="arrow">→</span> tick the three APIs from step 5.</div>
+          <div class="step-list-row">Under <strong>Application restrictions</strong> <span class="arrow">→</span> leave as <kbd>None</kbd> for now while testing. Tighten later to <kbd>HTTP referrers</kbd> with <code>wolf-ai.com.au/*</code> when ready for production.</div>
+          <div class="step-list-row">Hit <kbd>Save</kbd>.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="done">
+      <span class="done-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4 10-10"/></svg></span>
+      <div>Friend's setup is complete. The key is now usable.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 2 -->
+<section class="part">
+  <div class="container">
+    <div class="part-head">
+      <span class="part-num">Part 02</span>
+      <span class="part-time">~2 min</span>
+    </div>
+    <h2>Friend adds Shubham as a developer</h2>
+    <p class="sub">Gives Shubham access so he can manage the API key and use it for the build.</p>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Open IAM</div>
+        <div class="step-desc">Left menu <span class="arrow">→</span> <kbd>IAM &amp; Admin</kbd> <span class="arrow">→</span> <kbd>IAM</kbd>.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Grant access</div>
+        <div class="step-desc">Click <kbd>+ Grant Access</kbd> at the top of the page.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Add Shubham's email</div>
+        <div class="step-desc">In the <strong>New principals</strong> field, type Shubham's Google email.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Select the Editor role</div>
+        <div class="step-desc">In the <strong>Select a role</strong> dropdown, choose <kbd>Editor</kbd>. This lets Shubham manage the API key, see billing, and use everything.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-title">Save</div>
+        <div class="step-desc">Click <kbd>Save</kbd>. Shubham will get an email invite. He accepts it and he's in.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PART 3 -->
+<section class="part">
+  <div class="container">
+    <div class="part-head">
+      <span class="part-num">Part 03</span>
+      <span class="part-time">~1 min</span>
+    </div>
+    <h2>Shubham's steps</h2>
+    <p class="sub">Once Shubham accepts the invite, he can grab the key and start using it.</p>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Open the console</div>
+        <div class="step-desc">Go to <a href="https://console.cloud.google.com" target="_blank" rel="noreferrer">console.cloud.google.com</a>.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Switch to the project</div>
+        <div class="step-desc">Top of the screen, click the project dropdown and select <kbd>Wolf AI Maps</kbd>.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Grab the key</div>
+        <div class="step-desc"><kbd>APIs &amp; Services</kbd> <span class="arrow">→</span> <kbd>Credentials</kbd> <span class="arrow">→</span> click the API key <span class="arrow">→</span> copy the key string.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Test it works</div>
+        <div class="step-desc">Paste this in a browser, replacing <code>YOUR_KEY</code> with the key. A satellite image of Brisbane should appear.</div>
+        <div class="step-list">
+          <div class="step-list-row"><code>https://maps.googleapis.com/maps/api/staticmap?center=Brisbane&amp;zoom=15&amp;size=600x400&amp;maptype=satellite&amp;key=YOUR_KEY</code></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FASTER ALTERNATIVE -->
+<section class="part" style="border-bottom: 0;">
+  <div class="container">
+    <div class="tip">
+      <div class="tip-eyebrow">Faster alternative</div>
+      <h3>Don't need full developer access? Skip Part 2.</h3>
+      <p>If Shubham only needs to <em>use</em> the key (not manage the project), Part 2 isn't required. The friend can just send the key string by Signal, Slack, or email. Shubham pastes it into the code and it works. Friend still owns the billing.</p>
+      <p>Part 2 is only needed if Shubham will:</p>
+      <ul>
+        <li>Enable more APIs later</li>
+        <li>See usage and cost in the dashboard</li>
+        <li>Rotate or replace the key himself</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © Wolf AI · Setup guide v1
+</footer>
+
+</body>
+</html>

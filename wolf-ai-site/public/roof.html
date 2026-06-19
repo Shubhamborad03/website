@@ -1,0 +1,1035 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Roof Quoting Agent · Wolf AI</title>
+<link rel="icon" type="image/png" href="/logo.png">
+<link rel="apple-touch-icon" href="/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F4F1EA;
+    --cream-soft: #ECE7DA;
+    --cream-warm: #F8F5EE;
+    --dark: #0E0E0F;
+    --dark-soft: #1A1A1B;
+    --gray: #6B6B6B;
+    --gray-soft: #8A8A8A;
+    --accent: #A8512A;
+    --accent-soft: rgba(168, 81, 42, 0.08);
+    --line: rgba(14, 14, 15, 0.10);
+    --line-strong: rgba(14, 14, 15, 0.18);
+    --light-muted: rgba(244, 241, 234, 0.65);
+    --light-quiet: rgba(244, 241, 234, 0.14);
+    --shadow-sm: 0 1px 2px rgba(14, 14, 15, 0.04);
+    --shadow: 0 2px 8px rgba(14, 14, 15, 0.05), 0 1px 2px rgba(14, 14, 15, 0.04);
+    --shadow-lg: 0 8px 24px rgba(14, 14, 15, 0.08), 0 2px 6px rgba(14, 14, 15, 0.06);
+    --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'ss01', 'cv11';
+  }
+  ::selection { background: var(--accent); color: var(--cream); }
+
+  .container { max-width: 1080px; margin: 0 auto; padding: 0 28px; }
+  @media (max-width: 640px) { .container { padding: 0 20px; } }
+
+  /* NAV */
+  nav.top {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(244, 241, 234, 0.82);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav.top .inner {
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 9px;
+    font-weight: 600; font-size: 14px; letter-spacing: -0.01em;
+    color: var(--dark); text-decoration: none;
+  }
+  .brand-mark {
+    width: 22px; height: 22px;
+    display: inline-block;
+    object-fit: contain;
+    border-radius: 5px;
+  }
+  .nav-links { display: flex; align-items: center; gap: 22px; }
+  .nav-link {
+    color: var(--gray); text-decoration: none;
+    font-size: 13px; font-weight: 500;
+    transition: color 0.2s var(--ease);
+  }
+  .nav-link:hover { color: var(--dark); }
+  @media (max-width: 640px) { .nav-link.hide-mobile { display: none; } }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    height: 34px; padding: 0 16px;
+    border-radius: 999px;
+    font-family: inherit; font-size: 13px; font-weight: 500; letter-spacing: -0.005em;
+    text-decoration: none; border: 1px solid transparent;
+    cursor: pointer; user-select: none;
+    transition: opacity 0.2s var(--ease), background-color 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease), transform 0.15s var(--ease), box-shadow 0.2s var(--ease);
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .btn-primary { background: var(--dark); color: var(--cream); box-shadow: var(--shadow-sm); }
+  .btn-primary:hover { opacity: 0.9; box-shadow: var(--shadow); }
+  .btn-secondary { background: transparent; color: var(--dark); border-color: var(--line-strong); }
+  .btn-secondary:hover { background: var(--dark); color: var(--cream); border-color: var(--dark); }
+  .btn-lg { height: 40px; padding: 0 20px; font-size: 14px; }
+  .btn .arrow { transition: transform 0.2s var(--ease); display: inline-block; }
+  .btn:hover .arrow { transform: translateX(2px); }
+  .on-dark .btn-primary { background: var(--cream); color: var(--dark); }
+  .on-dark .btn-primary:hover { opacity: 0.9; }
+  .on-dark .btn-secondary { color: var(--cream); border-color: var(--light-quiet); }
+  .on-dark .btn-secondary:hover { background: var(--cream); color: var(--dark); border-color: var(--cream); }
+
+  /* TYPE */
+  .eyebrow {
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--gray);
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .eyebrow::before {
+    content: ''; width: 5px; height: 5px;
+    background: var(--accent);
+    border-radius: 999px;
+  }
+  h1, h2, h3, h4 { letter-spacing: -0.025em; font-weight: 600; }
+  p, li { font-size: 15px; line-height: 1.5; }
+
+  /* HERO compact, with subtle warmth */
+  .hero {
+    padding: 52px 0 48px;
+    background: var(--cream);
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: ''; position: absolute;
+    top: 0; right: -10%;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, var(--accent-soft) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .hero .container { position: relative; z-index: 1; }
+  .hero .eyebrow { margin-bottom: 20px; }
+  .hero h1 {
+    font-size: clamp(28px, 4.4vw, 44px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    font-weight: 600;
+    margin-bottom: 12px;
+    max-width: 30ch;
+  }
+  .hero h1 em {
+    font-style: normal;
+    font-weight: 500;
+    color: var(--gray);
+  }
+  .hero .sub {
+    font-size: 17px; line-height: 1.4;
+    color: var(--dark); font-weight: 400;
+    margin-bottom: 24px;
+    max-width: 50ch;
+    letter-spacing: -0.01em;
+  }
+  .hero .actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 28px; }
+  .hero .meta {
+    display: flex; gap: 28px; flex-wrap: wrap;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+  }
+  .hero .meta-item { font-size: 12px; color: var(--gray); }
+  .hero .meta-item strong {
+    display: block; color: var(--dark); font-weight: 600;
+    margin-bottom: 2px; font-size: 13px;
+  }
+
+  /* SECTIONS */
+  section { padding: 48px 0; }
+  section.alt { background: var(--cream-soft); }
+  section.dark-section { background: var(--dark); color: var(--cream); }
+  section.dark-section .eyebrow { color: var(--light-muted); }
+  section.dark-section .eyebrow::before { background: var(--accent); }
+  section.dark-section h2.section-title em { color: var(--light-muted); }
+  section + section { border-top: 1px solid var(--line); }
+  section.dark-section + section, section + section.dark-section { border-top: 0; }
+
+  section .eyebrow { margin-bottom: 14px; }
+  h2.section-title {
+    font-size: clamp(22px, 2.8vw, 30px);
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+    font-weight: 600;
+    margin-bottom: 20px;
+    max-width: 28ch;
+  }
+  h2.section-title em {
+    font-style: normal;
+    font-weight: 500;
+    color: var(--gray);
+  }
+  .body-prose p {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--dark);
+    margin-bottom: 12px;
+    max-width: 75ch;
+  }
+  .body-prose p:last-child { margin-bottom: 0; }
+
+  /* LEAK POINTS filled cards with accent indicator */
+  .leaks {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 18px 0 22px;
+  }
+  @media (max-width: 800px) { .leaks { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 460px) { .leaks { grid-template-columns: 1fr; } }
+  .leak {
+    background: var(--cream-warm);
+    padding: 16px 18px;
+    border-radius: 10px;
+    border-left: 2px solid var(--accent);
+    transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  }
+  .leak:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
+  }
+  .leak .leak-num {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .leak .leak-text {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .gap-resolve {
+    margin-top: 8px;
+    padding: 20px 22px;
+    background: var(--cream-warm);
+    border-radius: 10px;
+    border: 1px solid var(--line);
+  }
+  .gap-resolve h3 {
+    font-size: 18px; font-weight: 600; letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .gap-resolve p { font-size: 15px; color: var(--gray); line-height: 1.55; max-width: 65ch; }
+
+  /* DEFINITION dark inverted hero moment */
+  .def-section {
+    padding: 56px 0;
+    background: var(--dark);
+    color: var(--cream);
+    text-align: center;
+  }
+  .def-section .eyebrow { color: var(--light-muted); margin-bottom: 16px; }
+  .def-section .eyebrow::before { background: var(--accent); }
+  .def-section p {
+    font-size: clamp(20px, 2.6vw, 28px);
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    max-width: 38ch;
+    margin: 0 auto;
+  }
+  .def-section .strong-line {
+    display: block; font-weight: 600; margin-bottom: 8px; color: var(--cream);
+  }
+  .def-section .quiet { color: var(--light-muted); font-weight: 400; }
+
+  /* TWO OPERATORS */
+  .operators { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 760px) { .operators { grid-template-columns: 1fr; } }
+  .op-card {
+    background: var(--cream);
+    border: 1px solid var(--line-strong);
+    border-radius: 14px;
+    padding: 22px 24px;
+    transition: border-color 0.25s var(--ease), transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  }
+  .op-card:hover {
+    border-color: var(--dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
+  }
+  .op-card h3 { font-size: 17px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 8px; }
+  .op-card .desc { font-size: 14px; color: var(--gray); line-height: 1.5; margin-bottom: 14px; }
+  .op-card .win {
+    font-size: 14px; line-height: 1.45;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+  }
+  .op-card .win strong { font-weight: 600; color: var(--dark); }
+  .op-card .win-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-right: 8px;
+    font-weight: 600;
+  }
+
+  /* 5-STEP PROCESS refined with accent step numbers */
+  .process {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--line-strong);
+    border: 1px solid var(--line-strong);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  @media (max-width: 920px) { .process { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .process { grid-template-columns: 1fr; } }
+  .step {
+    background: var(--cream);
+    padding: 20px 18px;
+    transition: background-color 0.2s var(--ease);
+    position: relative;
+  }
+  .step:hover { background: var(--cream-warm); }
+  .step .step-num {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .step .step-icon { width: 22px; height: 22px; margin-bottom: 14px; }
+  .step .step-icon svg {
+    width: 100%; height: 100%;
+    stroke: var(--dark); stroke-width: 1.6;
+    fill: none; stroke-linecap: round; stroke-linejoin: round;
+  }
+  .step .step-name { font-size: 15px; font-weight: 600; letter-spacing: -0.015em; margin-bottom: 6px; }
+  .step .step-desc { font-size: 13px; color: var(--gray); line-height: 1.45; }
+
+  /* COMPARISON TABLE with AI column highlighted */
+  .compare {
+    border: 1px solid var(--line-strong);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  .compare table { width: 100%; border-collapse: collapse; }
+  .compare th, .compare td {
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+    line-height: 1.45;
+    vertical-align: top;
+  }
+  .compare th {
+    background: var(--cream-soft);
+    font-family: 'Geist Mono', monospace;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+  .compare th:nth-child(2) {
+    background: var(--dark);
+    color: var(--cream);
+  }
+  .compare tbody td:nth-child(1) { color: var(--gray); }
+  .compare tbody td:nth-child(2) {
+    color: var(--dark);
+    font-weight: 500;
+    background: var(--accent-soft);
+  }
+  .compare tbody td:nth-child(3) { color: var(--dark); font-style: italic; }
+  .compare tr:last-child td { border-bottom: 0; }
+  @media (max-width: 720px) {
+    .compare table, .compare thead, .compare tbody, .compare tr, .compare th, .compare td { display: block; }
+    .compare thead { display: none; }
+    .compare tr { border-bottom: 1px solid var(--line-strong); padding: 14px 0; }
+    .compare tr:last-child { border-bottom: 0; }
+    .compare td { padding: 4px 18px; border-bottom: 0; background: transparent !important; }
+    .compare tbody td:nth-child(1) { padding-top: 14px; font-weight: 600; color: var(--dark); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; font-family: 'Geist Mono', monospace; }
+  }
+
+  /* PULL QUOTE accent vertical bar, off-cream block */
+  .pull {
+    background: var(--cream-warm);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    padding: 24px 32px;
+    text-align: left;
+  }
+  .pull p {
+    font-size: clamp(17px, 2.2vw, 22px);
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    max-width: 50ch;
+    margin: 0;
+  }
+  .pull p em {
+    font-style: normal;
+    color: var(--gray);
+    font-weight: 400;
+  }
+
+  /* ROI TABLE multipliers in accent terracotta */
+  .roi {
+    border: 1px solid var(--line-strong);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  .roi table { width: 100%; border-collapse: collapse; }
+  .roi thead th {
+    background: var(--dark); color: var(--cream);
+    padding: 12px 16px;
+    font-family: 'Geist Mono', monospace;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-align: right;
+  }
+  .roi thead th:first-child { text-align: left; }
+  .roi tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+    text-align: right;
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+    font-family: 'Geist Mono', monospace;
+  }
+  .roi tbody td:first-child {
+    text-align: left;
+    color: var(--gray);
+    font-family: 'Geist', sans-serif;
+    width: 48%;
+  }
+  .roi tbody tr:last-child td {
+    border-bottom: 0;
+    background: var(--cream-warm);
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 18px;
+    letter-spacing: -0.01em;
+  }
+  .roi tbody tr:last-child td:first-child {
+    color: var(--dark);
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .roi-note {
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--gray);
+    line-height: 1.5;
+  }
+
+  /* PRICING refined cards with shadow */
+  .packages { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 880px) { .packages { grid-template-columns: 1fr; } }
+  .pkg {
+    background: var(--cream);
+    border: 1px solid var(--line-strong);
+    border-radius: 16px;
+    padding: 22px 24px;
+    display: flex; flex-direction: column;
+    transition: border-color 0.25s var(--ease), transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+    position: relative;
+  }
+  .pkg:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+  .pkg.featured {
+    background: var(--dark);
+    color: var(--cream);
+    border-color: var(--dark);
+    box-shadow: var(--shadow-lg);
+  }
+  .pkg.featured:hover { box-shadow: var(--shadow-lg); }
+  .pkg-name { font-size: 16px; font-weight: 600; letter-spacing: -0.015em; margin-bottom: 14px; }
+  .pkg-featured {
+    position: absolute; top: 22px; right: 24px;
+    background: var(--accent); color: var(--cream);
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 9px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .pkg-price {
+    font-size: 32px; font-weight: 600; letter-spacing: -0.03em;
+    line-height: 1; margin-bottom: 4px;
+  }
+  .pkg-price .per { font-size: 13px; color: var(--gray); font-weight: 500; }
+  .pkg.featured .pkg-price .per { color: var(--light-muted); }
+  .pkg-setup {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--line);
+    font-size: 12px;
+    color: var(--gray);
+    margin-bottom: 16px;
+  }
+  .pkg.featured .pkg-setup {
+    border-color: var(--light-quiet);
+    color: var(--light-muted);
+  }
+  .pkg-setup .struck { text-decoration: line-through; margin-right: 6px; }
+  .pkg-setup .new { color: var(--accent); font-weight: 600; }
+  .pkg.featured .pkg-setup .new { color: var(--cream); }
+  .pkg-details { font-size: 13px; line-height: 1.55; margin-bottom: 18px; flex-grow: 1; }
+  .pkg-detail {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 6px 0;
+    border-top: 1px solid var(--line);
+  }
+  .pkg.featured .pkg-detail { border-color: var(--light-quiet); }
+  .pkg-detail:first-child { border-top: 0; padding-top: 0; }
+  .pkg-detail .k { color: var(--gray); }
+  .pkg.featured .pkg-detail .k { color: var(--light-muted); }
+  .pkg-detail .v { font-weight: 600; }
+  .pkg-cta {
+    width: 100%; height: 38px;
+    border-radius: 10px;
+    border: 1px solid var(--dark);
+    background: var(--cream); color: var(--dark);
+    font-family: inherit; font-size: 13px; font-weight: 500;
+    letter-spacing: -0.005em;
+    cursor: pointer;
+    transition: background-color 0.2s var(--ease), color 0.2s var(--ease), transform 0.15s var(--ease);
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    text-decoration: none;
+  }
+  .pkg-cta:hover { background: var(--dark); color: var(--cream); }
+  .pkg-cta:active { transform: scale(0.98); }
+  .pkg.featured .pkg-cta { background: var(--cream); color: var(--dark); border-color: var(--cream); }
+  .pkg.featured .pkg-cta:hover { opacity: 0.92; }
+  .pkg-cta .arrow { transition: transform 0.2s var(--ease); }
+  .pkg-cta:hover .arrow { transform: translateX(2px); }
+  .disclaimer { margin-top: 14px; font-size: 12px; color: var(--gray); line-height: 1.5; }
+
+  /* INCLUDED grid soft warm background */
+  .included {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line-strong);
+    border: 1px solid var(--line-strong);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  @media (max-width: 720px) { .included { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 460px) { .included { grid-template-columns: 1fr; } }
+  .inc-item {
+    background: var(--cream);
+    padding: 14px 16px;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px; font-weight: 500; letter-spacing: -0.005em;
+    transition: background-color 0.2s var(--ease);
+  }
+  .inc-item:hover { background: var(--cream-warm); }
+  .inc-item .check {
+    width: 18px; height: 18px;
+    background: var(--accent);
+    border-radius: 999px;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .inc-item .check svg {
+    width: 11px; height: 11px;
+    stroke: var(--cream); stroke-width: 2.5;
+    fill: none; stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  /* INLINE LISTS */
+  .inline-block {
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    padding: 18px 22px;
+    font-size: 14px; line-height: 1.65;
+    color: var(--dark);
+    background: var(--cream);
+    box-shadow: var(--shadow-sm);
+  }
+  .inline-block strong { font-weight: 600; }
+  .inline-block .sep {
+    display: inline-block;
+    width: 3px; height: 3px;
+    background: var(--accent);
+    border-radius: 999px;
+    vertical-align: middle;
+    margin: 0 8px;
+    opacity: 0.8;
+  }
+
+  /* OTHER AUTOMATIONS cards with accent on hover */
+  .other-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 760px) { .other-grid { grid-template-columns: 1fr; } }
+  .other-card {
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    padding: 18px 20px;
+    text-decoration: none; color: inherit;
+    display: block; background: var(--cream);
+    transition: border-color 0.25s var(--ease), transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+    position: relative;
+    overflow: hidden;
+  }
+  .other-card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; width: 100%; height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s var(--ease);
+  }
+  .other-card:hover {
+    border-color: var(--dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
+  }
+  .other-card:hover::before { transform: scaleX(1); }
+  .other-card .ot-tag {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 10px; font-weight: 600;
+  }
+  .other-card h4 { font-size: 15px; font-weight: 600; letter-spacing: -0.015em; margin-bottom: 6px; }
+  .other-card p { font-size: 13px; color: var(--gray); line-height: 1.45; margin-bottom: 14px; }
+  .other-card .ot-foot {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 10px; border-top: 1px solid var(--line);
+  }
+  .other-card .ot-price {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px; font-weight: 600;
+    color: var(--dark);
+  }
+  .other-card .ot-price .gray { color: var(--gray); font-weight: 500; }
+  .other-card .ot-link { font-size: 12px; color: var(--gray); transition: transform 0.2s var(--ease), color 0.2s var(--ease); }
+  .other-card:hover .ot-link { color: var(--accent); transform: translateX(2px); }
+
+  /* FINAL CTA */
+  .final {
+    background: var(--dark); color: var(--cream);
+    border-radius: 18px;
+    padding: 40px 36px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+  }
+  .final::before {
+    content: ''; position: absolute;
+    top: -20%; right: -10%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(168, 81, 42, 0.25) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .final p {
+    font-size: clamp(18px, 2.4vw, 24px);
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    font-weight: 500;
+    max-width: 38ch;
+    margin: 0 auto 22px;
+    position: relative;
+  }
+  .final p em {
+    font-style: normal;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .final .actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; position: relative; }
+
+  /* FOOTER */
+  footer {
+    padding: 22px 0 32px;
+    color: var(--gray); font-size: 12px;
+    border-top: 1px solid var(--line);
+  }
+  footer .footer-inner {
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  }
+  footer a { color: var(--gray); text-decoration: none; transition: color 0.2s var(--ease); }
+  footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="top">
+  <div class="container inner">
+    <a href="/" class="brand">
+      <img src="/logo.png" alt="Wolf AI" class="brand-mark" />
+      <span>Wolf AI</span>
+    </a>
+    <div class="nav-links">
+      <a href="https://wolf-ai.com.au" class="nav-link hide-mobile">All automations</a>
+      <a href="#pricing" class="nav-link">Pricing</a>
+      <a href="https://z8d9iav9qs2.typeform.com/to/dxMNYngw" class="btn btn-primary">Get started <span class="arrow">→</span></a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="container">
+    <div class="eyebrow">AI Roof Quoting Agent</div>
+    <h1>Professional roof quotes <em>at the click of a button.</em></h1>
+    <p class="sub">An AI agent scans the roof, builds a branded quote, and sends it out. You don't have to do anything.</p>
+    <div class="actions">
+      <a href="#how" class="btn btn-primary btn-lg">See how it works <span class="arrow">→</span></a>
+      <a href="#operators" class="btn btn-secondary btn-lg">Is this for me?</a>
+    </div>
+    <div class="meta">
+      <div class="meta-item"><strong>No site visits</strong>for the first quote</div>
+      <div class="meta-item"><strong>Live in 7 days</strong>from your inputs</div>
+      <div class="meta-item"><strong>Month-to-month</strong>no lock-in</div>
+      <div class="meta-item"><strong>Works with what you use</strong>email, SMS, your CRM</div>
+    </div>
+  </div>
+</header>
+
+<!-- THE GAP -->
+<section>
+  <div class="container">
+    <div class="eyebrow">Sound familiar?</div>
+    <h2 class="section-title">You finish the day on the tools. <em>Then the real work starts.</em></h2>
+    <div class="body-prose">
+      <p>It's 9pm. You're at the kitchen table trying to write the quotes from a week of enquiries. Half the properties you haven't been to yet. The customer who called Monday already booked someone else. Tomorrow you're back on the tools at 6am and the cycle starts again. The jobs you lose are not lost on the work · they are lost in the gap between when the customer calls and when your quote arrives:</p>
+    </div>
+    <div class="leaks">
+      <div class="leak"><div class="leak-num">01</div><div class="leak-text">the missed call</div></div>
+      <div class="leak"><div class="leak-num">02</div><div class="leak-text">the delayed measure-up</div></div>
+      <div class="leak"><div class="leak-num">03</div><div class="leak-text">the quote written at night</div></div>
+      <div class="leak"><div class="leak-num">04</div><div class="leak-text">the follow-up that never happens</div></div>
+    </div>
+    <div class="gap-resolve">
+      <h3>An AI agent closes that gap.</h3>
+      <p>It scans the roof from satellite, applies your pricing, prepares a professional quote and sends it in your name. While you're still on site doing the actual work.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DEFINITION (dark inverted moment) -->
+<section class="def-section">
+  <div class="container">
+    <div class="eyebrow">The advantage</div>
+    <p>
+      <span class="strong-line">Harness AI to do more with less.</span>
+      <span class="quiet">Set and forget. More quotes out the door while you stay on the tools, finish earlier, or spend the time on whatever you actually love doing.</span>
+    </p>
+  </div>
+</section>
+
+<!-- TWO OPERATORS (alt bg) -->
+<section class="alt" id="operators">
+  <div class="container">
+    <div class="eyebrow">Who it's for</div>
+    <h2 class="section-title">Two kinds of operator, <em>same problem.</em></h2>
+    <div class="operators">
+      <div class="op-card">
+        <h3>Owner-operator. Maybe the wife helps with admin.</h3>
+        <p class="desc">You're good at the trade. The paperwork side has never been your thing. Quotes get written from a phone scribble. Some get sent late. Some never go out. You'd rather be on the tools, finishing earlier, or with the family.</p>
+        <div class="win"><span class="win-label">What you get</span><strong>Quotes go out without you opening a laptop at 9pm.</strong> Professional, accurate, branded. Same level of polish a much bigger business sends.</div>
+      </div>
+      <div class="op-card">
+        <h3>Established business with estimators on the team.</h3>
+        <p class="desc">You're paying real money for that labour. Lead volume is climbing and the choice is either hire more estimators or cap your growth. Quoting is the bottleneck that keeps slowing the team down.</p>
+        <div class="win"><span class="win-label">What you get</span><strong>Cut the labour cost on quotes.</strong> Lift the quote volume your existing team can push out. Hold pricing consistent. Grow without doubling your back-office spend.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5-STEP PROCESS -->
+<section id="how">
+  <div class="container">
+    <div class="eyebrow">How it works</div>
+    <h2 class="section-title">Five steps, <em>and you only touch one of them.</em></h2>
+    <div class="process">
+      <div class="step">
+        <div class="step-num">01 · Scan</div>
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M2 12c2-4 6-7 10-7s8 3 10 7c-2 4-6 7-10 7s-8-3-10-7Z"/></svg>
+        </div>
+        <div class="step-name">Scan the roof</div>
+        <div class="step-desc">From satellite imagery. No driving out. No waiting on the customer to send photos.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02 · Measure</div>
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg>
+        </div>
+        <div class="step-name">Measure &amp; assess</div>
+        <div class="step-desc">Roof size, pitch, complexity, access, condition. Accurate enough to quote from.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">03 · Price</div>
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 6H9a3 3 0 0 0 0 6h6a3 3 0 0 1 0 6H6"/></svg>
+        </div>
+        <div class="step-name">Apply your prices</div>
+        <div class="step-desc">Your rates. Your minimums. Your margins. Your exclusions. Not a generic quote.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">04 · Approve</div>
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg>
+        </div>
+        <div class="step-name">You approve</div>
+        <div class="step-desc">One tap on your phone: Send, Edit, Site Visit, or Reject. This is the only step you touch.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">05 · Send</div>
+        <div class="step-icon">
+          <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </div>
+        <div class="step-name">Customer receives it</div>
+        <div class="step-desc">Branded PDF quote by email or SMS. Booking link. Follow-up chase handled.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON + PULL QUOTE (alt bg) -->
+<section class="alt">
+  <div class="container">
+    <div class="eyebrow">Side by side</div>
+    <h2 class="section-title">What the customer is comparing <em>when they ring three of you.</em></h2>
+    <div class="compare">
+      <table>
+        <thead>
+          <tr>
+            <th>You without this</th>
+            <th>The roofer with the AI agent</th>
+            <th>What the customer feels</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Drives out or waits for photos before quoting.</td>
+            <td>Quote in their hands the same day, no site visit.</td>
+            <td>Faster. Easier.</td>
+          </tr>
+          <tr>
+            <td>More enquiries means more admin pressure.</td>
+            <td>Handles ten times the enquiries without adding admin.</td>
+            <td>Calls back when promised.</td>
+          </tr>
+          <tr>
+            <td>Pricing depends on the day, the mood, the guess.</td>
+            <td>Same pricing logic on every quote, every time.</td>
+            <td>Looks like a real business.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top: 18px;">
+      <div class="pull">
+        <p>The old edge was being the best tradesman. <em>The new edge is being the best tradesman who also responds like a much bigger business.</em></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMERCIAL CASE -->
+<section>
+  <div class="container">
+    <div class="eyebrow">The maths</div>
+    <h2 class="section-title">Even on the lowest tier, <em>one job a month pays for the year.</em></h2>
+    <div class="body-prose" style="margin-bottom: 16px;">
+      <p>This doesn't need heroic assumptions to work. We scan hundreds of roofs every month inside your service area and feed you the ones worth quoting. If only 1 in every 200 of those scans turns into a booked job, the maths is already a no-brainer.</p>
+    </div>
+    <div class="roi">
+      <table>
+        <thead>
+          <tr><th>Commercial model</th><th>Starter</th><th>Growth</th><th>Scale</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Included roof scans per month</td><td>400</td><td>1,600</td><td>4,000</td></tr>
+          <tr><td>Roof scans per year</td><td>4,800</td><td>19,200</td><td>48,000</td></tr>
+          <tr><td>Extra booked jobs per year (0.5% conversion)</td><td>24</td><td>96</td><td>240</td></tr>
+          <tr><td>Minimum additional annual income (at $3,000 / job)</td><td>$72,000</td><td>$288,000</td><td>$720,000</td></tr>
+          <tr><td>Total annual cost (setup + 12 months)</td><td>$7,987</td><td>$9,687</td><td>$13,787</td></tr>
+          <tr><td>Annual ROI</td><td>9.0x</td><td>29.7x</td><td>52.2x</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="roi-note">Numbers above use a conservative 0.5% scan-to-booked-job conversion and a $3,000 average job value. Real-world numbers for roof restoration tend to be higher.</p>
+  </div>
+</section>
+
+<!-- PRICING (alt bg) -->
+<section class="alt" id="pricing">
+  <div class="container">
+    <div class="eyebrow">Investment</div>
+    <h2 class="section-title">Now that you've seen it, <em>here's what it costs.</em></h2>
+    <div class="packages">
+      <div class="pkg">
+        <div class="pkg-name">Starter</div>
+        <div class="pkg-price">$499 <span class="per">/ mo</span></div>
+        <div class="pkg-setup">Setup <span class="struck">$3,999</span><span class="new">$1,999</span></div>
+        <div class="pkg-details">
+          <div class="pkg-detail"><span class="k">Included roof scans</span><span class="v">400 / mo</span></div>
+          <div class="pkg-detail"><span class="k">Quote drafts</span><span class="v">Up to 50 / mo</span></div>
+        </div>
+        <a href="https://z8d9iav9qs2.typeform.com/to/dxMNYngw" class="pkg-cta">Pick Starter <span class="arrow">→</span></a>
+      </div>
+      <div class="pkg featured">
+        <div class="pkg-featured">Most chosen</div>
+        <div class="pkg-name">Growth</div>
+        <div class="pkg-price">$599 <span class="per">/ mo</span></div>
+        <div class="pkg-setup">Setup <span class="struck">$4,499</span><span class="new">$2,499</span></div>
+        <div class="pkg-details">
+          <div class="pkg-detail"><span class="k">Included roof scans</span><span class="v">1,600 / mo</span></div>
+          <div class="pkg-detail"><span class="k">Quote drafts</span><span class="v">Up to 200 / mo</span></div>
+        </div>
+        <a href="https://z8d9iav9qs2.typeform.com/to/dxMNYngw" class="pkg-cta">Pick Growth <span class="arrow">→</span></a>
+      </div>
+      <div class="pkg">
+        <div class="pkg-name">Scale</div>
+        <div class="pkg-price">$899 <span class="per">/ mo</span></div>
+        <div class="pkg-setup">Setup <span class="struck">$4,999</span><span class="new">$2,999</span></div>
+        <div class="pkg-details">
+          <div class="pkg-detail"><span class="k">Included roof scans</span><span class="v">4,000 / mo</span></div>
+          <div class="pkg-detail"><span class="k">Quote drafts</span><span class="v">Up to 500 / mo</span></div>
+        </div>
+        <a href="https://z8d9iav9qs2.typeform.com/to/dxMNYngw" class="pkg-cta">Pick Scale <span class="arrow">→</span></a>
+      </div>
+    </div>
+    <p class="disclaimer">All prices AUD, exclude GST. Setup split 50% on signing, 50% on go-live. Month-to-month after the first 30 days. No lock-in, no exit fee. Included roof scans are the ones we assess each month inside your service area to find the properties worth quoting.</p>
+  </div>
+</section>
+
+<!-- INCLUDED -->
+<section>
+  <div class="container">
+    <div class="eyebrow">Every package includes</div>
+    <h2 class="section-title">Included in every package.</h2>
+    <div class="included">
+      <div class="inc-item"><span class="check"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></span>AI roof assessment agent</div>
+      <div class="inc-item"><span class="check"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></span>Your pricing logic applied</div>
+      <div class="inc-item"><span class="check"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></span>Branded PDF quotes</div>
+      <div class="inc-item"><span class="check"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></span>Operator approval workflow</div>
+      <div class="inc-item"><span class="check"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></span>SMS/email delivery</div>
+      <div class="inc-item"><span class="check"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></span>Booking link included</div>
+      <div class="inc-item"><span class="check"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></span>Conversion dashboard</div>
+      <div class="inc-item"><span class="check"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></span>Template and pricing updates</div>
+      <div class="inc-item"><span class="check"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></span>30 days post-launch tuning</div>
+    </div>
+  </div>
+</section>
+
+<!-- LAUNCH + ADAPTATIONS (alt bg) -->
+<section class="alt">
+  <div class="container">
+    <div class="eyebrow">Onboarding</div>
+    <h2 class="section-title">Launch requirements.</h2>
+    <div class="inline-block">
+      <strong>20 past quotes or job examples</strong><span class="sep"></span><strong>pricing rules</strong><span class="sep"></span><strong>service area</strong><span class="sep"></span><strong>logo and terms</strong><span class="sep"></span><strong>approval phone number</strong><span class="sep"></span><strong>30-minute walkthrough</strong>. Once received, go-live is targeted within 7 days.
+    </div>
+    <div style="height: 18px;"></div>
+    <div class="eyebrow" style="margin-bottom: 12px;">Adaptations</div>
+    <h2 class="section-title" style="font-size: 22px;">Where this can be adapted.</h2>
+    <div class="inline-block">
+      Same agent, different jobs. <strong>Roof restoration</strong><span class="sep"></span><strong>roof cleaning</strong><span class="sep"></span><strong>re-roofing</strong><span class="sep"></span><strong>solar cleaning</strong><span class="sep"></span><strong>gutter cleaning</strong><span class="sep"></span><strong>roof inspections</strong><span class="sep"></span><strong>insurance assessment support</strong>. We tune the pricing logic and template to whatever you actually quote.
+    </div>
+  </div>
+</section>
+
+<!-- OTHER AUTOMATIONS -->
+<section>
+  <div class="container">
+    <div class="eyebrow">Browse the catalog</div>
+    <h2 class="section-title">Other automations.</h2>
+    <div class="other-grid">
+      <a href="#" class="other-card">
+        <div class="ot-tag">Agent 02</div>
+        <h4>Voice Calling Agent</h4>
+        <p>Inbound and outbound voice agent. Books appointments, takes deposits, runs follow-ups.</p>
+        <div class="ot-foot"><div class="ot-price">From $199 <span class="gray">/ mo</span></div><div class="ot-link">View →</div></div>
+      </a>
+      <a href="#" class="other-card">
+        <div class="ot-tag">Agent 03</div>
+        <h4>Lead Generation Agent</h4>
+        <p>Daily lead drops matched to your ideal customer. Personalised first lines included.</p>
+        <div class="ot-foot"><div class="ot-price">From $399 <span class="gray">/ mo</span></div><div class="ot-link">View →</div></div>
+      </a>
+      <a href="#" class="other-card">
+        <div class="ot-tag">Agent 04</div>
+        <h4>Review-Velocity Engine</h4>
+        <p>Personalised review request after every completed job. Compounds your Google ranking.</p>
+        <div class="ot-foot"><div class="ot-price">From $45 <span class="gray">/ mo</span></div><div class="ot-link">View →</div></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section>
+  <div class="container">
+    <div class="final on-dark">
+      <p>Pick a package. Send us 20 past quotes. <em>You're live in 7 days.</em></p>
+      <div class="actions">
+        <a href="https://z8d9iav9qs2.typeform.com/to/dxMNYngw" class="btn btn-primary btn-lg">Pick a package <span class="arrow">→</span></a>
+        <a href="https://wolf-ai.com.au" class="btn btn-secondary btn-lg">Browse all automations</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container footer-inner">
+    <div>Wolf AI</div>
+    <div><a href="https://wolf-ai.com.au">wolf-ai.com.au</a></div>
+  </div>
+</footer>
+
+</body>
+</html>

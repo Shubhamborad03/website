@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Quote Engine for commercial roof and façade cleaning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F4F1EA;
+    --bg-dark: #0E1311;
+    --paper: #FFFFFF;
+    --ink: #0E1311;
+    --ink-2: #2A332F;
+    --mute: #6B7066;
+    --line: #D9D4C7;
+    --line-soft: #EAE4D6;
+    --accent: #15533E;
+    --accent-soft: #E4EEE7;
+    --warn: #C45A2C;
+    --shadow-sm: 0 2px 12px rgba(14, 19, 17, 0.04);
+    --shadow: 0 8px 30px rgba(14, 19, 17, 0.06);
+    --shadow-lg: 0 18px 50px rgba(14, 19, 17, 0.10);
+    --radius: 18px;
+    --radius-lg: 22px;
+    --radius-xl: 28px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--ink); font-size: 17px; line-height: 1.55; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 56px 28px 120px; }
+
+  .topbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid var(--line-soft); padding-bottom: 22px; }
+  .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink); }
+  .brand .dot { width: 9px; height: 9px; border-radius: 999px; background: var(--accent); }
+  .top-meta { font-size: 13px; color: var(--mute); letter-spacing: 0.04em; }
+
+  .hero { padding: 70px 0 30px; max-width: 880px; }
+  .kicker { color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 22px; }
+  h1 { font-family: 'Instrument Serif', serif; font-weight: 400; font-size: clamp(44px, 6.5vw, 76px); line-height: 1.02; letter-spacing: -0.02em; margin: 0 0 28px; color: var(--ink); }
+  h1 em { font-style: italic; color: var(--accent); }
+  .hero .sub { font-size: 22px; color: var(--ink-2); max-width: 60ch; margin: 0 0 38px; line-height: 1.45; }
+  .actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 15px 26px; font-weight: 600; font-size: 15px; border-radius: 999px; text-decoration: none; transition: transform 0.12s ease, opacity 0.12s ease; }
+  .btn:hover { transform: translateY(-1px); opacity: 0.92; }
+  .btn-primary { background: var(--ink); color: var(--bg); }
+  .btn-ghost { color: var(--ink); border: 1px solid var(--line); background: transparent; }
+  .hero-meta { margin-top: 32px; display: flex; gap: 28px; flex-wrap: wrap; color: var(--mute); font-size: 14px; }
+  .hero-meta strong { color: var(--ink); font-weight: 600; }
+
+  section { margin-top: 100px; }
+  section .label { color: var(--accent); font-weight: 700; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 14px; }
+  section h2 { font-family: 'Instrument Serif', serif; font-weight: 400; font-size: clamp(32px, 4vw, 44px); letter-spacing: -0.01em; line-height: 1.1; margin: 0 0 22px; max-width: 24ch; }
+  section .lead { font-size: 19px; color: var(--ink-2); margin: 0 0 30px; max-width: 60ch; line-height: 1.5; }
+
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 820px) { .compare { grid-template-columns: 1fr; } }
+  .col { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow); }
+  .col.now { background: var(--bg-dark); color: var(--bg); border-color: var(--bg-dark); }
+  .col.now h3 { color: var(--bg); }
+  .col.now p, .col.now li { color: rgba(244, 241, 234, 0.85); }
+  .col.now li::before { background: var(--warn); }
+  .col h3 { font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 26px; margin: 0 0 16px; color: var(--ink); }
+  .col p { color: var(--ink-2); margin: 0 0 18px; line-height: 1.6; }
+  .col ul { list-style: none; padding: 0; margin: 0; }
+  .col li { padding: 8px 0 8px 20px; position: relative; color: var(--ink-2); }
+  .col li::before { content: ""; position: absolute; left: 0; top: 16px; width: 8px; height: 2px; background: var(--accent); }
+
+  .walk { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-xl); padding: 36px; box-shadow: var(--shadow); }
+  .walk-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 36px; align-items: center; }
+  @media (max-width: 880px) { .walk-grid { grid-template-columns: 1fr; } }
+  .steps { list-style: none; padding: 0; margin: 0; counter-reset: step; }
+  .steps li { counter-increment: step; padding: 16px 0 16px 56px; position: relative; border-bottom: 1px solid var(--line-soft); color: var(--ink-2); line-height: 1.55; }
+  .steps li:last-child { border-bottom: 0; }
+  .steps li::before { content: counter(step); position: absolute; left: 0; top: 16px; width: 36px; height: 36px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+  .steps li strong { color: var(--ink); }
+
+  .phone { background: linear-gradient(180deg, #1F2624 0%, #0E1311 100%); border-radius: 36px; padding: 26px 18px 22px; color: white; max-width: 320px; margin: 0 auto; box-shadow: var(--shadow-lg); position: relative; }
+  .phone::before { content: ""; width: 110px; height: 28px; background: #0E1311; border-radius: 0 0 14px 14px; position: absolute; top: 0; left: 50%; transform: translateX(-50%); }
+  .phone-head { text-align: center; padding: 10px 0 14px; border-bottom: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); font-size: 13px; }
+  .phone-head strong { color: white; font-weight: 600; display: block; font-size: 14px; }
+  .thread { padding: 18px 4px 10px; display: flex; flex-direction: column; gap: 10px; }
+  .msg { max-width: 78%; padding: 10px 14px; border-radius: 18px; font-size: 14px; line-height: 1.4; }
+  .msg.them { background: rgba(255,255,255,0.10); align-self: flex-start; border-bottom-left-radius: 6px; }
+  .msg.us { background: var(--accent); align-self: flex-end; border-bottom-right-radius: 6px; color: white; }
+  .msg.img { padding: 0; overflow: hidden; background: linear-gradient(135deg, #6B7066 0%, #3B4540 100%); height: 110px; align-self: flex-start; display: flex; align-items: end; justify-content: start; color: rgba(255,255,255,0.5); font-size: 11px; padding: 8px; }
+  .approval { margin-top: 10px; background: var(--bg); color: var(--ink); border-radius: 14px; padding: 12px 14px; border: 1px solid var(--line); }
+  .approval .a-head { font-size: 11px; color: var(--mute); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+  .approval .a-total { font-family: 'Instrument Serif', serif; font-size: 28px; line-height: 1; margin-bottom: 6px; }
+  .approval .a-note { font-size: 12px; color: var(--ink-2); margin-bottom: 10px; }
+  .approval .a-btns { display: flex; gap: 6px; }
+  .approval .a-btn { flex: 1; background: var(--ink); color: white; border: 0; border-radius: 8px; font-size: 11px; padding: 8px 4px; font-weight: 600; }
+  .approval .a-btn.outline { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+
+  .email { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); max-width: 360px; margin: 0 auto; overflow: hidden; }
+  .email-head { background: var(--bg); border-bottom: 1px solid var(--line); padding: 14px 18px; font-size: 13px; color: var(--mute); }
+  .email-head strong { color: var(--ink); display: block; font-size: 14px; margin-bottom: 2px; }
+  .email-body { padding: 18px; font-size: 13px; line-height: 1.5; color: var(--ink-2); }
+  .email-body .subj { font-weight: 700; color: var(--ink); margin-bottom: 10px; font-size: 14px; }
+  .email-body .img-stub { height: 90px; background: linear-gradient(135deg, #BDB8AB 0%, #6B7066 100%); border-radius: 8px; margin: 10px 0; }
+  .email-body .price { font-family: 'Instrument Serif', serif; font-size: 24px; color: var(--ink); margin: 10px 0 4px; }
+
+  .pull { font-family: 'Instrument Serif', serif; font-style: italic; font-size: clamp(26px, 3vw, 34px); color: var(--ink); line-height: 1.35; border-left: 3px solid var(--accent); padding: 6px 0 6px 22px; margin: 40px 0; max-width: 40ch; }
+  .pull .accent { color: var(--accent); }
+
+  .features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 30px; border-top: 1px solid var(--line); }
+  @media (max-width: 700px) { .features-grid { grid-template-columns: 1fr; } }
+  .feature { padding: 22px 0; border-bottom: 1px solid var(--line); }
+  .feature h4 { font-size: 16px; margin: 0 0 6px; color: var(--ink); display: flex; align-items: center; gap: 10px; }
+  .feature h4::before { content: "✓"; color: var(--accent); font-weight: 700; width: 22px; height: 22px; border-radius: 999px; background: var(--accent-soft); display: inline-flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+  .feature p { margin: 0; color: var(--ink-2); font-size: 15px; line-height: 1.5; }
+
+  .pricing-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 30px; }
+  @media (max-width: 880px) { .pricing-strip { grid-template-columns: 1fr; } }
+  .card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 32px; display: flex; flex-direction: column; box-shadow: var(--shadow); position: relative; }
+  .card.featured { border: 2px solid var(--accent); box-shadow: var(--shadow-lg); }
+  .card .badge { position: absolute; top: -12px; left: 32px; background: var(--accent); color: white; padding: 5px 14px; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; border-radius: 999px; }
+  .card .tier { font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; color: var(--mute); margin-bottom: 12px; }
+  .card .qty { font-family: 'Instrument Serif', serif; font-size: 44px; line-height: 1; margin-bottom: 4px; }
+  .card .qty-sub { color: var(--mute); font-size: 14px; margin-bottom: 26px; }
+  .card .price-row { display: flex; align-items: baseline; gap: 8px; }
+  .card .price { font-family: 'Instrument Serif', serif; font-size: 48px; line-height: 1; color: var(--ink); }
+  .card .per { color: var(--mute); font-size: 15px; }
+  .card .setup { margin-top: 12px; padding-top: 14px; border-top: 1px dashed var(--line); font-size: 14px; color: var(--mute); }
+  .card .setup strong { color: var(--ink); }
+  .card .who { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--ink-2); font-size: 15px; line-height: 1.5; }
+
+  .list { list-style: none; padding: 0; margin: 0; }
+  .list li { padding: 14px 0; border-bottom: 1px solid var(--line-soft); font-size: 17px; color: var(--ink-2); line-height: 1.5; }
+  .list li:last-child { border-bottom: 0; }
+  .list li strong { color: var(--ink); }
+
+  .timeline { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow); }
+  .timeline-row { display: grid; grid-template-columns: 110px 1fr; padding: 22px 32px; border-bottom: 1px solid var(--line-soft); align-items: baseline; }
+  .timeline-row:last-child { border-bottom: 0; }
+  .timeline-row .day { font-weight: 700; color: var(--accent); font-size: 14px; letter-spacing: 0.04em; }
+  .timeline-row .what { color: var(--ink-2); font-size: 16px; line-height: 1.5; }
+  .timeline-row .what strong { color: var(--ink); }
+
+  .faq { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow); }
+  .faq-row { padding: 26px 32px; border-bottom: 1px solid var(--line-soft); }
+  .faq-row:last-child { border-bottom: 0; }
+  .faq-row .q { font-weight: 600; color: var(--ink); font-size: 18px; margin: 0 0 8px; }
+  .faq-row .a { color: var(--ink-2); margin: 0; font-size: 16px; line-height: 1.55; }
+
+  .qualify { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 30px; }
+  @media (max-width: 760px) { .qualify { grid-template-columns: 1fr; } }
+  .qualify-col { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 30px; }
+  .qualify-col h3 { font-family: 'Instrument Serif', serif; font-weight: 400; font-size: 24px; margin: 0 0 18px; }
+  .qualify-col ul { list-style: none; padding: 0; margin: 0; }
+  .qualify-col li { padding: 10px 0 10px 24px; position: relative; color: var(--ink-2); font-size: 16px; }
+  .qualify-col li::before { position: absolute; left: 0; top: 10px; font-weight: 700; }
+  .qualify-col.yes li::before { content: "✓"; color: var(--accent); }
+  .qualify-col.no li::before { content: "×"; color: var(--warn); }
+
+  .final-cta { margin-top: 90px; background: var(--bg-dark); color: var(--bg); border-radius: var(--radius-xl); padding: 56px 48px; }
+  .final-cta h3 { font-family: 'Instrument Serif', serif; font-weight: 400; font-size: clamp(34px, 4.4vw, 48px); line-height: 1.1; margin: 0 0 14px; color: var(--bg); max-width: 26ch; }
+  .final-cta p { color: rgba(244, 241, 234, 0.8); font-size: 18px; margin: 0 0 26px; max-width: 56ch; }
+  .final-cta .btn-primary { background: var(--bg); color: var(--ink); }
+  .final-cta .btn-ghost { color: var(--bg); border-color: rgba(244, 241, 234, 0.3); }
+
+  footer { margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--line-soft); color: var(--mute); font-size: 13px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  footer a { color: var(--mute); text-decoration: none; }
+  footer a:hover { color: var(--ink); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span><span>Wolf AI</span></div>
+    <div class="top-meta">AI Quote Engine · Commercial cleaning</div>
+  </div>
+
+  <div class="hero">
+    <div class="kicker">AI Quote Engine</div>
+    <h1>A drafted quote for every commercial property in your service area. <em>Approved and sent within minutes of an enquiry.</em></h1>
+    <p class="sub">Inbound enquiries return a drafted quote on your phone within minutes. Outbound runs continuously across every commercial property in your service area. Every quote requires your approval before it sends.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="https://wolf-ai.com.au">Get the Engine</a>
+      <a class="btn btn-ghost" href="#pricing">See pricing</a>
+    </div>
+    <div class="hero-meta">
+      <div><strong>Up to 500 quotes</strong> per month</div>
+      <div><strong>From $199</strong> per month, fully managed</div>
+      <div><strong>7 days</strong> to go-live</div>
+    </div>
+  </div>
+
+  <section>
+    <div class="label">The situation</div>
+    <h2>The cost of slow quoting in commercial cleaning.</h2>
+
+    <div class="compare">
+      <div class="col now">
+        <h3>Without the Engine</h3>
+        <p>Commercial cleaning operators lose more enquiries to slow reply times than to any other factor. Quotes drafted retrospectively drift outside historical pricing. Properties identified in the field rarely reach the facility manager because there is no time to draft, format, and send the quote.</p>
+        <ul>
+          <li>Inbound reply times above 24 hours, often above 72</li>
+          <li>Quote pricing drifts week to week and crew to crew</li>
+          <li>Eight to twelve hours per week absorbed by quote admin</li>
+          <li>Properties visibly needing service never reach a facility manager</li>
+          <li>No conversion data on which quotes won and which went cold</li>
+        </ul>
+      </div>
+
+      <div class="col">
+        <h3>With the Engine</h3>
+        <p>Every inbound enquiry returns a drafted quote on your phone within minutes. Every commercial property in your service area showing visible cleaning need is identified, paired with the responsible decision maker, and drafted into a quote for your approval.</p>
+        <ul>
+          <li>Inbound quotes drafted within minutes of arrival</li>
+          <li>Pricing trained on 20 of your historical jobs, accuracy within ±10%</li>
+          <li>One approval action per quote replaces an hour of manual work</li>
+          <li>Outbound runs continuously across the full service area</li>
+          <li>Conversion dashboard tracks opened, viewed, accepted, cold</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="label">Inbound flow</div>
+    <h2>An enquiry arrives. A drafted quote arrives on your phone within minutes.</h2>
+    <p class="lead">Inbound enquiries route through one dedicated number. The Engine reads the property image, assesses the work, drafts the quote in your pricing, and delivers it for approval. No manual quoting required.</p>
+
+    <div class="walk">
+      <div class="walk-grid">
+        <ol class="steps">
+          <li><strong>The customer sends a property image</strong> to your dedicated quoting number. The address is captured automatically or requested if not supplied.</li>
+          <li><strong>The Engine assesses the work.</strong> Scale, surface type, dirt severity, access, and hazards. A satellite view of the address confirms the surface area.</li>
+          <li><strong>The quote drafts in your pricing.</strong> Trained on 20 of your past commercial jobs. Accuracy held within ±10% of your historical average.</li>
+          <li><strong>An approval card delivers to your phone.</strong> The total, the assumptions used, a flag if anything is outside normal range. Three options: Send, Edit, Schedule site visit.</li>
+          <li><strong>Approved quotes send immediately.</strong> Branded PDF to the customer's inbox, follow-up SMS, and a booking link inside the quote.</li>
+        </ol>
+
+        <div class="phone" aria-hidden="true">
+          <div class="phone-head">
+            <strong>0432 119 800</strong>
+            today, 2:14pm
+          </div>
+          <div class="thread">
+            <div class="msg them">Quote request: roof clean at 12 Lytton Rd Pinkenba</div>
+            <div class="msg img">Property image attached</div>
+            <div class="msg them">Two joined sheds, colorbond, significant mould</div>
+            <div class="approval">
+              <div class="a-head">Quote drafted · 2 min</div>
+              <div class="a-total">$4,820</div>
+              <div class="a-note">~1,840 m² · soft wash · 1 day on site</div>
+              <div class="a-btns">
+                <button class="a-btn">Send</button>
+                <button class="a-btn outline">Edit</button>
+                <button class="a-btn outline">Visit</button>
+              </div>
+            </div>
+            <div class="msg us">Quote approved and sent. Customer notified by email and SMS.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="pull">Minutes from image received to PDF delivered. <span class="accent">The fastest quote wins commercial cleaning work.</span></p>
+  </section>
+
+  <section>
+    <div class="label">Outbound flow</div>
+    <h2>Every week, drafted quotes reach facility managers for properties you have not yet seen.</h2>
+    <p class="lead">Commercial cleaning operators win the work they bid on and lose the work they never see. The Engine identifies properties in your service area that visibly need cleaning, pairs each one with the responsible decision maker, and drafts the quote for your approval.</p>
+
+    <div class="walk">
+      <div class="walk-grid">
+        <ol class="steps">
+          <li><strong>The Engine scans your service area weekly.</strong> Commercial property categories only: industrial, warehousing, retail centres, schools, healthcare, stadiums, public infrastructure.</li>
+          <li><strong>Properties showing visible cleaning need are identified.</strong> Algae, lichen, dirt, staining, mould. Photo evidence captured at the time of identification.</li>
+          <li><strong>The responsible decision maker is identified.</strong> Facility manager, asset owner, or managing agent. Business contact details only.</li>
+          <li><strong>A quote drafts in your name.</strong> Photo evidence embedded. Pricing built from your historical work on comparable property types.</li>
+          <li><strong>The approval card delivers to your phone.</strong> Property, contact, drafted price, drafted message. Three options: Send, Edit, Skip.</li>
+          <li><strong>Approved quotes send from your email address.</strong> Named recipient, specific property, photo evidence, and a real price. The output is a quote, not a flyer.</li>
+        </ol>
+
+        <div class="email" aria-hidden="true">
+          <div class="email-head">
+            <strong>From: your business</strong>
+            To: facilities@brisbane-property.com.au
+          </div>
+          <div class="email-body">
+            <div class="subj">38 Hudson Rd, Albion · roof clean quote</div>
+            <p>Mark,</p>
+            <p>The factory roof at 38 Hudson Rd is showing significant lichen accumulation on the southern pitch. Quote attached for a soft wash treatment.</p>
+            <div class="img-stub"></div>
+            <div class="price">$6,240</div>
+            <p style="color: var(--mute); font-size: 12px; margin: 0;">2,400 m² · soft wash · 1.5 days on site</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="pull">Properties in your service area that need cleaning reach the facility manager from your business. <span class="accent">Not from a competitor.</span></p>
+  </section>
+
+  <section>
+    <div class="label">What every package includes</div>
+    <h2>Full feature set on every tier. Only the monthly quote capacity changes.</h2>
+
+    <div class="features-grid">
+      <div class="feature">
+        <h4>Drafted quotes in your pricing</h4>
+        <p>Trained on 20 of your past commercial jobs. Pricing accuracy held within ±10% of your historical average.</p>
+      </div>
+      <div class="feature">
+        <h4>Approval-card workflow</h4>
+        <p>Every quote requires operator approval. Send, Edit, or Schedule site visit. Nothing sends without your action.</p>
+      </div>
+      <div class="feature">
+        <h4>Branded quote PDF</h4>
+        <p>Your logo, brand colours, terms, and contact details applied to every quote sent.</p>
+      </div>
+      <div class="feature">
+        <h4>Dedicated quoting number</h4>
+        <p>Australian long-code number provisioned to your business. All inbound enquiries route through it.</p>
+      </div>
+      <div class="feature">
+        <h4>Outbound service-area coverage</h4>
+        <p>Commercial properties surfaced on a weekly cycle, paired with the responsible decision maker.</p>
+      </div>
+      <div class="feature">
+        <h4>Email and SMS delivery</h4>
+        <p>Approved quotes send by email with PDF attached, followed by SMS containing the booking link.</p>
+      </div>
+      <div class="feature">
+        <h4>Booking link inside every quote</h4>
+        <p>Customer can confirm a site visit or job booking directly from the quote without back-and-forth.</p>
+      </div>
+      <div class="feature">
+        <h4>Conversion dashboard</h4>
+        <p>Status tracked per quote: opened, viewed, accepted, cold. Reportable by week, month, source.</p>
+      </div>
+      <div class="feature">
+        <h4>Unlimited template updates</h4>
+        <p>Pricing, services, branding, and terms can be updated at any time without additional charge.</p>
+      </div>
+      <div class="feature">
+        <h4>30 days of post-launch tuning</h4>
+        <p>Pricing logic and templates refined against real quote data until performance is stable.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing">
+    <div class="label">Packages</div>
+    <h2>Three capacity tiers. Identical feature set.</h2>
+    <p class="lead">Select the tier that matches your peak monthly quote volume. Capacity is the ceiling.</p>
+
+    <div class="pricing-strip">
+      <div class="card">
+        <div class="tier">Starter</div>
+        <div class="qty">50</div>
+        <div class="qty-sub">quotes per month</div>
+        <div class="price-row"><div class="price">$199</div><div class="per">/ month</div></div>
+        <div class="setup"><strong>$1,299</strong> one-off setup</div>
+        <div class="who">Solo or two-crew operations. Captures full inbound volume plus low-volume outbound.</div>
+      </div>
+
+      <div class="card featured">
+        <div class="badge">Most operators</div>
+        <div class="tier">Growth</div>
+        <div class="qty">200</div>
+        <div class="qty-sub">quotes per month</div>
+        <div class="price-row"><div class="price">$299</div><div class="per">/ month</div></div>
+        <div class="setup"><strong>$1,499</strong> one-off setup</div>
+        <div class="who">Established operators in peak season. Full inbound capacity plus continuous outbound coverage.</div>
+      </div>
+
+      <div class="card">
+        <div class="tier">Scale</div>
+        <div class="qty">500</div>
+        <div class="qty-sub">quotes per month</div>
+        <div class="price-row"><div class="price">$499</div><div class="per">/ month</div></div>
+        <div class="setup"><strong>$1,699</strong> one-off setup</div>
+        <div class="who">Multi-crew, multi-region operations. Outbound running across the full service footprint.</div>
+      </div>
+    </div>
+
+    <p style="color: var(--mute); font-size: 14px; margin-top: 22px;">All prices AUD, exclude GST. Setup fee split 50% on signing, 50% on go-live. Month-to-month after the first 30 days. No lock-in, no exit fee.</p>
+  </section>
+
+  <section>
+    <div class="label">Required from operator</div>
+    <h2>One file transfer. One signature.</h2>
+    <p class="lead">All operator inputs are collected on Day 1. The build clock starts when these inputs are received.</p>
+
+    <ul class="list">
+      <li><strong>20 of your past quotes.</strong> PDF, photo, spreadsheet, or screenshot. Any format accepted.</li>
+      <li><strong>Services list and pricing rules.</strong> Service types, base rates, minimums, surcharges, discount conditions.</li>
+      <li><strong>Brand assets.</strong> Logo, colours, ABN, and any standard terms required on quotes.</li>
+      <li><strong>Operator phone number.</strong> Approval cards deliver to this number.</li>
+      <li><strong>Customer reply email address.</strong> Inbound replies from customers route to this inbox.</li>
+      <li><strong>30 minutes on Day 6.</strong> Walkthrough call and template sign-off before go-live.</li>
+    </ul>
+    <p style="color: var(--mute); font-size: 14px; margin-top: 18px;">No accounting system access required. No internal team onboarding. No additional software for the operator to install or learn.</p>
+  </section>
+
+  <section>
+    <div class="label">Delivered by Wolf AI</div>
+    <h2>The complete build, deployment, and ongoing operation.</h2>
+
+    <ul class="list">
+      <li><strong>Engine build, end to end.</strong> Tailored to commercial cleaning, your service area, and your historical pricing.</li>
+      <li><strong>Pricing logic calibration.</strong> Back-tested against your historical quotes until accuracy lands inside ±10%.</li>
+      <li><strong>Dedicated quoting number provisioning.</strong> Australian long-code number, configured and connected.</li>
+      <li><strong>Pre-launch testing.</strong> Ten dummy enquiries run end-to-end. Edge cases handled before customer-facing deployment.</li>
+      <li><strong>Operator handover on Day 7.</strong> Dashboard walkthrough, approval-card demonstration, override controls.</li>
+      <li><strong>Ongoing operation and maintenance.</strong> No additional fees for tuning, template updates, or pricing changes.</li>
+      <li><strong>Active monitoring.</strong> Issues detected and resolved without operator intervention.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="label">Timeline</div>
+    <h2>Seven days from sign-off to first live quote.</h2>
+    <p class="lead">No discovery phase, no extended rollout. Inputs in, system out, live in a week.</p>
+
+    <div class="timeline">
+      <div class="timeline-row"><div class="day">Day 1</div><div class="what"><strong>Kickoff call.</strong> Past quotes, brand assets, and pricing rules received. Dedicated quoting number provisioned.</div></div>
+      <div class="timeline-row"><div class="day">Day 2</div><div class="what"><strong>Vision model tuned</strong> to commercial cleaning property types in your service area.</div></div>
+      <div class="timeline-row"><div class="day">Day 3</div><div class="what"><strong>Pricing logic built and back-tested.</strong> Accuracy validated within ±10% of your historical pricing.</div></div>
+      <div class="timeline-row"><div class="day">Day 4</div><div class="what"><strong>Branded quote template completed.</strong> Approval-card workflow wired. Booking link embedded. Conversion dashboard configured.</div></div>
+      <div class="timeline-row"><div class="day">Day 5</div><div class="what"><strong>End-to-end testing.</strong> Ten dummy enquiries processed through the full flow. Edge cases handled.</div></div>
+      <div class="timeline-row"><div class="day">Day 6</div><div class="what"><strong>Operator walkthrough.</strong> Dashboard, approval card, override controls. Quote template sign-off.</div></div>
+      <div class="timeline-row"><div class="day">Day 7</div><div class="what"><strong>Go-live.</strong> First inbound enquiry processed. Outbound scanning begins. 30-day tuning period starts.</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="label">Fit</div>
+    <h2>Who this is built for. And who it is not.</h2>
+    <p class="lead">A fit assessment matters more than a pitch. Misaligned engagements waste operator time and Wolf AI's reputation.</p>
+
+    <div class="qualify">
+      <div class="qualify-col yes">
+        <h3>This is for you</h3>
+        <ul>
+          <li>You service commercial roofs, façades, industrial assets, warehouses, schools, healthcare, retail centres, stadiums, or public infrastructure.</li>
+          <li>You convert enquiries via written quotes from photographs, addresses, or initial site information.</li>
+          <li>Your average job value is $1,500 or more.</li>
+          <li>You have 12 or more months of trading history and 20 or more past quotes available.</li>
+          <li>Slow reply times are costing enquiries, or your service area has known properties not being reached.</li>
+        </ul>
+      </div>
+      <div class="qualify-col no">
+        <h3>This is not for you</h3>
+        <ul>
+          <li>You operate residential-only. A separate build and tuning is required.</li>
+          <li>You physically inspect every property before any quote is issued and never quote remotely.</li>
+          <li>You have less than 6 months of trading history and no quote dataset.</li>
+          <li>Your average job value is below $500.</li>
+          <li>You are seeking a chatbot to replace customer interaction. The Engine drafts quotes for operator approval, not autonomous conversation.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="label">Frequently asked</div>
+    <h2>Questions raised before every engagement.</h2>
+
+    <div class="faq">
+      <div class="faq-row">
+        <p class="q">Our pricing model is non-trivial. Can the system learn it accurately?</p>
+        <p class="a">The pricing logic is trained on 20 of your historical quotes and back-tested against 10 more. Go-live is conditional on achieving accuracy within ±10% of your historical pricing. If that threshold is not met during back-testing, tuning continues until it is.</p>
+      </div>
+      <div class="faq-row">
+        <p class="q">What if the system drafts an incorrect quote?</p>
+        <p class="a">No quote sends without operator approval. The approval card includes the price, the assumptions used, and a flag if any input falls outside normal range. The operator approves, edits, or escalates to a site visit.</p>
+      </div>
+      <div class="faq-row">
+        <p class="q">Our work category is specific. Will the system handle it?</p>
+        <p class="a">Each build is tuned to your specific work category and property types. The vision and pricing components learn from your historical job data, not a generic dataset.</p>
+      </div>
+      <div class="faq-row">
+        <p class="q">Will outbound damage our brand reputation?</p>
+        <p class="a">Outbound quotes send from your email address to named decision makers, reference a specific property, and include photo evidence and a real price. The output is a quote, not a flyer. Industry response data does not equate it to spam outreach.</p>
+      </div>
+      <div class="faq-row">
+        <p class="q">Contract terms after the first month?</p>
+        <p class="a">Month-to-month billing. One month's notice to cancel. No exit fee, no long-term contract.</p>
+      </div>
+      <div class="faq-row">
+        <p class="q">Cost of pricing or service updates?</p>
+        <p class="a">Template updates, pricing changes, and service additions are covered by the monthly fee. No additional invoicing for scope adjustments.</p>
+      </div>
+      <div class="faq-row">
+        <p class="q">Can customers reach an operator directly through the quoting number?</p>
+        <p class="a">Yes. Customer messages route to the operator's phone. The Engine does not block conversation. All threads are visible in the dashboard.</p>
+      </div>
+      <div class="faq-row">
+        <p class="q">What happens at the monthly capacity ceiling?</p>
+        <p class="a">Overflow rolls into the following month. Service does not stop mid-month. If the cap is reached consistently across consecutive months, a tier change is recommended at the next billing cycle.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="label">Ongoing</div>
+    <h2>Single flat fee. All operating costs included.</h2>
+
+    <ul class="list">
+      <li><strong>No per-quote charges.</strong> The monthly fee is the only invoiced amount.</li>
+      <li><strong>No usage fees.</strong> All SMS, email, scans, drafts, and dashboard operations are included.</li>
+      <li><strong>No automatic billing changes.</strong> Any fee adjustment is communicated and confirmed before it applies.</li>
+      <li><strong>Unlimited template and pricing updates.</strong> Changes to your services, prices, or branding do not generate additional charges.</li>
+      <li><strong>Overflow rolls forward.</strong> Capacity exceeded in one month rolls to the next. Service continues uninterrupted.</li>
+      <li><strong>Month-to-month terms.</strong> One month notice required to cancel. No lock-in, no exit fee.</li>
+    </ul>
+  </section>
+
+  <div class="final-cta">
+    <h3>Capture every inbound enquiry. Reach every property in your service area.</h3>
+    <p>Select a tier. Submit your operator inputs. Within seven days, your first live quote sends and outbound coverage begins running across your service area.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="https://wolf-ai.com.au">Get the Engine</a>
+      <a class="btn btn-ghost" href="#pricing">Review pricing</a>
+    </div>
+  </div>
+
+  <footer>
+    <div>Wolf AI · Noosa, Queensland</div>
+    <div><a href="https://wolf-ai.com.au">wolf-ai.com.au</a></div>
+  </footer>
+
+</div>
+
+</body>
+</html>

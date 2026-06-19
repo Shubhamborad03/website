@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Roof Flow · Wolf AI</title>
+<link rel="icon" type="image/png" href="/logo.png">
+<link rel="apple-touch-icon" href="/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #F8F6F0;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --line: rgba(31, 41, 55, 0.08);
+    --accent: #A8512A;
+    --accent-soft: rgba(168, 81, 42, 0.08);
+    --sky: #9BC7D8;
+    --sky-soft: #E8F1F6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--ink); font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  .page { max-width: 1000px; margin: 0 auto; padding: 48px 24px 60px; }
+
+  .nav-pill { display: inline-flex; gap: 4px; background: white; border: 1px solid var(--line); border-radius: 999px; padding: 4px; margin-bottom: 24px; }
+  .nav-pill button { padding: 8px 18px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-decoration: none; border-radius: 999px; transition: all 0.2s; background: none; border: 0; cursor: pointer; }
+  .nav-pill button:hover { color: var(--ink); }
+  .nav-pill button.active { background: var(--ink); color: white; }
+
+  .eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+  h1 { font-size: 38px; font-weight: 600; letter-spacing: -0.025em; margin-bottom: 12px; line-height: 1.05; }
+  .lede { color: var(--muted); font-size: 16px; max-width: 56ch; line-height: 1.5; min-height: 48px; }
+
+  /* VISUAL FLOW */
+  .flow { margin: 48px 0; position: relative; padding-left: 70px; }
+  .flow::before { content: ''; position: absolute; left: 55px; top: 60px; bottom: 60px; width: 2px; background: var(--accent); opacity: 0.25; border-radius: 1px; }
+  .step { position: relative; background: white; border: 1px solid var(--line); border-radius: 18px; padding: 24px 28px; margin-bottom: 18px; display: grid; grid-template-columns: 130px 1fr; gap: 28px; align-items: center; transition: transform 0.2s, box-shadow 0.2s; }
+  .step:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(31, 41, 55, 0.06); }
+  .step-icon { width: 120px; height: 120px; background: var(--bg); border-radius: 16px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--line); }
+  .step-icon svg { width: 88px; height: 88px; }
+  .step-badge { position: absolute; left: -67px; top: 50%; transform: translateY(-50%); width: 28px; height: 28px; background: var(--accent); color: white; border-radius: 999px; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(168, 81, 42, 0.3); border: 3px solid var(--bg); }
+  .step-body h3 { font-size: 21px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 6px; line-height: 1.2; }
+  .step-body p { font-size: 14.5px; color: var(--muted); line-height: 1.5; }
+  @media (max-width: 700px) {
+    .page { padding: 36px 16px 48px; }
+    .flow { padding-left: 0; }
+    .flow::before { display: none; }
+    .step { grid-template-columns: 1fr; gap: 16px; padding: 20px; text-align: center; }
+    .step-icon { margin: 0 auto; width: 100px; height: 100px; }
+    .step-icon svg { width: 72px; height: 72px; }
+    .step-badge { position: static; transform: none; margin: 0 auto 6px; }
+    h1 { font-size: 28px; }
+  }
+
+  /* COMPARE */
+  .compare { margin-top: 48px; }
+  .compare-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 8px; }
+  .compare-head h2 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; }
+  .compare-head p { color: var(--muted); font-size: 13.5px; }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  @media (max-width: 800px) { .compare-grid { grid-template-columns: 1fr; } }
+  .compare-card { background: white; border: 1.5px solid var(--line); border-radius: 16px; padding: 22px 22px 24px; position: relative; opacity: 0.55; transition: opacity 0.2s, border-color 0.2s, background 0.2s, box-shadow 0.2s; cursor: pointer; }
+  .compare-card:hover { opacity: 0.8; }
+  .compare-card.active { opacity: 1; border-color: var(--accent); background: var(--bg); box-shadow: 0 8px 28px rgba(168, 81, 42, 0.12); cursor: default; }
+  .compare-card.active::before { content: 'You are here'; position: absolute; top: -10px; right: 14px; background: var(--accent); color: white; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.12em; padding: 4px 10px; border-radius: 999px; font-weight: 700; }
+  .compare-name { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .compare-card.active .compare-name { color: var(--accent); }
+  .compare-card h3 { font-size: 19px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 14px; }
+  .compare-icon { width: 100%; height: 110px; background: var(--bg); border-radius: 12px; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+  .compare-card.active .compare-icon { background: white; }
+  .compare-icon svg { width: 90px; height: 90px; }
+  .compare-list { list-style: none; padding: 0; }
+  .compare-list li { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; font-size: 13px; color: var(--ink); line-height: 1.4; }
+  .compare-list li::before { content: '·'; color: var(--accent); font-weight: 700; margin-top: -2px; font-size: 16px; }
+  .compare-card .compare-cost { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--muted); }
+  .compare-card.active .compare-cost { color: var(--accent); font-weight: 600; }
+
+  /* COST BLOCK */
+  .cost-block { background: var(--ink); color: var(--bg); border-radius: 18px; padding: 36px 40px; margin-top: 32px; }
+  .cost-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(244, 241, 234, 0.55); margin-bottom: 8px; }
+  .cost-block h2 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 24px; color: white; }
+  .cost-top { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 18px; padding: 22px 24px; background: rgba(168, 81, 42, 0.15); border: 1px solid var(--accent); border-radius: 14px; margin-bottom: 32px; align-items: center; }
+  @media (max-width: 700px) { .cost-top { grid-template-columns: 1fr 1fr; } }
+  .cost-item .ci-label { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(244, 241, 234, 0.5); margin-bottom: 4px; }
+  .cost-item .ci-value { font-size: 26px; font-weight: 600; letter-spacing: -0.025em; color: white; line-height: 1; }
+  .cost-item .ci-value small { display: block; font-size: 11px; font-weight: 400; opacity: 0.6; margin-top: 4px; letter-spacing: 0; }
+  .cost-item.cost-item-hero .ci-value { font-size: 36px; color: var(--bg); }
+  .cost-item.cost-item-hero .ci-value strong { color: var(--accent); }
+
+  .chart-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(244, 241, 234, 0.55); margin-bottom: 14px; }
+  .chart-title { font-size: 18px; font-weight: 600; color: white; margin-bottom: 18px; }
+  .chart-bars { display: flex; flex-direction: column; gap: 14px; }
+  .chart-row { display: grid; grid-template-columns: 170px 1fr 90px; gap: 14px; align-items: center; }
+  @media (max-width: 600px) { .chart-row { grid-template-columns: 1fr; gap: 6px; } .chart-row .bar-track { order: 3; } }
+  .bar-label { font-size: 13px; color: rgba(244, 241, 234, 0.8); font-weight: 500; }
+  .bar-label .ll-mono { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(244, 241, 234, 0.5); display: block; letter-spacing: 0.08em; margin-top: 2px; }
+  .bar-track { height: 30px; background: rgba(255, 255, 255, 0.06); border-radius: 6px; overflow: hidden; position: relative; }
+  .bar-fill { height: 100%; background: rgba(168, 81, 42, 0.45); border-radius: 6px; transition: width 0.4s, background 0.2s, box-shadow 0.2s; }
+  .bar-fill.active { background: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .bar-fill.estimator { background: rgba(244, 241, 234, 0.7); }
+  .bar-value { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; color: white; text-align: right; white-space: nowrap; }
+
+  .savings-line { margin-top: 24px; padding: 16px 20px; background: var(--accent); color: white; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+  .savings-line .sl-text { font-size: 14.5px; }
+  .savings-line .sl-num { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; font-family: 'JetBrains Mono', monospace; }
+
+  /* TIER-SPECIFIC CONTENT — only one visible at a time */
+  .tier-content { display: none; }
+  .tier-content.active { display: block; }
+
+  /* COST BREAKDOWN · where the money goes */
+  .breakdown { margin-top: 56px; }
+  .breakdown-head { margin-bottom: 24px; }
+  .breakdown-head .be-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .breakdown-head h2 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 6px; }
+  .breakdown-head p { color: var(--muted); font-size: 13.5px; max-width: 64ch; line-height: 1.5; }
+
+  .breakdown-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+  }
+  @media (max-width: 800px) { .breakdown-grid { grid-template-columns: 1fr; } }
+  .breakdown-card {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 22px 24px;
+  }
+  .bd-tier {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .bd-total {
+    font-size: 28px; font-weight: 600;
+    letter-spacing: -0.025em; color: var(--ink);
+    margin-bottom: 16px; line-height: 1.1;
+  }
+  .bd-total span { font-size: 13px; font-weight: 500; color: var(--muted); margin-left: 4px; }
+
+  .bd-stacked {
+    height: 30px;
+    background: rgba(31, 41, 55, 0.06);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    margin-bottom: 16px;
+  }
+  .bd-seg {
+    height: 100%;
+    min-width: 5px;
+    transition: opacity 0.2s;
+  }
+  .bd-seg:hover { opacity: 0.85; }
+
+  .bd-items { list-style: none; padding: 0; }
+  .bd-items li {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 0;
+    font-size: 13px;
+    border-top: 1px solid var(--line);
+  }
+  .bd-items li:first-child { border-top: 0; padding-top: 4px; }
+  .bd-items li:last-child { padding-bottom: 4px; }
+  .bd-dot {
+    width: 10px; height: 10px;
+    border-radius: 999px;
+    flex-shrink: 0;
+  }
+  .bd-name { flex: 1; color: var(--ink); line-height: 1.3; }
+  .bd-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600; color: var(--ink);
+    font-size: 13px;
+  }
+  .bd-val.zero { color: var(--muted); font-style: italic; font-size: 11.5px; font-weight: 500; }
+
+  /* Breakdown colour palette */
+  .seg-imagery { background: #2A6F8C; }
+  .seg-ai      { background: #B26A2C; }
+  .seg-llm     { background: #5E3FAF; }
+  .seg-phone   { background: #A8512A; }
+  .seg-infra   { background: #3F7B4A; }
+  .seg-buffer  { background: #94A3B8; }
+
+  /* Nearmap sharing table */
+  .sharing { margin-top: 48px; }
+  .sharing-head { margin-bottom: 18px; }
+  .sharing-head .sh-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .sharing-head h2 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 6px; }
+  .sharing-head p { color: var(--muted); font-size: 13.5px; max-width: 64ch; line-height: 1.5; }
+  .sharing-table {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-top: 14px;
+  }
+  .sharing-table table { width: 100%; border-collapse: collapse; }
+  .sharing-table th {
+    background: var(--bg);
+    padding: 12px 18px;
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+    border-bottom: 1px solid var(--line);
+  }
+  .sharing-table th:not(:first-child) { text-align: right; }
+  .sharing-table td {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .sharing-table td:not(:first-child) {
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+  }
+  .sharing-table tr:last-child td { border-bottom: 0; }
+  .sharing-table tr.highlight td {
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .sharing-table tr.highlight td:first-child { font-weight: 600; }
+  .sharing-note {
+    margin-top: 14px;
+    padding: 14px 18px;
+    background: var(--bg);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .sharing-note strong { color: var(--accent); }
+
+  /* Stats mini-grid inside each breakdown card */
+  .bd-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 18px;
+    padding: 12px;
+    background: var(--bg);
+    border-radius: 8px;
+    border: 1px solid var(--line);
+  }
+  .bd-stat { padding: 4px 6px; }
+  .bd-stat .bd-stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+  .bd-stat .bd-stat-value {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: -0.01em;
+  }
+  .bd-stat .bd-stat-value span {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: 0;
+    margin-left: 2px;
+  }
+
+  /* AUD pill */
+  .aud-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    padding: 6px 12px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="nav-pill" id="nav-pill">
+      <button data-tier="basic">Basic</button>
+      <button data-tier="pro">Pro</button>
+      <button data-tier="killer">Killer</button>
+    </div>
+    <div class="eyebrow" id="eyebrow">How it works</div>
+    <h1>Pick a suburb. Get a ranked list of roofs to quote.</h1>
+    <p class="lede" id="lede"></p>
+  </header>
+
+  <!-- ============================================ -->
+  <!-- THE FLOW · SAME FOR ALL TIERS              -->
+  <!-- ============================================ -->
+  <div class="flow">
+
+    <div class="step">
+      <span class="step-badge">01</span>
+      <div class="step-icon">
+        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <rect x="14" y="22" width="92" height="76" rx="6" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.8"/>
+          <line x1="14" y1="50" x2="106" y2="50" stroke="#9BC7D8" stroke-width="1.6" stroke-dasharray="3 3"/>
+          <line x1="14" y1="74" x2="106" y2="74" stroke="#9BC7D8" stroke-width="1.6" stroke-dasharray="3 3"/>
+          <line x1="40" y1="22" x2="40" y2="98" stroke="#9BC7D8" stroke-width="1.6" stroke-dasharray="3 3"/>
+          <line x1="78" y1="22" x2="78" y2="98" stroke="#9BC7D8" stroke-width="1.6" stroke-dasharray="3 3"/>
+          <path d="M 60 38 C 72 38 74 50 60 70 C 46 50 48 38 60 38 Z" fill="#A8512A" stroke="#A8512A" stroke-width="1.5"/>
+          <circle cx="60" cy="50" r="5" fill="#FFFFFF"/>
+        </svg>
+      </div>
+      <div class="step-body">
+        <h3>Roofer picks a suburb</h3>
+        <p>From a dropdown in the dashboard. Anywhere in their service area.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-badge">02</span>
+      <div class="step-icon">
+        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <circle cx="60" cy="24" r="11" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.8"/>
+          <circle cx="60" cy="24" r="5" fill="#A8512A"/>
+          <line x1="60" y1="38" x2="30" y2="72" stroke="#A8512A" stroke-width="1.5" stroke-dasharray="3 3"/>
+          <line x1="60" y1="38" x2="60" y2="72" stroke="#A8512A" stroke-width="1.5" stroke-dasharray="3 3"/>
+          <line x1="60" y1="38" x2="90" y2="72" stroke="#A8512A" stroke-width="1.5" stroke-dasharray="3 3"/>
+          <path d="M 16 100 L 16 86 L 30 74 L 44 86 L 44 100 Z" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.8"/>
+          <path d="M 46 100 L 46 86 L 60 74 L 74 86 L 74 100 Z" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.8"/>
+          <path d="M 76 100 L 76 86 L 90 74 L 104 86 L 104 100 Z" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.8"/>
+        </svg>
+      </div>
+      <div class="step-body">
+        <h3>AI looks at every house</h3>
+        <p>Pulls satellite + Street View for each property and checks the roof.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-badge">03</span>
+      <div class="step-icon">
+        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <path d="M 12 78 L 12 52 L 28 38 L 44 52 L 44 78 Z" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.8"/>
+          <circle cx="38" cy="48" r="9" fill="#3F7B4A"/>
+          <path d="M 33 48 L 37 52 L 44 44" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M 52 78 L 52 52 L 68 38 L 84 52 L 84 78 Z" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.8" opacity="0.35"/>
+          <circle cx="78" cy="48" r="9" fill="#A8512A"/>
+          <line x1="73" y1="43" x2="83" y2="53" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"/>
+          <line x1="83" y1="43" x2="73" y2="53" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M 92 78 L 92 52 L 108 38 L 124 52 L 124 78 Z" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.8"/>
+          <circle cx="118" cy="48" r="9" fill="#3F7B4A"/>
+          <path d="M 113 48 L 117 52 L 124 44" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="step-body">
+        <h3>AI filters out the ones already done</h3>
+        <p>Checks council permits and recent sale photos. Drops anything that looks finished.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-badge">04</span>
+      <div class="step-icon">
+        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <path d="M 8 36 L 8 22 L 18 14 L 28 22 L 28 36 Z" fill="#A8512A" stroke="#A8512A" stroke-width="1.6"/>
+          <rect x="36" y="20" width="72" height="12" rx="2" fill="#A8512A" opacity="0.85"/>
+          <path d="M 8 68 L 8 54 L 18 46 L 28 54 L 28 68 Z" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.8"/>
+          <rect x="36" y="52" width="50" height="12" rx="2" fill="#1F2937" opacity="0.25"/>
+          <path d="M 8 100 L 8 86 L 18 78 L 28 86 L 28 100 Z" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.8"/>
+          <rect x="36" y="84" width="30" height="12" rx="2" fill="#1F2937" opacity="0.15"/>
+        </svg>
+      </div>
+      <div class="step-body">
+        <h3>AI ranks the rest by likelihood</h3>
+        <p>Top of the list = highest chance the roof actually needs attention.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-badge">05</span>
+      <div class="step-icon">
+        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <path d="M 14 50 L 38 32 L 38 68 L 14 50 Z" fill="#A8512A" stroke="#A8512A" stroke-width="1.6" stroke-linejoin="round"/>
+          <rect x="38" y="42" width="20" height="16" rx="2" fill="#A8512A"/>
+          <path d="M 64 36 Q 76 50 64 64" stroke="#A8512A" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M 74 28 Q 92 50 74 72" stroke="#A8512A" stroke-width="2" stroke-linecap="round" opacity="0.55"/>
+          <path d="M 84 20 Q 108 50 84 80" stroke="#A8512A" stroke-width="1.6" stroke-linecap="round" opacity="0.3"/>
+          <path d="M 90 102 L 90 90 L 100 82 L 110 90 L 110 102 Z" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.6"/>
+        </svg>
+      </div>
+      <div class="step-body">
+        <h3>Roofer markets to the list</h3>
+        <p>Letterbox drop, Facebook ad to the postcode, cold call. Whoever responds becomes a lead.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="step-badge">06</span>
+      <div class="step-icon">
+        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <rect x="16" y="14" width="58" height="78" rx="4" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.8"/>
+          <line x1="26" y1="28" x2="64" y2="28" stroke="#1F2937" stroke-width="1.8"/>
+          <line x1="26" y1="40" x2="58" y2="40" stroke="#9BC7D8" stroke-width="1.6"/>
+          <line x1="26" y1="50" x2="62" y2="50" stroke="#9BC7D8" stroke-width="1.6"/>
+          <line x1="26" y1="60" x2="54" y2="60" stroke="#9BC7D8" stroke-width="1.6"/>
+          <line x1="26" y1="70" x2="60" y2="70" stroke="#9BC7D8" stroke-width="1.6"/>
+          <line x1="26" y1="80" x2="48" y2="80" stroke="#9BC7D8" stroke-width="1.6"/>
+          <circle cx="86" cy="84" r="22" fill="#A8512A"/>
+          <path d="M 74 85 L 83 93 L 98 76" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </div>
+      <div class="step-body">
+        <h3>AI quotes responders, roofer approves</h3>
+        <p>Address in, branded quote out within minutes. One-tap approval. Customer gets the quote.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- THREE TIERS COMPARED -->
+  <section class="compare">
+    <div class="compare-head">
+      <h2>Three tiers compared.</h2>
+      <p>Same six-step flow. Each tier upgrades the imagery and the AI.</p>
+    </div>
+    <div class="compare-grid" id="compare-grid">
+
+      <div class="compare-card" data-tier="basic">
+        <div class="compare-name">Basic</div>
+        <h3>Cheapest. Old imagery.</h3>
+        <div class="compare-icon">
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none">
+            <rect x="14" y="14" width="50" height="50" rx="6" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.6" opacity="0.5"/>
+            <line x1="14" y1="36" x2="64" y2="36" stroke="#9BC7D8" stroke-width="1.2" opacity="0.5"/>
+            <line x1="36" y1="14" x2="36" y2="64" stroke="#9BC7D8" stroke-width="1.2" opacity="0.5"/>
+            <rect x="14" y="70" width="50" height="14" rx="3" fill="#6B7280" opacity="0.2"/>
+            <text x="39" y="80" font-family="JetBrains Mono" font-size="8" fill="#6B7280" text-anchor="middle" font-weight="700">1-3 YRS OLD</text>
+            <circle cx="92" cy="46" r="18" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.8"/>
+            <circle cx="92" cy="46" r="8" fill="#A8512A"/>
+            <text x="92" y="86" font-family="JetBrains Mono" font-size="9" fill="#1F2937" text-anchor="middle" font-weight="700">1 AI</text>
+          </svg>
+        </div>
+        <ul class="compare-list">
+          <li>Google satellite (1-3 yrs old)</li>
+          <li>One general-purpose AI</li>
+          <li>Free council records</li>
+        </ul>
+        <div class="compare-cost">$48 / month · $576 / year</div>
+      </div>
+
+      <div class="compare-card" data-tier="pro">
+        <div class="compare-name">Pro</div>
+        <h3>Fresh imagery. Smart AI.</h3>
+        <div class="compare-icon">
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none">
+            <rect x="14" y="14" width="50" height="50" rx="6" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.8"/>
+            <line x1="14" y1="36" x2="64" y2="36" stroke="#9BC7D8" stroke-width="1.4"/>
+            <line x1="36" y1="14" x2="36" y2="64" stroke="#9BC7D8" stroke-width="1.4"/>
+            <rect x="14" y="70" width="50" height="14" rx="3" fill="#A8512A"/>
+            <text x="39" y="80" font-family="JetBrains Mono" font-size="8" fill="#FFFFFF" text-anchor="middle" font-weight="700">FRESH 6X/YR</text>
+            <circle cx="92" cy="46" r="18" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.8"/>
+            <circle cx="92" cy="46" r="8" fill="#A8512A"/>
+            <path d="M 86 50 L 86 46 L 92 41 L 98 46 L 98 50 Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="0.5"/>
+            <text x="92" y="86" font-family="JetBrains Mono" font-size="9" fill="#1F2937" text-anchor="middle" font-weight="700">1 ROOF AI</text>
+          </svg>
+        </div>
+        <ul class="compare-list">
+          <li>Fresh satellite (6x/yr refresh)</li>
+          <li>Roof-specific AI</li>
+          <li>Free council records</li>
+        </ul>
+        <div class="compare-cost">$300 / month · $3,600 / year</div>
+      </div>
+
+      <div class="compare-card" data-tier="killer">
+        <div class="compare-name">Killer</div>
+        <h3>Fresh + two AIs cross-checking.</h3>
+        <div class="compare-icon">
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none">
+            <rect x="10" y="14" width="40" height="40" rx="5" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.8"/>
+            <line x1="10" y1="32" x2="50" y2="32" stroke="#9BC7D8" stroke-width="1.4"/>
+            <line x1="28" y1="14" x2="28" y2="54" stroke="#9BC7D8" stroke-width="1.4"/>
+            <rect x="10" y="60" width="40" height="12" rx="2" fill="#A8512A"/>
+            <text x="30" y="69" font-family="JetBrains Mono" font-size="7" fill="#FFFFFF" text-anchor="middle" font-weight="700">FRESH</text>
+            <circle cx="74" cy="32" r="13" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.8"/>
+            <circle cx="74" cy="32" r="6" fill="#A8512A"/>
+            <circle cx="100" cy="58" r="13" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.8"/>
+            <circle cx="100" cy="58" r="6" fill="#A8512A"/>
+            <path d="M 82 38 Q 91 46 92 50" stroke="#A8512A" stroke-width="1.8" stroke-dasharray="2.5 2.5" fill="none"/>
+            <path d="M 92 52 Q 83 44 80 40" stroke="#A8512A" stroke-width="1.8" stroke-dasharray="2.5 2.5" fill="none"/>
+            <circle cx="87" cy="86" r="11" fill="#3F7B4A"/>
+            <path d="M 81 86 L 85 90 L 93 82" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <text x="60" y="106" font-family="JetBrains Mono" font-size="9" fill="#1F2937" text-anchor="middle" font-weight="700">2 AIs AGREE</text>
+          </svg>
+        </div>
+        <ul class="compare-list">
+          <li>Fresh satellite (6x/yr refresh)</li>
+          <li>Two AIs cross-checking</li>
+          <li>Highest accuracy</li>
+        </ul>
+        <div class="compare-cost">$333 / month · $3,996 / year</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- COST BLOCK · ONE PER TIER, ONLY ACTIVE SHOWS -->
+
+  <div class="tier-content" data-tier="basic">
+    <section class="cost-block">
+      <div class="cost-eyebrow">Basic tier · cost to run</div>
+      <h2>Exact numbers.</h2>
+      <div class="cost-top">
+        <div class="cost-item cost-item-hero">
+          <div class="ci-label">Total monthly</div>
+          <div class="ci-value"><strong>$48</strong><small>AUD per client, per month</small></div>
+        </div>
+        <div class="cost-item">
+          <div class="ci-label">Annual</div>
+          <div class="ci-value">$576<small>AUD per year</small></div>
+        </div>
+        <div class="cost-item">
+          <div class="ci-label">Scans / month</div>
+          <div class="ci-value">2,000<small>$0.008 per scan</small></div>
+        </div>
+        <div class="cost-item">
+          <div class="ci-label">Quotes / month</div>
+          <div class="ci-value">50<small>$0.05 per quote</small></div>
+        </div>
+      </div>
+
+      <div class="chart-eyebrow">Cost in context</div>
+      <div class="chart-title">What you'd pay vs hiring a roofing estimator.</div>
+      <div class="chart-bars">
+        <div class="chart-row">
+          <div class="bar-label">Wolf AI Basic <span class="ll-mono">YOU ARE HERE</span></div>
+          <div class="bar-track"><div class="bar-fill active" style="width: 1%; min-width: 14px;"></div></div>
+          <div class="bar-value">$48/mo</div>
+        </div>
+        <div class="chart-row">
+          <div class="bar-label">Wolf AI Pro <span class="ll-mono">UPGRADE</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width: 4%; min-width: 18px;"></div></div>
+          <div class="bar-value">$300/mo</div>
+        </div>
+        <div class="chart-row">
+          <div class="bar-label">Wolf AI Killer <span class="ll-mono">UPGRADE</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width: 6.25%; min-width: 24px;"></div></div>
+          <div class="bar-value">$333/mo</div>
+        </div>
+        <div class="chart-row">
+          <div class="bar-label">Hire a junior estimator <span class="ll-mono">ALTERNATIVE</span></div>
+          <div class="bar-track"><div class="bar-fill estimator" style="width: 100%;"></div></div>
+          <div class="bar-value">$8,000/mo</div>
+        </div>
+      </div>
+      <div class="savings-line">
+        <span class="sl-text">Basic tier vs hiring · same lead-gen output</span>
+        <span class="sl-num">167× cheaper</span>
+      </div>
+    </section>
+  </div>
+
+  <div class="tier-content" data-tier="pro">
+    <section class="cost-block">
+      <div class="cost-eyebrow">Pro tier · cost to run</div>
+      <h2>Exact numbers.</h2>
+      <div class="cost-top">
+        <div class="cost-item cost-item-hero">
+          <div class="ci-label">Total monthly</div>
+          <div class="ci-value"><strong>$300</strong><small>AUD per client, per month</small></div>
+        </div>
+        <div class="cost-item">
+          <div class="ci-label">Annual</div>
+          <div class="ci-value">$3,600<small>AUD per year</small></div>
+        </div>
+        <div class="cost-item">
+          <div class="ci-label">Scans / month</div>
+          <div class="ci-value">5,000<small>$0.002 per scan</small></div>
+        </div>
+        <div class="cost-item">
+          <div class="ci-label">Quotes / month</div>
+          <div class="ci-value">200<small>$0.05 per quote</small></div>
+        </div>
+      </div>
+
+      <div class="chart-eyebrow">Cost in context</div>
+      <div class="chart-title">What you'd pay vs hiring a roofing estimator.</div>
+      <div class="chart-bars">
+        <div class="chart-row">
+          <div class="bar-label">Wolf AI Basic <span class="ll-mono">CHEAPER</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width: 1%; min-width: 14px;"></div></div>
+          <div class="bar-value">$48/mo</div>
+        </div>
+        <div class="chart-row">
+          <div class="bar-label">Wolf AI Pro <span class="ll-mono">YOU ARE HERE</span></div>
+          <div class="bar-track"><div class="bar-fill active" style="width: 4%; min-width: 18px;"></div></div>
+          <div class="bar-value">$300/mo</div>
+        </div>
+        <div class="chart-row">
+          <div class="bar-label">Wolf AI Killer <span class="ll-mono">UPGRADE</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width: 6.25%; min-width: 24px;"></div></div>
+          <div class="bar-value">$333/mo</div>
+        </div>
+        <div class="chart-row">
+          <div class="bar-label">Hire a junior estimator <span class="ll-mono">ALTERNATIVE</span></div>
+          <div class="bar-track"><div class="bar-fill estimator" style="width: 100%;"></div></div>
+          <div class="bar-value">$8,000/mo</div>
+        </div>
+      </div>
+      <div class="savings-line">
+        <span class="sl-text">Pro tier vs hiring · fresh imagery + roof-trained AI</span>
+        <span class="sl-num">27× cheaper</span>
+      </div>
+    </section>
+  </div>
+
+  <div class="tier-content" data-tier="killer">
+    <section class="cost-block">
+      <div class="cost-eyebrow">Killer tier · Nearmap + Gemini Pro dual-AI</div>
+      <h2>Exact numbers.</h2>
+      <div class="cost-top">
+        <div class="cost-item cost-item-hero">
+          <div class="ci-label">Total monthly</div>
+          <div class="ci-value"><strong>$333</strong><small>AUD per client, per month</small></div>
+        </div>
+        <div class="cost-item">
+          <div class="ci-label">Annual</div>
+          <div class="ci-value">$3,996<small>AUD per year</small></div>
+        </div>
+        <div class="cost-item">
+          <div class="ci-label">Scans / month</div>
+          <div class="ci-value">10,000<small>$0.003 per scan (dual-AI)</small></div>
+        </div>
+        <div class="cost-item">
+          <div class="ci-label">Quotes / month</div>
+          <div class="ci-value">500<small>$0.05 per quote</small></div>
+        </div>
+      </div>
+
+      <div class="chart-eyebrow">Cost in context</div>
+      <div class="chart-title">What you'd pay vs hiring a roofing estimator.</div>
+      <div class="chart-bars">
+        <div class="chart-row">
+          <div class="bar-label">Wolf AI Basic <span class="ll-mono">CHEAPER</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width: 1%; min-width: 14px;"></div></div>
+          <div class="bar-value">$48/mo</div>
+        </div>
+        <div class="chart-row">
+          <div class="bar-label">Wolf AI Pro <span class="ll-mono">CHEAPER</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width: 4%; min-width: 18px;"></div></div>
+          <div class="bar-value">$300/mo</div>
+        </div>
+        <div class="chart-row">
+          <div class="bar-label">Wolf AI Killer <span class="ll-mono">YOU ARE HERE</span></div>
+          <div class="bar-track"><div class="bar-fill active" style="width: 6.25%; min-width: 24px;"></div></div>
+          <div class="bar-value">$333/mo</div>
+        </div>
+        <div class="chart-row">
+          <div class="bar-label">Hire a junior estimator <span class="ll-mono">ALTERNATIVE</span></div>
+          <div class="bar-track"><div class="bar-fill estimator" style="width: 100%;"></div></div>
+          <div class="bar-value">$8,000/mo</div>
+        </div>
+      </div>
+      <div class="savings-line">
+        <span class="sl-text">Killer tier vs hiring · dual-AI maximum accuracy</span>
+        <span class="sl-num">24× cheaper</span>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- WHERE EACH TIER'S COST GOES · ALL THREE      -->
+  <!-- Visible at the same time so Dave can compare -->
+  <!-- ============================================ -->
+  <section class="breakdown">
+    <div class="breakdown-head">
+      <div class="be-eyebrow">Behind the numbers · exact math</div>
+      <h2>Exactly what fits inside each monthly cost.</h2>
+      <p>Each tier's monthly cost = fixed (subscriptions + infra) + variable (per scan + per quote). The numbers below are the <strong>exact maximum</strong> volume you can fit inside the monthly cost. Subscriptions enable scanning, so most of the cost is locked once you go above Basic.</p>
+      <div class="aud-note">All figures · AUD</div>
+    </div>
+
+    <div class="breakdown-grid">
+
+      <!-- BASIC BREAKDOWN -->
+      <div class="breakdown-card">
+        <div class="bd-tier">Basic</div>
+        <div class="bd-total">$48<span>AUD / month</span></div>
+        <div class="bd-stats">
+          <div class="bd-stat">
+            <div class="bd-stat-label">Scans / month</div>
+            <div class="bd-stat-value">2,000</div>
+          </div>
+          <div class="bd-stat">
+            <div class="bd-stat-label">Quotes / month</div>
+            <div class="bd-stat-value">50</div>
+          </div>
+          <div class="bd-stat">
+            <div class="bd-stat-label">Per scan</div>
+            <div class="bd-stat-value">$0.008<span>AUD</span></div>
+          </div>
+          <div class="bd-stat">
+            <div class="bd-stat-label">Per quote</div>
+            <div class="bd-stat-value">$0.05<span>AUD</span></div>
+          </div>
+        </div>
+        <div class="bd-stacked" title="Basic monthly cost composition">
+          <div class="bd-seg seg-llm"     style="width: 33.3%"></div>
+          <div class="bd-seg seg-phone"   style="width: 15.6%"></div>
+          <div class="bd-seg seg-infra"   style="width: 8.3%"></div>
+          <div class="bd-seg seg-buffer"  style="width: 41.7%"></div>
+        </div>
+        <ul class="bd-items">
+          <li><span class="bd-dot seg-llm"></span><span class="bd-name">LLM scans (2,000 × $0.008 Gemini Pro)</span><span class="bd-val">$16</span></li>
+          <li><span class="bd-dot seg-imagery"></span><span class="bd-name">Imagery · Google Maps + Street View</span><span class="bd-val zero">free credit</span></li>
+          <li><span class="bd-dot seg-phone"></span><span class="bd-name">Twilio (phone $5 + 50 SMS at $0.05)</span><span class="bd-val">$7.50</span></li>
+          <li><span class="bd-dot seg-infra"></span><span class="bd-name">Infrastructure · VPS + monitoring</span><span class="bd-val">$4</span></li>
+          <li><span class="bd-dot seg-buffer"></span><span class="bd-name">Buffer · overage + ops time</span><span class="bd-val">$20</span></li>
+        </ul>
+      </div>
+
+      <!-- PRO BREAKDOWN -->
+      <div class="breakdown-card">
+        <div class="bd-tier">Pro</div>
+        <div class="bd-total">$300<span>AUD / month</span></div>
+        <div class="bd-stats">
+          <div class="bd-stat">
+            <div class="bd-stat-label">Scans / month</div>
+            <div class="bd-stat-value">5,000</div>
+          </div>
+          <div class="bd-stat">
+            <div class="bd-stat-label">Quotes / month</div>
+            <div class="bd-stat-value">200</div>
+          </div>
+          <div class="bd-stat">
+            <div class="bd-stat-label">Per scan</div>
+            <div class="bd-stat-value">$0.002<span>AUD</span></div>
+          </div>
+          <div class="bd-stat">
+            <div class="bd-stat-label">Per quote</div>
+            <div class="bd-stat-value">$0.05<span>AUD</span></div>
+          </div>
+        </div>
+        <div class="bd-stacked" title="Pro monthly cost composition">
+          <div class="bd-seg seg-imagery" style="width: 83.3%"></div>
+          <div class="bd-seg seg-llm"     style="width: 3.3%"></div>
+          <div class="bd-seg seg-phone"   style="width: 5.0%"></div>
+          <div class="bd-seg seg-infra"   style="width: 1.7%"></div>
+          <div class="bd-seg seg-buffer"  style="width: 6.7%"></div>
+        </div>
+        <ul class="bd-items">
+          <li><span class="bd-dot seg-imagery"></span><span class="bd-name">Imagery + AI · Nearmap API</span><span class="bd-val">$250</span></li>
+          <li><span class="bd-dot seg-llm"></span><span class="bd-name">LLM reasoning (5,000 × $0.002)</span><span class="bd-val">$10</span></li>
+          <li><span class="bd-dot seg-phone"></span><span class="bd-name">Twilio (phone $5 + 200 SMS at $0.05)</span><span class="bd-val">$15</span></li>
+          <li><span class="bd-dot seg-infra"></span><span class="bd-name">Infrastructure · VPS + monitoring</span><span class="bd-val">$5</span></li>
+          <li><span class="bd-dot seg-buffer"></span><span class="bd-name">Buffer · overage + ops time</span><span class="bd-val">$20</span></li>
+        </ul>
+      </div>
+
+      <!-- KILLER BREAKDOWN -->
+      <div class="breakdown-card">
+        <div class="bd-tier">Killer</div>
+        <div class="bd-total">$333<span>AUD / month</span></div>
+        <div class="bd-stats">
+          <div class="bd-stat">
+            <div class="bd-stat-label">Scans / month</div>
+            <div class="bd-stat-value">10,000</div>
+          </div>
+          <div class="bd-stat">
+            <div class="bd-stat-label">Quotes / month</div>
+            <div class="bd-stat-value">500</div>
+          </div>
+          <div class="bd-stat">
+            <div class="bd-stat-label">Per scan</div>
+            <div class="bd-stat-value">$0.003<span>AUD</span></div>
+          </div>
+          <div class="bd-stat">
+            <div class="bd-stat-label">Per quote</div>
+            <div class="bd-stat-value">$0.05<span>AUD</span></div>
+          </div>
+        </div>
+        <div class="bd-stacked" title="Killer monthly cost composition">
+          <div class="bd-seg seg-imagery" style="width: 75.1%"></div>
+          <div class="bd-seg seg-ai"      style="width: 2.4%"></div>
+          <div class="bd-seg seg-llm"     style="width: 6.0%"></div>
+          <div class="bd-seg seg-phone"   style="width: 9.0%"></div>
+          <div class="bd-seg seg-infra"   style="width: 1.5%"></div>
+          <div class="bd-seg seg-buffer"  style="width: 6.0%"></div>
+        </div>
+        <ul class="bd-items">
+          <li><span class="bd-dot seg-imagery"></span><span class="bd-name">Imagery + AI · Nearmap API (agency tier)</span><span class="bd-val">$250</span></li>
+          <li><span class="bd-dot seg-ai"></span><span class="bd-name">Verification AI · Gemini Flash (10,000 × $0.0008)</span><span class="bd-val">$8</span></li>
+          <li><span class="bd-dot seg-llm"></span><span class="bd-name">LLM reasoning (10,000 × $0.002)</span><span class="bd-val">$20</span></li>
+          <li><span class="bd-dot seg-phone"></span><span class="bd-name">Twilio (phone $5 + 500 SMS at $0.05)</span><span class="bd-val">$30</span></li>
+          <li><span class="bd-dot seg-infra"></span><span class="bd-name">Infrastructure · VPS + monitoring</span><span class="bd-val">$5</span></li>
+          <li><span class="bd-dot seg-buffer"></span><span class="bd-name">Buffer · overage + ops time</span><span class="bd-val">$20</span></li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================ -->
+  <!-- NEARMAP SHARING TABLE (Dave's internal view) -->
+  <!-- ============================================ -->
+  <section class="sharing">
+    <div class="sharing-head">
+      <div class="sh-eyebrow">Nearmap sharing economics</div>
+      <h2>If we share one Nearmap subscription across multiple clients.</h2>
+      <p>Numbers above are <strong>per single client</strong> paying for their own Nearmap. In reality, one $250/mo Nearmap agency subscription serves multiple clients — splitting the cost. Other line items (LLM, SMS, Twilio, etc) stay per-client. This table isolates the Nearmap cost.</p>
+    </div>
+
+    <div class="sharing-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Clients sharing the $250/mo Nearmap</th>
+            <th>Nearmap cost per client</th>
+            <th>Pro total per client*</th>
+            <th>Killer total per client*</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1 client</td>
+            <td>$250</td>
+            <td>$300</td>
+            <td>$333</td>
+          </tr>
+          <tr>
+            <td>2 clients</td>
+            <td>$125</td>
+            <td>$175</td>
+            <td>$208</td>
+          </tr>
+          <tr>
+            <td>3 clients</td>
+            <td>$83</td>
+            <td>$133</td>
+            <td>$167</td>
+          </tr>
+          <tr class="highlight">
+            <td>5 clients (realistic at $250 tier)</td>
+            <td>$50</td>
+            <td>$100</td>
+            <td>$133</td>
+          </tr>
+          <tr>
+            <td>10 clients (needs bigger Nearmap tier)</td>
+            <td>$25</td>
+            <td>$75</td>
+            <td>$108</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sharing-note">
+      <strong>*</strong> Pro = $50 of non-Nearmap costs + Nearmap share. Killer = $83 of non-Nearmap costs + Nearmap share. <strong>Basic uses Google (free credit), so unaffected by Nearmap sharing — stays at $48/mo regardless.</strong>
+      <br><br>
+      <strong>Capacity note:</strong> $250/mo Nearmap agency tier estimated at ~30,000 image credits/month. 5 Pro clients (5×5,000 = 25,000 scans) fits. 3 Killer clients (3×10,000 = 30,000 scans) maxes it. Beyond that, upgrade to next Nearmap tier (~$500/mo for ~60k credits). Exact quota needs Nearmap sales call to confirm.
+    </div>
+  </section>
+
+</div>
+
+<script>
+  (function() {
+    var ledeText = {
+      basic: 'Same six illustrated steps below. Basic uses standard Google maps and a general-purpose AI.',
+      pro: 'Same six illustrated steps below. Pro upgrades to fresh imagery and a roof-specific AI.',
+      killer: 'Same six illustrated steps below. Killer adds a second AI brain · two systems must agree.'
+    };
+    var eyebrowText = {
+      basic: 'How it works · Basic tier',
+      pro: 'How it works · Pro tier',
+      killer: 'How it works · Killer tier'
+    };
+
+    function showTier(tier) {
+      if (!ledeText[tier]) tier = 'basic';
+      document.querySelectorAll('.nav-pill button').forEach(function(b) { b.classList.toggle('active', b.dataset.tier === tier); });
+      document.querySelectorAll('.compare-card').forEach(function(c) { c.classList.toggle('active', c.dataset.tier === tier); });
+      document.querySelectorAll('.tier-content').forEach(function(t) { t.classList.toggle('active', t.dataset.tier === tier); });
+      document.getElementById('eyebrow').textContent = eyebrowText[tier];
+      document.getElementById('lede').textContent = ledeText[tier];
+      if (history.replaceState) history.replaceState(null, '', '#' + tier);
+    }
+
+    document.querySelectorAll('.nav-pill button').forEach(function(btn) {
+      btn.addEventListener('click', function() { showTier(btn.dataset.tier); });
+    });
+    document.querySelectorAll('.compare-card').forEach(function(card) {
+      card.addEventListener('click', function() { showTier(card.dataset.tier); });
+    });
+
+    var initial = (location.hash || '#basic').replace('#', '');
+    showTier(initial);
+  })();
+</script>
+
+</body>
+</html>

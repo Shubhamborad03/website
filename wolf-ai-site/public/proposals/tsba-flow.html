@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TSBA Solar · Install Lifecycle Flow Chart</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #F8F6F0;
+    --ink: #1F2937;
+    --muted: #6B7280;
+    --line: rgba(31, 41, 55, 0.08);
+
+    --cust-bg: #E8F1F6;
+    --cust-border: #9BC7D8;
+    --cust-deep: #2A6F8C;
+
+    --ai-bg: #ECE4F7;
+    --ai-border: #B79EE0;
+    --ai-deep: #5E3FAF;
+
+    --team-bg: #FBE6D0;
+    --team-border: #E5B789;
+    --team-deep: #B26A2C;
+
+    --life-bg: #DEEFE0;
+    --life-border: #94BD9D;
+    --life-deep: #3F7B4A;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 48px 24px 60px;
+  }
+  .header { margin-bottom: 28px; }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ai-deep);
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-size: 34px;
+    font-weight: 600;
+    letter-spacing: -0.022em;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+  .sub {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 640px;
+  }
+  .chart-wrap {
+    background: var(--bg);
+    border-radius: 16px;
+    padding: 8px 0;
+    overflow-x: auto;
+  }
+  svg.flowchart {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-width: 1080px;
+  }
+  .summary {
+    margin-top: 36px;
+    padding: 28px 32px;
+    background: white;
+    border-radius: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 28px;
+    box-shadow: 0 1px 0 rgba(31, 41, 55, 0.04), 0 4px 24px rgba(31, 41, 55, 0.06);
+  }
+  .summary-item { border-left: 3px solid var(--ai-border); padding-left: 14px; }
+  .summary-item:nth-child(2) { border-left-color: var(--cust-border); }
+  .summary-item:nth-child(3) { border-left-color: var(--team-border); }
+  .summary-item:nth-child(4) { border-left-color: var(--life-border); }
+  .summary-num {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+  .summary-label {
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .note-wrap { text-align: center; }
+  .note {
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--muted);
+    padding: 14px 22px;
+    background: white;
+    border-radius: 999px;
+    display: inline-block;
+    box-shadow: 0 1px 0 rgba(31, 41, 55, 0.04), 0 2px 12px rgba(31, 41, 55, 0.04);
+  }
+  @media (max-width: 820px) {
+    h1 { font-size: 24px; }
+    .summary { grid-template-columns: 1fr 1fr; gap: 18px; padding: 22px; }
+  }
+  @media (max-width: 540px) {
+    .summary { grid-template-columns: 1fr; }
+  }
+  @media print {
+    .chart-wrap { padding: 0; overflow: visible; }
+    svg.flowchart { min-width: 0; }
+    .summary { break-inside: avoid; box-shadow: none; border: 1px solid var(--line); }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="header">
+    <div class="eyebrow">TSBA Solar · Install Lifecycle</div>
+    <h1>From first click to lifetime customer</h1>
+    <p class="sub">Where every Wolf AI agent fires across the solar install journey. Three lanes for who does the work. Four phases for what stage you're in.</p>
+  </header>
+
+  <div class="chart-wrap">
+    <svg class="flowchart" viewBox="0 0 1280 1640" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="TSBA Solar install lifecycle flow chart">
+
+      <defs>
+        <pattern id="dots" x="0" y="0" width="22" height="22" patternUnits="userSpaceOnUse">
+          <circle cx="2" cy="2" r="1" fill="rgba(31, 41, 55, 0.05)" />
+        </pattern>
+        <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+          <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#1F2937" flood-opacity="0.10" />
+        </filter>
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
+        </marker>
+      </defs>
+
+      <!-- Background dots -->
+      <rect width="1280" height="1640" fill="url(#dots)" />
+
+      <!-- Soft lane tints -->
+      <rect x="40" y="100" width="340" height="1520" fill="#E8F1F6" opacity="0.35" rx="14" />
+      <rect x="420" y="100" width="440" height="1520" fill="#ECE4F7" opacity="0.4" rx="14" />
+      <rect x="900" y="100" width="340" height="1520" fill="#FBE6D0" opacity="0.4" rx="14" />
+
+      <!-- Lane header pills -->
+      <g font-family="JetBrains Mono, monospace" font-size="11" font-weight="500" letter-spacing="0.12em">
+        <rect x="130" y="40" width="160" height="32" rx="16" fill="#E8F1F6" stroke="#9BC7D8" stroke-width="1" />
+        <text x="210" y="60" text-anchor="middle" fill="#2A6F8C">CUSTOMER</text>
+
+        <rect x="540" y="40" width="200" height="32" rx="16" fill="#ECE4F7" stroke="#B79EE0" stroke-width="1" />
+        <text x="640" y="60" text-anchor="middle" fill="#5E3FAF">AI AGENTS</text>
+
+        <rect x="990" y="40" width="160" height="32" rx="16" fill="#FBE6D0" stroke="#E5B789" stroke-width="1" />
+        <text x="1070" y="60" text-anchor="middle" fill="#B26A2C">TSBA TEAM</text>
+      </g>
+
+      <!-- Phase labels (left margin pills) -->
+      <g font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="0.1em" font-weight="500">
+        <rect x="40" y="125" width="100" height="22" rx="11" fill="#E3F1E5" />
+        <text x="90" y="140" text-anchor="middle" fill="#4A7C53">PHASE 1 · LEAD</text>
+
+        <rect x="40" y="430" width="110" height="22" rx="11" fill="#FBE5D5" />
+        <text x="95" y="445" text-anchor="middle" fill="#B26A2C">PHASE 2 · SELL</text>
+
+        <rect x="40" y="845" width="130" height="22" rx="11" fill="#E4DAF4" />
+        <text x="105" y="860" text-anchor="middle" fill="#6B4FA0">PHASE 3 · INSTALL</text>
+
+        <rect x="40" y="1305" width="140" height="22" rx="11" fill="#FDEAC8" />
+        <text x="110" y="1320" text-anchor="middle" fill="#A07A1F">PHASE 4 · LIFETIME</text>
+      </g>
+
+      <!-- ============================================== -->
+      <!-- STEP 1 · Lead lands                            -->
+      <!-- ============================================== -->
+      <g filter="url(#cardShadow)">
+        <rect x="80" y="160" width="260" height="110" rx="14" fill="#E8F1F6" stroke="#9BC7D8" stroke-width="1.5" />
+        <text x="98" y="184" font-family="JetBrains Mono, monospace" font-size="10" fill="#2A6F8C" letter-spacing="0.1em" font-weight="500">STEP 01</text>
+        <text x="210" y="208" text-anchor="middle" font-family="Inter" font-size="15" font-weight="600" fill="#1F2937">Lead lands</text>
+        <text x="210" y="228" text-anchor="middle" font-family="Inter" font-size="12" fill="#4B5563">Meta ad · Google ad · referral</text>
+        <text x="210" y="244" text-anchor="middle" font-family="Inter" font-size="12" fill="#4B5563">website form · phone call</text>
+        <rect x="165" y="254" width="90" height="18" rx="9" fill="#9BC7D8" opacity="0.35" />
+        <text x="210" y="266" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="500" fill="#2A6F8C">INBOUND</text>
+      </g>
+
+      <!-- Arrow 1 → 2 -->
+      <path d="M 340 215 C 400 215, 440 250, 480 290" stroke="#94A3B8" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+
+      <!-- ============================================== -->
+      <!-- STEP 2 · AI responds + books consult          -->
+      <!-- ============================================== -->
+      <g filter="url(#cardShadow)">
+        <rect x="450" y="240" width="380" height="130" rx="14" fill="#ECE4F7" stroke="#B79EE0" stroke-width="1.5" />
+        <text x="468" y="264" font-family="JetBrains Mono, monospace" font-size="10" fill="#5E3FAF" letter-spacing="0.1em" font-weight="500">STEP 02 · VOICE + SMS</text>
+        <text x="640" y="288" text-anchor="middle" font-family="Inter" font-size="15" font-weight="600" fill="#1F2937">Responds in 60 seconds</text>
+        <text x="640" y="308" text-anchor="middle" font-family="Inter" font-size="12" fill="#4B5563">Qualifies: phase, roof, usage, battery interest</text>
+        <text x="640" y="324" text-anchor="middle" font-family="Inter" font-size="12" fill="#4B5563">Books site consult into rep's calendar</text>
+        <rect x="580" y="338" width="120" height="20" rx="10" fill="#B79EE0" opacity="0.35" />
+        <text x="640" y="352" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="500" fill="#5E3FAF">UNDER 1 MIN</text>
+      </g>
+
+      <!-- Arrow 2 → 3 -->
+      <path d="M 830 310 C 880 310, 910 340, 940 410" stroke="#94A3B8" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+
+      <!-- ============================================== -->
+      <!-- STEP 3 · TSBA rep consult                     -->
+      <!-- ============================================== -->
+      <g filter="url(#cardShadow)">
+        <rect x="940" y="400" width="260" height="110" rx="14" fill="#FBE6D0" stroke="#E5B789" stroke-width="1.5" />
+        <text x="958" y="424" font-family="JetBrains Mono, monospace" font-size="10" fill="#B26A2C" letter-spacing="0.1em" font-weight="500">STEP 03</text>
+        <text x="1070" y="448" text-anchor="middle" font-family="Inter" font-size="15" font-weight="600" fill="#1F2937">Sales consult</text>
+        <text x="1070" y="468" text-anchor="middle" font-family="Inter" font-size="12" fill="#4B5563">Onsite or video, rep with the customer</text>
+        <text x="1070" y="484" text-anchor="middle" font-family="Inter" font-size="12" fill="#4B5563">Roof, usage, budget, system design</text>
+        <rect x="1025" y="494" width="90" height="18" rx="9" fill="#E5B789" opacity="0.45" />
+        <text x="1070" y="506" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="500" fill="#B26A2C">60-90 MIN</text>
+      </g>
+
+      <!-- Arrow 3 → 4 -->
+      <path d="M 940 450 C 880 450, 850 500, 830 580" stroke="#94A3B8" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+
+      <!-- ============================================== -->
+      <!-- STEP 4 · Quote drafted + sent                 -->
+      <!-- ============================================== -->
+      <g filter="url(#cardShadow)">
+        <rect x="450" y="540" width="380" height="120" rx="14" fill="#ECE4F7" stroke="#B79EE0" stroke-width="1.5" />
+        <text x="468" y="564" font-family="JetBrains Mono, monospace" font-size="10" fill="#5E3FAF" letter-spacing="0.1em" font-weight="500">STEP 04 · QUOTE ENGINE</text>
+        <text x="640" y="588" text-anchor="middle" font-family="Inter" font-size="15" font-weight="600" fill="#1F2937">Quote drafted &amp; sent</text>
+        <text x="640" y="608" text-anchor="middle" font-family="Inter" font-size="12" fill="#4B5563">System design priced from your catalogue</text>
+        <text x="640" y="624" text-anchor="middle" font-family="Inter" font-size="12" fill="#4B5563">Rep reviews, taps approve, customer receives</text>
+        <rect x="595" y="636" width="90" height="18" rx="9" fill="#B79EE0" opacity="0.35" />
+        <text x="640" y="648" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="500" fill="#5E3FAF">SAME DAY</text>
+      </g>
+
+      <!-- Arrow 4 → 5 -->
+      <path d="M 450 600 C 400 600, 360 650, 340 720" stroke="#94A3B8" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+
+      <!-- ============================================== -->
+      <!-- STEP 5 · Customer accepts + deposit           -->
+      <!-- ============================================== -->
+      <g filter="url(#cardShadow)">
+        <rect x="80" y="710" width="260" height="100" rx="14" fill="#E8F1F6" stroke="#9BC7D8" stroke-width="1.5" />
+        <text x="98" y="734" font-family="JetBrains Mono, monospace" font-size="10" fill="#2A6F8C" letter-spacing="0.1em" font-weight="500">STEP 05</text>
+        <text x="210" y="758" text-anchor="middle" font-family="Inter" font-size="15" font-weight="600" fill="#1F2937">Accepts &amp; pays deposit</text>
+        <text x="210" y="778" text-anchor="middle" font-family="Inter" font-size="12" fill="#4B5563">Signs online · pays via secure link</text>
+        <rect x="165" y="788" width="90" height="18" rx="9" fill="#9BC7D8" opacity="0.35" />
+        <text x="210" y="800" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="500" fill="#2A6F8C">1-7 DAYS</text>
+      </g>
+
+      <!-- Arrow 5 → 6 -->
+      <path d="M 340 760 C 400 760, 440 820, 480 890" stroke="#94A3B8" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+
+      <!-- ============================================== -->
+      <!-- STEP 6 · DNSP submission                      -->
+      <!-- ============================================== -->
+      <g filter="url(#cardShadow)">
+        <rect x="450" y="880" width="380" height="130" rx="14" fill="#ECE4F7" stroke="#B79EE0" stroke-width="1.5" />
+        <text x="468" y="904" font-family="JetBrains Mono, monospace" font-size="10" fill="#5E3FAF" letter-spacing="0.1em" font-weight="500">STEP 06 · DNSP AGENT</text>
+        <text x="640" y="928" text-anchor="middle" font-family="Inter" font-size="15" font-weight="600" fill="#1F2937">Grid pre-approval submitted</text>
+        <text x="640" y="948" text-anchor="middle" font-family="Inter" font-size="12" fill="#4B5563">Detects Energex / Ergon / Ausgrid / Endeavour</text>
+        <text x="640" y="964" text-anchor="middle" font-family="Inter" font-size="12" fill="#4B5563">Right form, pre-filled from job data</text>
+        <text x="640" y="980" text-anchor="middle" font-family="Inter" font-size="12" fill="#4B5563">Tracks approval, flags conditions imposed</text>
+        <rect x="580" y="990" width="120" height="18" rx="9" fill="#B79EE0" opacity="0.35" />
+        <text x="640" y="1002" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="500" fill="#5E3FAF">SAME DAY SUBMIT</text>
+      </g>
+
+      <!-- Arrow 6 → 7 -->
+      <path d="M 830 950 C 880 950, 910 990, 940 1060" stroke="#94A3B8" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+
+      <!-- ============================================== -->
+      <!-- STEP 7 · Install scheduled                    -->
+      <!-- ============================================== -->
+      <g filter="url(#cardShadow)">
+        <rect x="940" y="1050" width="260" height="100" rx="14" fill="#FBE6D0" stroke="#E5B789" stroke-width="1.5" />
+        <text x="958" y="1074" font-family="JetBrains Mono, monospace" font-size="10" fill="#B26A2C" letter-spacing="0.1em" font-weight="500">STEP 07</text>
+        <text x="1070" y="1098" text-anchor="middle" font-family="Inter" font-size="15" font-weight="600" fill="#1F2937">Install scheduled</text>
+        <text x="1070" y="1118" text-anchor="middle" font-family="Inter" font-size="12" fill="#4B5563">Crew assigned, customer notified, parts ordered</text>
+        <rect x="1015" y="1128" width="110" height="18" rx="9" fill="#E5B789" opacity="0.45" />
+        <text x="1070" y="1140" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="500" fill="#B26A2C">ON APPROVAL</text>
+      </g>
+
+      <!-- Arrow 7 → 8 (same lane, straight down) -->
+      <path d="M 1070 1150 L 1070 1180" stroke="#94A3B8" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+
+      <!-- ============================================== -->
+      <!-- STEP 8 · Install day + commissioning          -->
+      <!-- ============================================== -->
+      <g filter="url(#cardShadow)">
+        <rect x="940" y="1190" width="260" height="100" rx="14" fill="#FBE6D0" stroke="#E5B789" stroke-width="1.5" />
+        <text x="958" y="1214" font-family="JetBrains Mono, monospace" font-size="10" fill="#B26A2C" letter-spacing="0.1em" font-weight="500">STEP 08</text>
+        <text x="1070" y="1238" text-anchor="middle" font-family="Inter" font-size="15" font-weight="600" fill="#1F2937">Install + commission</text>
+        <text x="1070" y="1258" text-anchor="middle" font-family="Inter" font-size="12" fill="#4B5563">Crew on site · system live · handover</text>
+        <rect x="1020" y="1268" width="100" height="18" rx="9" fill="#E5B789" opacity="0.45" />
+        <text x="1070" y="1280" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="500" fill="#B26A2C">1 DAY ONSITE</text>
+      </g>
+
+      <!-- Arrow 8 → 9 -->
+      <path d="M 940 1240 C 880 1240, 850 1290, 830 1370" stroke="#94A3B8" stroke-width="2" fill="none" marker-end="url(#arrow)" />
+
+      <!-- ============================================== -->
+      <!-- STEP 9 · Review ask + warranty recorded       -->
+      <!-- ============================================== -->
+      <g filter="url(#cardShadow)">
+        <rect x="450" y="1330" width="380" height="130" rx="14" fill="#ECE4F7" stroke="#B79EE0" stroke-width="1.5" />
+        <text x="468" y="1354" font-family="JetBrains Mono, monospace" font-size="10" fill="#5E3FAF" letter-spacing="0.1em" font-weight="500">STEP 09 · REVIEW + WARRANTY</text>
+        <text x="640" y="1378" text-anchor="middle" font-family="Inter" font-size="15" font-weight="600" fill="#1F2937">Handover triggers</text>
+        <text x="640" y="1398" text-anchor="middle" font-family="Inter" font-size="12" fill="#4B5563">Review ask sent in JT's voice</text>
+        <text x="640" y="1414" text-anchor="middle" font-family="Inter" font-size="12" fill="#4B5563">Panel + inverter + battery serials filed</text>
+        <text x="640" y="1430" text-anchor="middle" font-family="Inter" font-size="12" fill="#4B5563">Warranty windows tracked</text>
+        <rect x="600" y="1440" width="80" height="18" rx="9" fill="#B79EE0" opacity="0.35" />
+        <text x="640" y="1452" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="500" fill="#5E3FAF">SAME DAY</text>
+      </g>
+
+      <!-- Dashed separator: years later -->
+      <line x1="100" y1="1500" x2="1180" y2="1500" stroke="#B26A2C" stroke-width="1.2" stroke-dasharray="6 6" opacity="0.5" />
+      <rect x="540" y="1488" width="200" height="22" rx="11" fill="#FDEAC8" stroke="#E5B789" stroke-width="1" />
+      <text x="640" y="1503" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="0.1em" font-weight="500" fill="#A07A1F">MONTHS / YEARS LATER</text>
+
+      <!-- ============================================== -->
+      <!-- STEP 10 · Past-customer reactivation          -->
+      <!-- ============================================== -->
+      <g filter="url(#cardShadow)">
+        <rect x="450" y="1530" width="380" height="80" rx="14" fill="#DEEFE0" stroke="#94BD9D" stroke-width="1.5" />
+        <text x="468" y="1554" font-family="JetBrains Mono, monospace" font-size="10" fill="#3F7B4A" letter-spacing="0.1em" font-weight="500">STEP 10 · REACTIVATION</text>
+        <text x="640" y="1578" text-anchor="middle" font-family="Inter" font-size="15" font-weight="600" fill="#1F2937">Battery, EV, expansion offer fires</text>
+        <text x="640" y="1598" text-anchor="middle" font-family="Inter" font-size="12" fill="#4B5563">Customer comes back · highest-margin sale TSBA owns</text>
+      </g>
+
+    </svg>
+  </div>
+
+  <section class="summary">
+    <div class="summary-item">
+      <div class="summary-num">9 agents</div>
+      <div class="summary-label">Wolf AI agents running across the lifecycle</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-num">Under 1 min</div>
+      <div class="summary-label">Lead response time, day or night</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-num">Same day</div>
+      <div class="summary-label">DNSP submission once deposit clears</div>
+    </div>
+    <div class="summary-item">
+      <div class="summary-num">Lifetime</div>
+      <div class="summary-label">Customer kept active for battery + EV upsell</div>
+    </div>
+  </section>
+
+  <div class="note-wrap">
+    <div class="note">Sales team only touches consults, install supervision, and customer relationships. Everything else runs in the background.</div>
+  </div>
+
+</div>
+</body>
+</html>
