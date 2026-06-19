@@ -189,7 +189,7 @@ export default function SatelliteQuoteDemo() {
                   transform: "translate(-50%, -50%)",
                 }}
               >
-                <div className="px-2.5 py-1 rounded-md bg-ink/85 backdrop-blur border border-gold/40 text-[10px] sm:text-[11px] font-bold text-gold whitespace-nowrap">
+                <div className="px-2.5 py-1 rounded-md bg-ink/85 backdrop-blur border border-gold/40 text-[10px] sm:text-[11px] font-bold text-white whitespace-nowrap">
                   {d.label}
                 </div>
               </motion.div>
