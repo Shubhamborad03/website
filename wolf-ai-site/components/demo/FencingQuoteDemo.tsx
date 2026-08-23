@@ -52,8 +52,7 @@ const CSS = `#fqd *{box-sizing:border-box;margin:0;padding:0}
 #fqd .v-in.act{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,113,227,.14)}
 #fqd .v-in .ph{color:#b3b7c0}
 #fqd .cur{width:1.5px;height:15px;background:var(--blue);margin-left:1px;animation:bl .9s steps(2) infinite}
-@keyframes bl{0%,50%{opacity:1}
-#fqd 51%,#fqd 100%{opacity:0}
+@keyframes bl{0%,50%{opacity:1}51%,100%{opacity:0}}
 #fqd .v-ac{margin-top:7px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;
   box-shadow:0 14px 30px -16px rgba(11,13,18,.28);opacity:0;transform:translateY(-6px);transition:all .4s var(--e)}
 #fqd .v-ac.in{opacity:1;transform:none}
@@ -113,8 +112,7 @@ const CSS = `#fqd *{box-sizing:border-box;margin:0;padding:0}
   font-size:11.5px;line-height:1.55;color:var(--ink-2)}
 #fqd .v-bub b{color:var(--ink);font-weight:600}
 #fqd .fade{animation:fin .5s var(--e)}
-@keyframes fin{from{opacity:0;transform:translateY(8px)}
-#fqd to{opacity:1;transform:none}
+@keyframes fin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 #fqd /* ---------- step rail: scrolls inside itself,#fqd page never moves ---------- */
 .rail{position:relative;width:clamp(388px,40vw,498px);height:clamp(500px,74vh,604px);overflow:hidden}
 #fqd .rail::before,#fqd .rail::after{content:"";position:absolute;left:0;right:0;height:80px;z-index:5;pointer-events:none}
@@ -142,13 +140,7 @@ const CSS = `#fqd *{box-sizing:border-box;margin:0;padding:0}
 #fqd .again:hover{color:var(--ink);border-color:var(--ink)}
 #fqd .credit{position:fixed;bottom:26px;left:32px;z-index:60;font-family:var(--mono);font-size:9.5px;
   color:var(--ink-3);letter-spacing:.1em;text-transform:uppercase}
-@media(max-width:940px){#fqd,#fqd{overflow:auto}
-#fqd .app{height:auto;padding:80px 22px 90px}
-#fqd .stage{flex-direction:column;gap:36px}
-#fqd .rail{width:min(470px,92vw);height:auto}
-#fqd .rail::before,#fqd .rail::after{display:none}
-#fqd .track{position:static;padding:0;transform:none !important}
-#fqd .step{opacity:1}
+@media(max-width:940px){#fqd .app{height:auto;padding:80px 22px 90px}#fqd .stage{flex-direction:column;gap:36px}#fqd .rail{width:min(470px,92vw);height:auto}#fqd .rail::before,#fqd .rail::after{display:none}#fqd .track{position:static;padding:0;transform:none !important}#fqd .step{opacity:1}}
 #fqd .cta{position:fixed;top:22px;right:32px;z-index:60;display:inline-flex;align-items:center;gap:8px;
   border-radius:999px;background:var(--btn);color:#fff;padding:11px 20px;font-size:13.5px;font-weight:600;
   text-decoration:none;box-shadow:0 1px 2px rgba(11,13,18,.06);transition:all .22s var(--e)}
@@ -159,9 +151,8 @@ const CSS = `#fqd *{box-sizing:border-box;margin:0;padding:0}
 #fqd .credit{text-decoration:none;transition:color .2s}
 #fqd .credit:hover{color:var(--ink)}
 @media(max-width:940px){
-  #fqd .cta{position:static;display:inline-flex;margin:0 auto}
+  #fqd .cta{position:static;display:inline-flex;margin:14px auto 0}
   #fqd .mark{position:static;justify-content:center;padding-top:26px}
-  #fqd .app{padding-top:20px}
   #fqd .credit{position:static;display:block;text-align:center;margin-top:28px}
   #fqd .again{position:static;display:block;margin:18px auto 0}
 }
